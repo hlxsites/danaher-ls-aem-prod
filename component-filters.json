@@ -6,8 +6,99 @@
     ]
   },
   {
-    "id": "columns",
+    "id": "section",
+    "components": [
+      "article-info",
+      "breadcrumb",
+      "banner",
+      "text",
+      "image",
+      "button",
+      "title",
+      "columns",
+      "card-list",
+      "takeway",
+      "product-banner",
+      "product-category",
+      "product-family",
+      "product-hero",
+      "shop-featured-products",
+      "product-card",
+      "call-to-action",
+      "accordion",
+      "recent-articles",
+      "embed",
+      "carousel",
+      "dual-carousel",
+      "opco-banner",
+      "top-selling",
+      "top-purchased-products",
+      "offer-banner",
+      "simple-text",
+      "body-banner",
+      "separator-line",
+      "insight",
+      "learn-more",
+      "articles-list",
+      "product-categories",
+      "cards",
+      "tiny-carousel",
+      "tabs-container",
+      "accordion-container",
+      "opco-grid",
+      "offer-advertisement",
+      "related-category",
+      "product-hero-content",
+      "product-info-list",
+      "table",
+      "testimonial",
+      "tags-list",
+      "related-articles"
+    ]
+  },
+  {
+    "id": "accordion-container",
+    "components": [
+      "accordion-item"
+    ]
+  },
+  {
+    "id": "article-info",
     "components": []
+  },
+  {
+    "id": "articles-list",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "body-banner",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "breadcrumb",
+    "components": []
+  },
+  {
+    "id": "card-list",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "cards",
+    "components": [
+      "cards-item"
+    ]
+  },
+  {
+    "id": "columns",
+    "components": [
+      "column"
+    ]
   },
   {
     "id": "column",
@@ -19,43 +110,88 @@
     ]
   },
   {
-    "id": "section",
+    "id": "dual-carousel",
     "components": [
-      "breadcrumb",
-      "text",
-      "image",
-      "button",
-      "title",
-      "columns",
-      "takeway",
-      "call-to-action",
-      "accordion",
-      "recent-articles",
-      "carousel"
+      ""
     ]
   },
   {
-    "id": "accordion",
+    "id": "insight",
     "components": [
-      "accordion-item"
+      "insight-item"
     ]
   },
   {
-    "id": "carousel",
+    "id": "learn-more",
     "components": [
-      "carousel-item"
+      ""
     ]
   },
   {
-    "id": "mini-teasers",
+    "id": "top-selling",
     "components": [
-      "mini-teasers-item"
+      ""
     ]
   },
   {
-    "id": "cards",
+    "id": "opco-banner",
     "components": [
-      "cards-item"
+      "opco-banner-item"
+    ]
+  },
+  {
+    "id": "opco-grid",
+    "components": [
+      "opco-grid-item"
+    ]
+  },
+  {
+    "id": "product-categories",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "product-category-list",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "product-category",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "top-selling",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "shop-featured-products",
+    "components": [
+      "shop-featured-products-item"
+    ]
+  },
+  {
+    "id": "simple-text",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "tabs-container",
+    "components": [
+      "tiny-carousel",
+      "tiny-carousel-item"
+    ]
+  },
+  {
+    "id": "tiny-carousel",
+    "components": [
+      "tiny-carousel-item"
     ]
   }
 ]
