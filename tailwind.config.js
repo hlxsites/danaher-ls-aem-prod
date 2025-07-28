@@ -88,6 +88,10 @@ module.exports = {
           marginTop: "2px",
           marginLeft: "4px",
         },
+        ".dhls-container .font-medium": {
+          fontWeight: "400",
+          fontFamily: "TWK Lausanne EDS",
+        },
       });
     }),
   ],
@@ -217,6 +221,7 @@ module.exports = {
       fontFamily: {
         sans: [
           "TWK Lausanne",
+          "TWK Lausanne EDS",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -234,7 +239,7 @@ module.exports = {
       },
       fontWeight: {
         normal: "200",
-        medium: "400",
+        dhlsMedium: "400",
         semibold: "700",
       },
       screens: {

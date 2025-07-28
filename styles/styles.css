@@ -62,7 +62,7 @@ html {
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: TWK Lausanne, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: TWK Lausanne, TWK Lausanne EDS, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
@@ -482,10 +482,15 @@ h1,
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dhls-container h1 {
+  font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
 h1 {
   font-size: 1.875rem !important;
   line-height: 2.25rem !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
 }
 
 @media (min-width: 768px) {
@@ -495,9 +500,14 @@ h1 {
   }
 }
 
+.dhls-container h2 {
+  font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
 h2 {
   font-size: 1.5rem !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   line-height: 2.25rem !important;
 }
 
@@ -508,9 +518,14 @@ h2 {
   }
 }
 
+.dhls-container h3 {
+  font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
 h3 {
   font-size: 1.25rem !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   line-height: 2rem !important;
 }
 
@@ -521,9 +536,14 @@ h3 {
   }
 }
 
+.dhls-container h4 {
+  font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
 h4 {
   font-size: 1.125rem !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   line-height: 1.75rem !important;
 }
 
@@ -547,13 +567,20 @@ main .default-content-wrapper h1 {
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
+.dhls-container main .default-content-wrapper h2,.dhls-container 
+  main .default-content-wrapper h3,.dhls-container 
+  main .default-content-wrapper h4 {
+  font-weight: 400;
+  font-family: TWK Lausanne EDS;
+}
+
 main .default-content-wrapper h2,
   main .default-content-wrapper h3,
   main .default-content-wrapper h4 {
   padding-top: 1rem;
   font-size: 1.875rem;
   line-height: 2.25rem;
-  font-weight: 400;
+  font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
@@ -700,6 +727,11 @@ main .default-content-wrapper h2,
 
 .carousel-wrapper .carousel, .product-recommendations-wrapper .product-recommendations {
   scrollbar-width: none;
+}
+
+.dhls-container .font-medium {
+  font-weight: 400;
+  font-family: TWK Lausanne EDS;
 }
 
 body.appear {
@@ -883,6 +915,11 @@ main
   background-color: rgb(64 0 165 / var(--tw-bg-opacity));
 }
 
+.dhls-container .btn-outline-primary {
+  font-weight: 400;
+  font-family: TWK Lausanne EDS;
+}
+
 .btn-outline-primary {
   margin-top: 1.5rem;
   border-radius: 9999px;
@@ -895,7 +932,7 @@ main
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   font-size: 1.125rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(117 35 255 / var(--tw-text-opacity));
@@ -1009,6 +1046,11 @@ main .default-content-wrapper p {
   line-height: 1.75rem;
 }
 
+.dhls-container main .default-content-wrapper p.button-container > a {
+  font-weight: 400;
+  font-family: TWK Lausanne EDS;
+}
+
 main .default-content-wrapper p.button-container > a {
   margin-top: 1.5rem;
   border-radius: 9999px;
@@ -1021,7 +1063,7 @@ main .default-content-wrapper p.button-container > a {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   font-size: 1.125rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(117 35 255 / var(--tw-text-opacity));
@@ -1575,16 +1617,26 @@ main .top-border > div.columns-wrapper:first-child {
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 
+.dhls-container .productdetail main .columns p > strong {
+  font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
 .productdetail main .columns p > strong {
   font-size: 1.125rem !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   line-height: 1.25rem !important;
   --tw-text-opacity: 1 !important;
   color: rgb(17 24 39 / var(--tw-text-opacity)) !important;
 }
 
-.container-two-col .col-left h2 strong {
+.dhls-container .container-two-col .col-left h2 strong {
   font-weight: 400 !important;
+  font-family: TWK Lausanne EDS !important;
+}
+
+.container-two-col .col-left h2 strong {
+  font-weight: 500 !important;
 }
 
 .productdetail main .columns p {
@@ -2916,7 +2968,7 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
 }
 
 .font-sans {
-  font-family: TWK Lausanne, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: TWK Lausanne, TWK Lausanne EDS, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .font-serif {
@@ -2962,7 +3014,7 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
 }
 
 .font-medium {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .font-normal {

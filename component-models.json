@@ -238,6 +238,61 @@
     ]
   },
   {
+    "id": "article-info-new",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "authorName",
+        "label": "Author Name",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "authorTitle",
+        "label": "Author Title",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "valueType": "Picture",
+        "name": "image",
+        "label": "Image",
+        "multi": false,
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "articleOpco",
+        "label": "Article Opco",
+        "value": ""
+      },
+      {
+        "component": "date-time",
+        "valueType": "date",
+        "name": "publishDate",
+        "label": "Date",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "readingTime",
+        "label": "Reading Time",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "article-info",
     "fields": [
       {
@@ -349,29 +404,6 @@
         "name": "right-bg-color",
         "value": "",
         "label": "Right-Bg-Color"
-      }
-    ]
-  },
-  {
-    "id": "breadcrumb",
-    "fields": [
-      {
-        "component": "text-input",
-        "name": "rootLabel",
-        "label": "Root Label",
-        "valueType": "string"
-      },
-      {
-        "component": "boolean",
-        "name": "showHidden",
-        "label": "Show hidden pages",
-        "valueType": "boolean"
-      },
-      {
-        "component": "boolean",
-        "name": "hideCurrent",
-        "label": "Hide current page",
-        "valueType": "boolean"
       }
     ]
   },
