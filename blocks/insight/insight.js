@@ -11,8 +11,8 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { decorateModals } from '../../scripts/scripts.js';
 
 export default function decorate(block) {
-  block?.parentElement?.parentElement?.removeAttribute('class');
-  block?.parentElement?.parentElement?.removeAttribute('style');
+  block.parentElement.parentElement.style.padding = '0';
+  block.parentElement.parentElement.style.margin = '0';
   const [insightTitle, insightDescription] = block.children;
 
   const insightItemsList = [];
@@ -93,7 +93,7 @@ export default function decorate(block) {
   const leftCol = div(
     { class: 'w-full md:w-1/2 pr-0 md:pr-6' },
     h2(
-      { class: 'text-2xl md:text-3xl font-semibold mb-4 mt-0 text-black' },
+      { class: ' md:text-3xl font-semibold mb-4 mt-0 text-black' },
       leftTitle,
     ),
     div({

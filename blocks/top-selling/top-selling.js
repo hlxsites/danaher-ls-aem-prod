@@ -19,8 +19,9 @@ function getCardsPerPageGrid() {
  * @param {HTMLElement} block - The block element to decorate.
  */
 export default async function decorate(block) {
-  block?.parentElement?.parentElement?.removeAttribute('class');
-  block?.parentElement?.parentElement?.removeAttribute('style');
+  block.parentElement.parentElement.style.padding = '0';
+  block.parentElement.parentElement.style.margin = '0';
+  block.style.display = 'none';
 
   const topSellingWrapper = div({
     class:
@@ -541,5 +542,6 @@ export default async function decorate(block) {
   carouselContainer.append(carouselHead, carouselCards, paginationContainer);
   topSellingWrapper.append(carouselContainer);
   block.innerHTML = '';
+  block.style = '';
   block.append(topSellingWrapper);
 }

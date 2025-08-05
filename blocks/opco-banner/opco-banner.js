@@ -31,9 +31,8 @@ export default async function decorate(block) {
   const baseUrl = `https://${window.DanaherConfig.host}`;
 
   const currentPath = window.location.href;
-
-  block?.parentElement?.parentElement?.removeAttribute('class');
-  block?.parentElement?.parentElement?.removeAttribute('style');
+  block.parentElement.parentElement.style.padding = '0';
+  block.parentElement.parentElement.style.margin = '0';
 
   const opcoBannerTitle = bannerTitle;
   const opcoBannerHeading = bannerHeading;
@@ -95,7 +94,7 @@ export default async function decorate(block) {
               href: `/us/en/${productsTag}/brands/${brandLink}`,
               target: linkTarget.includes('http') ? '_blank' : '_self',
               class:
-                'text-[16px] leading-tight font-medium font-primary text-center text-sm text-danaherpurple-800 bg-danaherpurple-25 px-4 py-1',
+                'leading-tight font-medium font-primary text-center text-sm text-danaherpurple-800 bg-danaherpurple-25 px-4 py-1',
             },
             linkLabel,
           ),
@@ -105,7 +104,7 @@ export default async function decorate(block) {
   }
   // === LEFT SECTION ===
   const leftContent = div({
-    class: 'flex flex-col gap-4 max-w-[567px]',
+    class: 'flex flex-col gap-4 max-w-[567px] items-start',
   });
 
   if (opcoBannerTitle) {
@@ -124,7 +123,7 @@ export default async function decorate(block) {
       img({
         src: opcoBannerImage.src,
         alt: opcoBannerImage.alt || 'Brand Image',
-        class: 'w-[172px] mb-2 md:mb-8 h-auto',
+        class: 'max-w-[294px] max-h-[120px] object-contain mb-2 md:mb-8 h-auto',
       }),
     );
   }
@@ -144,7 +143,7 @@ export default async function decorate(block) {
   if (opcoBannerDescription) {
     const leftDescription = div({
       id: 'opcoBannerDescription',
-      class: 'text-[18px] leading-[22px] font-normal text-black w-full',
+      class: 'text-base leading-[22px] font-normal text-black w-full',
     });
 
     leftDescription.insertAdjacentHTML('beforeend', opcoBannerDescription);
@@ -383,8 +382,7 @@ export default async function decorate(block) {
       overlayWrapper?.classList.remove('hidden');
       slide.style.padding = '2.5rem';
       slide.style.backgroundImage = `url('${opcoBannerItemBgImage.src}')`;
-      slide.style.backgroundSize = 'cover';
-      slide.style.backgroundSize = 'cover';
+      slide.style.backgroundSize = 'contain';
       slide.style.backgroundPosition = 'center';
       slide.querySelectorAll('.text-center')?.forEach((it) => {
         it.style.color = '#fff';

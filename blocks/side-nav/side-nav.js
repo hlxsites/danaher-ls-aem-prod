@@ -35,6 +35,10 @@ function renderSideNav(sideNavItems) {
 }
 
 export default async function decorate(block) {
+  const elToClean = document.querySelector('.bg-danaherlightblue-50.side-nav-container');
+  if (elToClean) {
+    elToClean.classList.remove('bg-danaherlightblue-50');
+  }
   let sideNavItems = [];
   let sideNavTitle = 'Side Navigation';
   let selectedNavItem = null;
@@ -87,6 +91,8 @@ export default async function decorate(block) {
     navHeadingDiv.classList.add('pt-0');
   }
   block.append(navHeadingDiv, sideNavElements);
+  const blockSideNavContent = block?.parentElement?.parentElement?.nextElementSibling?.querySelector('.default-content-wrapper');
+  block?.parentElement?.parentElement?.querySelector('.default-content-wrapper')?.append(blockSideNavContent);
   block?.parentElement?.parentElement?.nextElementSibling?.classList.add(...'lg:col-span-8 lg:col-start-5 space-y-4 mb-2 flex-1 lg:pt-6 px-0 stretch'.split(' '));
   return block;
 }
