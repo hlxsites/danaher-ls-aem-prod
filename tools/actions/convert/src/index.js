@@ -22,6 +22,7 @@ import mappingCfg from '../../../../paths.json';
 import createPipeline from './utils.js';
 // eslint-disable-next-line
 //import pathConfig from './pathConfig.json' with { type: 'json' };
+import { excludeProdPaths, excludeStagePaths } from './converter-paths-config.js';
 
 const mediaTypes = {
   'application/atom+xml': false,
@@ -220,6 +221,7 @@ function skipConverter(path) {
   if (path.includes('/us/en/e-buy')) return true;
 
   */
+ /*
   // this condition for production
   if ((path.includes('us/en/products/brands') || path.includes('us/en/products/2d-3d-cell-culture-systems') || path.includes('us/en/products/antibodies') || path.includes('us/en/products/capillary-electrophoresis-systems') || path.includes('us/en/products/cell-lines-lysates') || path.includes('us/en/products/extraction-kits')) && !path.includes('/topics-jck1/')) {
     return true;
@@ -234,10 +236,27 @@ function skipConverter(path) {
     }
     if (path.includes('/us/en/products-eds') || path.includes('/us/en/e-buy')) return true;
   }
+ */
+  // this is the prod repo
+  const prodRepo = 'danaher-ls-aem-prod';
 
-  if (path.includes('/us/en/blog-eds/')) return true;
-  if (path.includes('/us/en/news-eds/')) return true;
-  if (path.includes('/us/en/videos-eds/')) return true;
+  // check for stage : :::::  checking host in the config for prod
+  if (converterCfg.internalHost.includes(prodRepo)) {
+    if (!excludeProdPaths.some((prodPath) => path.includes(prodPath)) && !path.includes('/topics-jck1/')) {
+      return true;
+    }
+  }
+
+  // check for stage : :::::  checking host in the config for stage
+  if (!converterCfg.internalHost.includes(prodRepo)) {
+    if (!excludeStagePaths.some((stagePath) => path.includes(stagePath)) && !path.includes('/topics-jck1/')) {
+      return true;
+    }
+  }
+  /*
+  if (path.includes('/us/en/blog/')) return true;
+  if (path.includes('/us/en/news/')) return true;
+  if (path.includes('/us/en/videos-eds/')) return true; */
   // skip the converter for pages like **/products/*/topics/**
   const regex = /\/[^/]+\/[^/]+\/products\/[^/]+\/topics-jck1\/[^/]+/;
   return regex.test(path);
