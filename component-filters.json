@@ -55,7 +55,8 @@
       "table",
       "testimonial",
       "tags-list",
-      "related-articles"
+      "related-articles",
+      "mini-teasers"
     ]
   },
   {
@@ -108,7 +109,7 @@
   {
     "id": "carousel",
     "components": [
-      " "
+      ""
     ]
   },
   {
@@ -160,6 +161,12 @@
     "id": "learn-more",
     "components": [
       ""
+    ]
+  },
+  {
+    "id": "mini-teasers",
+    "components": [
+      "mini-teaser"
     ]
   },
   {
