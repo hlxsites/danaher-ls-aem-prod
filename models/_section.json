@@ -27,6 +27,14 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "bg-white seventythirty",
+              "value": "bg-white seventythirty"
+            },
+            {
+              "name": "bg-white thirtyseventy",
+              "value": "bg-white thirtyseventy"
             }
           ]
         }
@@ -38,7 +46,6 @@
       "id": "section",
     "components": [
       "article-info",
-      "article-info-new",
       "breadcrumb",
       "banner",
       "text",
@@ -85,7 +92,9 @@
       "testimonial",
       "tags-list",
       "related-articles",
-      "mini-teasers"
+      "social-media",
+      "mini-teasers",
+      "talk-to-an-expert-text"
     ]
     }
   ]

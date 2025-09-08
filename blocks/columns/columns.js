@@ -4,6 +4,7 @@ import {
 import {
   decorateIcons,
 } from '../../scripts/lib-franklin.js';
+import loadSFDCForm from '../form/form.js';
 
 /** *****JOIN-TODAY FORM Starts ******* */
 
@@ -610,6 +611,37 @@ async function loadForm(row, tags) {
 export default function decorate(block) {
   const sectionDiv = block.closest('.section');
   const cols = [...block.firstElementChild.children];
+
+  /** ********EDS FORM Starts****************** */
+  if (window.location.pathname.includes('/us/en/we-see-a-way/') || window.location.pathname.includes('/us/en/expert-eds/')) {
+    const pTags = document.querySelectorAll('p');
+    pTags.forEach((p) => {
+      if (p.textContent.trim() === 'talk-to-an-expert') {
+        p.style.display = 'none';
+      } else {
+        p.style.display = '';
+      }
+    });
+    const hasExpertFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'talk-to-an-expert');
+    if (hasExpertFormTag) {
+      const columnsBlock = document.querySelector('div[class*="form-wrapper"]');
+      const columns = columnsBlock.querySelectorAll(':scope > div');
+      const container = columns[0];
+      const colDivs = container.querySelectorAll(':scope > div');
+      const column2 = colDivs[1];
+      // Check if form already exists
+      if (!column2.querySelector('.talk-to-an-expert-form')) {
+        const expertFormDiv = document.createElement('div');
+        expertFormDiv.className = 'talk-to-an-expert-form block';
+        expertFormDiv.setAttribute('data-block-name', 'talk-to-an-expert-form');
+        expertFormDiv.setAttribute('data-block-status', 'loaded');
+        column2.appendChild(expertFormDiv);
+        loadSFDCForm(expertFormDiv);
+      }
+    }
+  }
+  /** ********EDS FORM Ends****************** */
+
   block.classList.add(`columns-${cols.length}-cols`);
   const imageAspectRatio = 1.7778;
   block.querySelectorAll('div').forEach((ele, index) => {
@@ -772,5 +804,38 @@ export default function decorate(block) {
         }
       }
     });
+  });
+
+  // EMBEDS
+  block.querySelectorAll('.embed').forEach((embed) => {
+    let url = '';
+    if (embed.dataset && embed.dataset.url) {
+      url = embed.dataset.url.trim();
+    } else {
+      url = embed.textContent.trim();
+    }
+    if (url.includes('vimeo.com/') && !url.includes('player.vimeo.com')) {
+      const match = url.match(/vimeo\.com\/(\d+)/);
+      if (match) url = `https://player.vimeo.com/video/${match[1]}`;
+    }
+    if (url.includes('youtube.com/watch')) {
+      const match = url.match(/v=([^&]+)/);
+      if (match) url = `https://www.youtube.com/embed/${match[1]}`;
+    }
+    if (url.startsWith('http')) {
+      if (embed.tagName.toLowerCase() === 'p') {
+        div.className = embed.className;
+        embed.replaceWith(div);
+        // const embed = div;
+      }
+      embed.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.width = '100%';
+      iframe.height = '400';
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allowfullscreen', '');
+      embed.appendChild(iframe);
+    }
   });
 }

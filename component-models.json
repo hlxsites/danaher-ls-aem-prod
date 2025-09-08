@@ -208,6 +208,14 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "bg-white seventythirty",
+            "value": "bg-white seventythirty"
+          },
+          {
+            "name": "bg-white thirtyseventy",
+            "value": "bg-white thirtyseventy"
           }
         ]
       }
@@ -241,63 +249,6 @@
         "name": "item_description",
         "value": "",
         "label": "Description"
-      }
-    ]
-  },
-  {
-    "id": "article-info-new",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "authorName",
-        "label": "Author Name",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "authorTitle",
-        "label": "Author Title",
-        "value": ""
-      },
-      {
-        "component": "reference",
-        "valueType": "Picture",
-        "name": "image",
-        "label": "Image",
-        "multi": false,
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAlt",
-        "label": "Alt Text",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "articleOpco",
-        "label": "Article Opco",
-        "value": ""
-      },
-      {
-        "component": "date-time",
-        "valueType": "date-time",
-        "name": "publishDate",
-        "label": "Date",
-        "displayFormat": null,
-        "valueFormat": null,
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "readingTime",
-        "label": "Reading Time",
-        "value": ""
       }
     ]
   },
@@ -824,53 +775,39 @@
     "id": "columns",
     "fields": [
       {
-        "component": "select",
-        "name": "rows",
-        "label": "Number of Columns",
-        "valueType": "string",
-        "default": "2",
-        "options": [
-          {
-            "name": "2 Columns",
-            "value": "2"
-          },
-          {
-            "name": "3 Columns",
-            "value": "3"
-          }
-        ]
+        "component": "text",
+        "valueType": "number",
+        "name": "columns",
+        "value": "2",
+        "label": "Columns"
       },
       {
-        "component": "multiselect",
+        "component": "text",
+        "valueType": "number",
+        "name": "rows",
+        "value": "1",
+        "label": "Rows"
+      },
+      {
+        "component": "select",
         "name": "classes",
-        "label": "Select Ratio (only for 2 columns)",
+        "label": "Select Class Name",
         "valueType": "string",
-        "default": "fiftyfifty",
+        "default": "",
         "options": [
           {
-            "name": "70/30 Split",
-            "value": "seventythirty"
+            "name": "default",
+            "value": ""
           },
           {
-            "name": "30/70 Split",
-            "value": "thirtyseventy"
+            "name": "itemscenter",
+            "value": "itemscenter"
+          },
+          {
+            "name": "form-wrapper",
+            "value": "form-wrapper"
           }
-        ],
-        "condition": {
-          "field": "rows",
-          "equals": "2"
-        }
-      }
-    ]
-  },
-  {
-    "id": "column",
-    "fields": [
-      {
-        "component": "blocks",
-        "name": "blocks",
-        "label": "Blocks",
-        "valueType": "array"
+        ]
       }
     ]
   },
@@ -943,6 +880,23 @@
   {
     "id": "form",
     "fields": [
+      {
+        "component": "select",
+        "name": "formSelection",
+        "label": "Select Form Name",
+        "valueType": "string",
+        "default": "",
+        "options": [
+          {
+            "name": "default",
+            "value": ""
+          },
+          {
+            "name": "talk-to-an-expert",
+            "value": "talk-to-an-expert"
+          }
+        ]
+      },
       {
         "component": "text",
         "name": "formId",
@@ -2001,53 +1955,21 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "url",
-        "label": "Current Article URL",
-        "value": ""
-      },
-      {
-        "component": "reference",
-        "valueType": "List",
         "name": "articles",
-        "label": "Filtered Articles",
-        "multi": true,
-        "fields": [
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "title",
-            "label": "Title",
-            "value": ""
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "path",
-            "label": "Path",
-            "value": ""
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "type",
-            "label": "Type",
-            "value": ""
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "topics",
-            "label": "Topics",
-            "value": ""
-          },
-          {
-            "component": "date-time",
-            "valueType": "date-time",
-            "name": "publishDate",
-            "label": "Publish Date",
-            "value": ""
-          }
-        ]
+        "label": "articles",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "talk-to-an-expert-text",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "talkToAnExpertText",
+        "label": "Talk to an Expert Text",
+        "value": ""
       }
     ]
   },
