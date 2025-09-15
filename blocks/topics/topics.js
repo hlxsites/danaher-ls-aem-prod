@@ -1,5 +1,7 @@
 import ffetch from '../../scripts/ffetch.js';
-import { ul, a, div, span } from '../../scripts/dom-builder.js';
+import {
+  ul, a, div, span,
+} from '../../scripts/dom-builder.js';
 import { getMetadata, toClassName } from '../../scripts/lib-franklin.js';
 import createArticleCard from '../card-list/articleCard.js';
 import { makePublicUrl } from '../../scripts/scripts.js';
@@ -19,8 +21,7 @@ const getSelectionFromUrl = () => {
   return '';
 };
 
-const getPageFromUrl = () =>
-  toClassName(new URLSearchParams(window.location.search).get('page')) || '';
+const getPageFromUrl = () => toClassName(new URLSearchParams(window.location.search).get('page')) || '';
 
 const patchBannerHeading = () => {
   const heading = getMetadata('heading');
@@ -90,7 +91,6 @@ export function createFilters(articles, activeTag = '') {
   const container = div({ class: 'flex items-center gap-2 mb-24' });
 
   if (activeTag) {
-    console.log('activeTag', activeTag);
     let articleType = '';
     if (window.location.pathname.startsWith('/us/en/blog')) {
       articleType = 'Blog';
@@ -101,9 +101,9 @@ export function createFilters(articles, activeTag = '') {
     if (window.location.pathname.startsWith('/us/en/library')) {
       articleType = 'Library';
     }
-     container.append(
+    container.append(
       span({ class: 'font-medium text-danahergray-700' }, `${articleType} topic:`),
-      span({ class: 'font-bold text-black', style: 'margin-left:-4px;' }, activeTag.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())),
+      span({ class: 'font-bold text-black', style: 'margin-left:-4px;' }, activeTag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())),
     );
   }
 
@@ -112,7 +112,7 @@ export function createFilters(articles, activeTag = '') {
   if (window.location.pathname.indexOf(tagName) > -1) {
     newUrl.pathname = window.location.pathname.substring(
       0,
-      window.location.pathname.indexOf(`/${tagName}/`)
+      window.location.pathname.indexOf(`/${tagName}/`),
     );
   }
 
@@ -134,7 +134,7 @@ export function createFilters(articles, activeTag = '') {
   return container;
 }
 
-let indexTemplate = getMetadata('template');
+const indexTemplate = getMetadata('template');
 
 export default async function decorate(block) {
   let indexType = '';
@@ -159,7 +159,6 @@ export default async function decorate(block) {
 
   // Always extract tag from URL
   const activeTagFilter = getSelectionFromUrl();
-  console.log('activeTagFilter', activeTagFilter);
 
   let filteredArticles = articles;
   if (activeTagFilter) {

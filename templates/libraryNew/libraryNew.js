@@ -5,7 +5,7 @@ export default async function buildAutoBlocks() {
   const main = document.querySelector('main');
   const section = main.querySelector(':scope > div:nth-child(2)');
   section.prepend(
-    buildBlock('social-media', { elems: [] })
+    buildBlock('social-media', { elems: [] }),
   );
 
   const additionalContentSection = document.createElement('div');
