@@ -26,6 +26,10 @@
   height: 12rem
 }
 
+.pdp-citations-wrapper :is(.h-\[85rem\]) {
+  height: 85rem
+}
+
 .pdp-citations-wrapper :is(.w-3) {
   width: 0.75rem
 }
