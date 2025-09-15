@@ -33,8 +33,8 @@
               "value": "bg-white seventythirty"
             },
             {
-              "name": "bg-white thirtyseventy",
-              "value": "bg-white thirtyseventy"
+              "name": "thirtyseventy",
+              "value": "thirtyseventy"
             }
           ]
         }
@@ -91,6 +91,7 @@
       "product-hero-content",
       "product-info-list",
       "table",
+      "takeaway",
       "testimonial",
       "tags-list",
       "topics",

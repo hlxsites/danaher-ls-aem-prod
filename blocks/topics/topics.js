@@ -1,5 +1,7 @@
 import ffetch from '../../scripts/ffetch.js';
-import { ul, a, div, span } from '../../scripts/dom-builder.js';
+import {
+  ul, a, div, span,
+} from '../../scripts/dom-builder.js';
 import { getMetadata, toClassName } from '../../scripts/lib-franklin.js';
 import createArticleCard from '../card-list/articleCard.js';
 import { makePublicUrl } from '../../scripts/scripts.js';
@@ -19,8 +21,7 @@ const getSelectionFromUrl = () => {
   return '';
 };
 
-const getPageFromUrl = () =>
-  toClassName(new URLSearchParams(window.location.search).get('page')) || '';
+const getPageFromUrl = () => toClassName(new URLSearchParams(window.location.search).get('page')) || '';
 
 const patchBannerHeading = () => {
   const heading = getMetadata('heading');
@@ -100,9 +101,9 @@ export function createFilters(articles, activeTag = '') {
     if (window.location.pathname.startsWith('/us/en/library')) {
       articleType = 'Library';
     }
-     container.append(
+    container.append(
       span({ class: 'font-medium text-danahergray-700' }, `${articleType} topic:`),
-      span({ class: 'font-bold text-black'}, activeTag.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())),
+      span({ class: 'font-bold text-black', style: 'margin-left:-4px;' }, activeTag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())),
     );
   }
 
@@ -111,7 +112,7 @@ export function createFilters(articles, activeTag = '') {
   if (window.location.pathname.indexOf(tagName) > -1) {
     newUrl.pathname = window.location.pathname.substring(
       0,
-      window.location.pathname.indexOf(`/${tagName}/`)
+      window.location.pathname.indexOf(`/${tagName}/`),
     );
   }
 
@@ -119,7 +120,7 @@ export function createFilters(articles, activeTag = '') {
     a(
       {
         class: 'text-danaherpurple-500 font-semibold',
-        style: 'margin-left:16px;',
+        style: 'margin-left:12px;',
         href: makePublicUrl(newUrl.toString()),
       },
       'View All Topics →',
@@ -133,7 +134,7 @@ export function createFilters(articles, activeTag = '') {
   return container;
 }
 
-let indexTemplate = getMetadata('template');
+const indexTemplate = getMetadata('template');
 
 export default async function decorate(block) {
   let indexType = '';
@@ -186,7 +187,7 @@ export default async function decorate(block) {
       'container grid max-w-7xl w-full mx-auto gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 sm:px-0 justify-items-center mt-3 mb-3',
   });
   articlesToDisplay.forEach((article, index) => {
-    if (articleType !== 'library') {
+    if (articleType) {
       cardList.appendChild(createArticleCard(article, index === 0));
     }
   });

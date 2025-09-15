@@ -1049,7 +1049,8 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Testimonial",
-                  "model": "testimonial"
+                  "model": "testimonial",
+                  "filter": "testimonial"
                 }
               }
             }

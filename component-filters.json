@@ -54,6 +54,7 @@
       "product-hero-content",
       "product-info-list",
       "table",
+      "takeaway",
       "testimonial",
       "tags-list",
       "topics",
@@ -277,10 +278,20 @@
     "components": []
   },
   {
+    "id": "takeway",
+    "components": [
+      " "
+    ]
+  },
+  {
     "id": "talk-to-an-expert-text",
     "components": [
       " "
     ]
+  },
+  {
+    "id": "testimonial",
+    "components": []
   },
   {
     "id": "tiny-carousel",

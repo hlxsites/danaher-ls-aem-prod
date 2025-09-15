@@ -234,8 +234,8 @@
             "value": "bg-white seventythirty"
           },
           {
-            "name": "bg-white thirtyseventy",
-            "value": "bg-white thirtyseventy"
+            "name": "thirtyseventy",
+            "value": "thirtyseventy"
           }
         ]
       }
@@ -281,6 +281,37 @@
         "name": "accordion_title",
         "value": "",
         "label": "Super Title"
+      },
+      {
+        "component": "select",
+        "name": "accordion_titleType",
+        "label": "According Super Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
       }
     ]
   },
@@ -293,6 +324,37 @@
         "name": "item_title",
         "value": "",
         "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "item_titleType",
+        "label": "Accordion Item Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
       },
       {
         "component": "richtext",
@@ -521,12 +583,12 @@
     "fields": [
       {
         "component": "text",
-        "name": "title",
+        "name": "call-to-action_title",
         "label": "Title"
       },
       {
         "component": "select",
-        "name": "titleType",
+        "name": "call-to-action_titleType",
         "label": "Title Type",
         "options": [
           {
@@ -557,22 +619,22 @@
       },
       {
         "component": "aem-content",
-        "name": "carousel_link",
+        "name": "call-to-action_link",
         "label": "Link"
       },
       {
         "component": "text",
-        "name": "carousel_linkText",
+        "name": "call-to-action_linkText",
         "label": "Text"
       },
       {
         "component": "text",
-        "name": "carousel_linkTitle",
+        "name": "call-to-action_linkTitle",
         "label": "Title"
       },
       {
         "component": "select",
-        "name": "carousel_linkType",
+        "name": "call-to-action_linkType",
         "label": "Type",
         "options": [
           {
@@ -2212,6 +2274,54 @@
     ]
   },
   {
+    "id": "takeway",
+    "fields": [
+      {
+        "component": "text",
+        "name": "takeway_title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "takeway_titleType",
+        "label": "Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "takeway_description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
     "id": "talk-to-an-expert-text",
     "fields": [
       {
@@ -2220,6 +2330,36 @@
         "name": "talkToAnExpertText",
         "label": "Talk to an Expert Text",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "testimonial",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Testimonial Image",
+        "multi": false,
+        "referenceType": "image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "testimonial_text",
+        "label": "Testimonial Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author",
+        "label": "Testimonial Author"
       }
     ]
   },
