@@ -10,7 +10,9 @@ export default async function decorate(block) {
   block.parentElement.parentElement.style.padding = '0px 0px 0px 20px';
   const response = JSON.parse(localStorage.getItem('eds-product-details'));
   try {
-    let bundleDetails = JSON.parse(response.raw?.bundlepreviewjson) || [];
+    let bundleDetails = [];
+    const jsonString = response.raw?.bundlepreviewjson;
+    if (jsonString) bundleDetails = JSON.parse(jsonString);
     const elem = document.querySelector('#authored-parts')?.children[3];
     let parsedData;
     if (elem) {

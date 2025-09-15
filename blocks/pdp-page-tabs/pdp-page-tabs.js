@@ -142,11 +142,11 @@ export default async function decorate(block) {
 
   // Full map of static label to section ID/type
   const fullTabConfig = {
-    overview: { label: 'Description', available: !!response?.raw?.richlongdescription?.trim() || authoredTabMap.overview?.length > 0 },
-    specifications: { label: 'Specifications', available: !!response?.raw?.attributejson?.trim() || authoredTabMap.specifications?.length > 0 },
+    overview: { label: 'Description', available: !!response?.raw?.richlongdescription?.trim() || authoredTabMap.hasOwnProperty('overview') },
+    specifications: { label: 'Specifications', available: !!response?.raw?.attributejson?.trim() || authoredTabMap.hasOwnProperty('specifications') },
     products: { label: 'Products', available: response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0 },
     resources: { label: 'Resources', available: !!response?.raw?.numresources },
-    parts: { label: 'Product Parts List', available: !!response?.raw?.bundlepreviewjson?.trim() || authoredTabMap.parts?.length > 0 },
+    parts: { label: 'Product Parts List', available: !!response?.raw?.bundlepreviewjson?.trim() || authoredTabMap.hasOwnProperty('parts') },
     // eslint-disable-next-line no-prototype-builtins
     citations: { label: 'Citations', available: !!response?.raw?.citations?.trim() || authoredTabMap.hasOwnProperty('citations') },
   };

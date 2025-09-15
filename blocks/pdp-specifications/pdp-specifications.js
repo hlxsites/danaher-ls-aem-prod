@@ -8,8 +8,9 @@ export default async function decorate(block) {
   const isPIM = document.querySelector('#authored-specifications')?.children[0].textContent;
 
   const response = JSON.parse(localStorage.getItem('eds-product-details'));
-  let attrJson = ((response !== undefined && response !== null)
-  && JSON.parse(response?.raw.attributejson)) ? JSON.parse(response?.raw.attributejson) : [];
+  let attrJson = [];
+  if (response?.raw?.attributejson)
+    attrJson = JSON.parse(response.raw.attributejson);
   const elem = document.querySelector('#authored-specifications')?.children[3];
   let parsedData;
   if (elem) {
