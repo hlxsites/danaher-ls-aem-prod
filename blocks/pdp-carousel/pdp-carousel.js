@@ -1,7 +1,7 @@
 import { div, span } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import renderGridCard from './grid-data.js';
-import { getProductRecommendationsResponse, recommendationsController } from "../../scripts/coveo/recommendations-engine.js";
+import { getProductRecommendationsResponse, recommendationsController } from '../../scripts/coveo/recommendations-engine.js';
 
 function getCardsPerPageGrid() {
   if (window.innerWidth < 640) return 1;
@@ -69,45 +69,6 @@ export default async function decorate(block) {
     }
   });
 
-  if (cachedProducts && cachedProducts.length) {
-    renderCarousel(cachedProducts);
-  } else {
-    getProductRecommendationsResponse(sku);
-    recommendationsController.subscribe(() => {
-      const recommendations = recommendationsController.state.recommendations;
-      const productsList = (recommendations || []).slice(0, 12);
-      localStorage.setItem(storageKey, JSON.stringify(productsList));
-      renderCarousel(productsList);
-    });
-  }
-
-  function renderCarousel(productsList) {
-    track.innerHTML = '';
-
-    productsList.forEach((product) => {
-      const mappedProduct = {
-        title: product.title,
-        url: product.clickUri,
-        image: product.raw?.images?.[0] || 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
-        description: product.raw?.description || '',
-      };
-      track.append(renderGridCard(mappedProduct));
-    });
-
-    scrollIndex = 0;
-    scrollCarousel(0);
-    updateArrows();
-
-    if (!carouselContainer.isConnected) {
-      carouselContainer.append(carouselHead, carouselCards, paginationContainer);
-      blockWrapper.append(carouselContainer);
-
-      block.textContent = '';
-      block.style = '';
-      block.append(blockWrapper);
-    }
-  }
-
   function updateArrows() {
     const currentProducts = JSON.parse(localStorage.getItem(`pdp-carousel-products-${sku}`)) || [];
     const maxIndex = Math.ceil(currentProducts.length / cardsPerPageGrid) - 1;
@@ -150,6 +111,45 @@ export default async function decorate(block) {
     });
 
     updateArrows();
+  }
+
+  function renderCarousel(productsList) {
+    track.innerHTML = '';
+
+    productsList.forEach((product) => {
+      const mappedProduct = {
+        title: product.title,
+        url: product.clickUri,
+        image: product.raw?.images?.[0] || 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
+        description: product.raw?.description || '',
+      };
+      track.append(renderGridCard(mappedProduct));
+    });
+
+    scrollIndex = 0;
+    scrollCarousel(0);
+    updateArrows();
+
+    if (!carouselContainer.isConnected) {
+      carouselContainer.append(carouselHead, carouselCards, paginationContainer);
+      blockWrapper.append(carouselContainer);
+
+      block.textContent = '';
+      block.style = '';
+      block.append(blockWrapper);
+    }
+  }
+
+  if (cachedProducts && cachedProducts.length) {
+    renderCarousel(cachedProducts);
+  } else {
+    getProductRecommendationsResponse(sku);
+    recommendationsController.subscribe(() => {
+      const { recommendations } = recommendationsController.state;
+      const productsList = (recommendations || []).slice(0, 12);
+      localStorage.setItem(storageKey, JSON.stringify(productsList));
+      renderCarousel(productsList);
+    });
   }
 
   prevDiv.addEventListener('click', () => scrollCarousel(-1));

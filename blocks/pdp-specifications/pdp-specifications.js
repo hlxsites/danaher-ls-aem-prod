@@ -9,8 +9,7 @@ export default async function decorate(block) {
 
   const response = JSON.parse(localStorage.getItem('eds-product-details'));
   let attrJson = [];
-  if (response?.raw?.attributejson)
-    attrJson = JSON.parse(response.raw.attributejson);
+  if (response?.raw?.attributejson) attrJson = JSON.parse(response.raw.attributejson);
   const elem = document.querySelector('#authored-specifications')?.children[3];
   let parsedData;
   if (elem) {
