@@ -21,7 +21,12 @@ async function getProductTitle(url, host) {
 const createProductHero = async (main, document, param, url) => {
   const host = param.opts?.converterCfg?.internalHost;
   const product = main.querySelector('product-page');
-  if (product) {
+  const template = document.querySelector('meta[name="template"]')?.content;
+  if (product || (template !== undefined && template === 'pdp')) {
+    let tag = document.createElement('meta');
+    tag.setAttribute('property', 'edspdptagrj');
+    tag.content = 'PDP tag test for EDS';
+    document.head.appendChild(tag);
     const productCells = [
       ['Product Hero'],
     ];
