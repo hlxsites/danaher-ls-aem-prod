@@ -9,8 +9,7 @@
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
               "name": "Testimonial",
-              "model": "testimonial",
-              "filter": "testimonial"
+              "model": "testimonial"
             }
           }
         }
@@ -37,7 +36,7 @@
         {
           "component": "richtext",
           "valueType": "string",
-          "name": "testimonial_text",
+          "name": "text",
           "label": "Testimonial Text"
         },
         {
@@ -49,10 +48,5 @@
       ]
     }
   ],
-  "filters": [
-    {
-      "id": "testimonial",
-      "components": []
-    }
-  ]
+  "filters": [  ]
 }
