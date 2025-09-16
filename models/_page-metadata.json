@@ -52,6 +52,18 @@
             {
               "component": "text",
               "valueType": "string",
+              "name": "og:image",
+              "label": "OG Image"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "og:image:secure_url",
+              "label": "OG Image Secure URL"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
               "name": "path",
               "label": ":path",
               "value": ""

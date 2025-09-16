@@ -18,6 +18,7 @@ export default function decorate(block) {
   const expectedPublishFormat = new Date(publishDate);
   block.innerHTML = '';
 
+  if (!window.location.pathname.includes('/us/en/library/')) {
   block.append(
     div(
       { class: 'articleinfo' },
@@ -48,6 +49,7 @@ export default function decorate(block) {
       ),
     ),
   );
+}
 
   if (authorImage) {
     const items = block.querySelector('.items-center');
@@ -57,11 +59,13 @@ export default function decorate(block) {
     block.querySelector('.articleinfo')?.firstChild?.prepend(imageEl);
   }
 
+  if (!window.location.pathname.includes('/us/en/library/')) {
   block.querySelector('.reading-icon').innerHTML = `
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M9.01172 5.66667V9L11.5117 11.5M16.5117 9C16.5117 13.1421 13.1539 16.5 9.01172 16.5C4.86958 16.5 1.51172 13.1421 1.51172 9C1.51172 4.85786 4.86958 1.5 9.01172 1.5C13.1539 1.5 16.5117 4.85786 16.5117 9Z" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
     </svg>
   `;
+  }
 
   const toBeRemoved = ['social-media-wrapper', 'columns-wrapper', 'article-info-wrapper', 'tags-list-wrapper', 'related-articles-wrapper'];
   const sectionEl = document.querySelector('main > div:nth-child(1)');
