@@ -45,6 +45,30 @@
           {
             "component": "text",
             "valueType": "string",
+            "name": "topics",
+            "label": "Topics"
+          },
+          {
+            "component": "reference",
+            "valueType": "string",
+            "name": "image",
+            "label": "Image"
+          },
+          {
+            "component": "reference",
+            "valueType": "string",
+            "name": "og:image",
+            "label": "OG Image"
+          },
+          {
+            "component": "reference",
+            "valueType": "string",
+            "name": "og:image:secure_url",
+            "label": "Image Secure URL"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
             "name": "path",
             "label": ":path",
             "value": ""
@@ -81,6 +105,20 @@
             "placeholder": "YYYY-MM-DD",
             "displayFormat": null,
             "valueFormat": null,
+            "value": ""
+          },
+          {
+            "component": "date-time",
+            "valueType": "date-time",
+            "name": "publishdate",
+            "label": "Publish Date",
+            "value": ""
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "readingTime",
+            "label": "Reading Time",
             "value": ""
           },
           {
@@ -214,8 +252,8 @@
             "value": "bg-white seventythirty"
           },
           {
-            "name": "bg-white thirtyseventy",
-            "value": "bg-white thirtyseventy"
+            "name": "thirtyseventy",
+            "value": "thirtyseventy"
           }
         ]
       }
@@ -242,6 +280,99 @@
         "name": "item_title",
         "value": "",
         "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "item_description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "accordion_title",
+        "value": "",
+        "label": "Super Title"
+      },
+      {
+        "component": "select",
+        "name": "accordion_titleType",
+        "label": "According Super Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "accordion-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "item_title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "item_titleType",
+        "label": "Accordion Item Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
       },
       {
         "component": "richtext",
@@ -466,40 +597,121 @@
     ]
   },
   {
-    "id": "card-list",
+    "id": "call-to-action",
     "fields": [
       {
         "component": "text",
-        "valueType": "string",
-        "name": "tagName",
-        "value": "topics",
-        "label": "Tag Category (e.g. topics, solutions)"
+        "name": "call-to-action_title",
+        "label": "Title"
       },
       {
         "component": "select",
-        "valueType": "string",
-        "name": "articleType",
-        "label": "Article Type",
+        "name": "call-to-action_titleType",
+        "label": "Title Type",
         "options": [
           {
-            "name": "Default (Articles)",
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "call-to-action_link",
+        "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "call-to-action_linkText",
+        "label": "Text"
+      },
+      {
+        "component": "text",
+        "name": "call-to-action_linkTitle",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "call-to-action_linkType",
+        "label": "Type",
+        "options": [
+          {
+            "name": "default",
             "value": ""
           },
           {
-            "name": "Application",
-            "value": "application"
+            "name": "primary",
+            "value": "primary"
           },
           {
-            "name": "Info",
-            "value": "info"
+            "name": "secondary",
+            "value": "secondary"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "card-list",
+    "fields": [
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "News",
+            "value": "news"
+          },
+          {
+            "name": "Blog",
+            "value": "blog"
+          },
+          {
+            "name": "We see a way",
+            "value": "wsaw"
           },
           {
             "name": "Library",
             "value": "library"
           },
           {
+            "name": "Info",
+            "value": "info"
+          },
+          {
+            "name": "Application",
+            "value": "application"
+          },
+          {
             "name": "New Lab",
             "value": "new-lab"
+          },
+          {
+            "name": "URL Filtered",
+            "value": "url-filtered"
           }
         ]
       },
@@ -516,13 +728,6 @@
         "name": "filters",
         "label": "Enable Filters",
         "value": true
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sourceIndex",
-        "label": "Custom Index Path",
-        "value": "/us/en/article-index.json"
       }
     ]
   },
@@ -1962,6 +2167,54 @@
     ]
   },
   {
+    "id": "takeway",
+    "fields": [
+      {
+        "component": "text",
+        "name": "takeway_title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "takeway_titleType",
+        "label": "Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "takeway_description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
     "id": "talk-to-an-expert-text",
     "fields": [
       {
@@ -1970,6 +2223,36 @@
         "name": "talkToAnExpertText",
         "label": "Talk to an Expert Text",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "testimonial",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Testimonial Image",
+        "multi": false,
+        "referenceType": "image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "text",
+        "label": "Testimonial Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author",
+        "label": "Testimonial Author"
       }
     ]
   },
@@ -2060,6 +2343,32 @@
         "name": "productid",
         "value": "",
         "label": "Product IDs(comma separated)"
+      }
+    ]
+  },
+  {
+    "id": "topics",
+    "fields": [
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "News",
+            "value": "news"
+          },
+          {
+            "name": "Blog",
+            "value": "blog"
+          },
+          {
+            "name": "Library",
+            "value": "library"
+          }
+        ]
       }
     ]
   }

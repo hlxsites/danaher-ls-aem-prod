@@ -46,6 +46,30 @@
             {
               "component": "text",
               "valueType": "string",
+              "name": "topics",
+              "label": "Topics"
+            },
+            {
+              "component": "reference",
+              "valueType": "string",
+              "name": "image",
+              "label": "Image"
+            },
+            {
+              "component": "reference",
+              "valueType": "string",
+              "name": "og:image",
+              "label": "OG Image"
+            },
+            {
+              "component": "reference",
+              "valueType": "string",
+              "name": "og:image:secure_url",
+              "label": "Image Secure URL"
+            },
+            {
+              "component": "text",
+              "valueType": "string",
               "name": "path",
               "label": ":path",
               "value": ""
@@ -82,6 +106,20 @@
               "placeholder": "YYYY-MM-DD",
               "displayFormat": null,
               "valueFormat": null,
+              "value": ""
+            },
+            {
+              "component": "date-time",
+              "valueType": "date-time",
+              "name": "publishdate",
+              "label": "Publish Date",
+              "value": ""
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "readingTime",
+              "label": "Reading Time",
               "value": ""
             },
             {
