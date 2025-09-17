@@ -50,16 +50,10 @@
               "label": "Topics"
             },
             {
-              "component": "text",
+              "component": "reference",
               "valueType": "string",
-              "name": "og:image",
-              "label": "OG Image"
-            },
-            {
-              "component": "text",
-              "valueType": "string",
-              "name": "og:image:secure_url",
-              "label": "OG Image Secure URL"
+              "name": "image",
+              "label": "Image"
             },
             {
               "component": "text",
