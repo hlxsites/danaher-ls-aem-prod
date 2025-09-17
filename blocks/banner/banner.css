@@ -15,8 +15,17 @@
   display: flex
 }
 
-.banner :is(.h-auto) {
-  height: auto
+.banner :is(.h-max) {
+  height: -moz-max-content;
+  height: max-content
+}
+
+.banner :is(.min-h-\[13rem\]) {
+  min-height: 13rem
+}
+
+.banner :is(.min-h-\[6rem\]) {
+  min-height: 6rem
 }
 
 .banner :is(.w-full) {
@@ -27,8 +36,8 @@
   max-width: 80rem
 }
 
-.banner :is(.items-start) {
-  align-items: flex-start
+.banner :is(.items-center) {
+  align-items: center
 }
 
 .banner :is(.justify-start) {
@@ -50,6 +59,10 @@
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
 }
 
+.banner :is(.p-4) {
+  padding: 1rem
+}
+
 .banner :is(.p-0) {
   padding: 0px
 }
@@ -58,28 +71,9 @@
   padding: 0.5rem
 }
 
-.banner :is(.p-4) {
-  padding: 1rem
-}
-
 .banner :is(.px-6) {
   padding-left: 1.5rem;
   padding-right: 1.5rem
-}
-
-.banner :is(.py-0) {
-  padding-top: 0px;
-  padding-bottom: 0px
-}
-
-.banner :is(.py-2) {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem
-}
-
-.banner :is(.py-4) {
-  padding-top: 1rem;
-  padding-bottom: 1rem
 }
 
 .banner :is(.text-left) {
