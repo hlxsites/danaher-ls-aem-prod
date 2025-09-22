@@ -3,7 +3,6 @@ import { buildArticleSchema } from '../../scripts/schema.js';
 import {
   div,
 } from '../../scripts/dom-builder.js';
-// eslint-disable-next-line import/named
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 function moveImageInstrumentation(picture) {
@@ -31,44 +30,59 @@ export default async function buildAutoBlocks() {
     if (imgElement) return false;
     return true;
   });
-  section.removeChild(blogH1);
-  let columnElements = '';
-  let blogHeroImage;
-  if (blogHeroP2) {
-    blogHeroImage = blogHeroP2.querySelector(':scope > picture, :scope > img');
-    section.removeChild(blogHeroP1);
-    section.removeChild(blogHeroP2);
-    const divEl = div();
-    divEl.append(blogH1, blogHeroP1);
-    moveImageInstrumentation(blogHeroImage);
-    columnElements = [[divEl, blogHeroImage]];
-  } else if (blogHeroP1) {
-    blogHeroImage = blogHeroP1.querySelector(':scope > picture, :scope > img');
-    moveImageInstrumentation(blogHeroImage);
-    section.removeChild(blogHeroP1);
-    columnElements = [[blogHeroImage, blogH1]];
+  if (window.location.pathname.includes('/us/en/news/')) {
+    if (blogHeroP2) {
+      section.removeChild(blogHeroP1);
+      section.removeChild(blogHeroP2);
+      const divEl = div();
+      divEl.append(blogH1, blogHeroP1);
+    } else if (blogHeroP1) {
+      section.removeChild(blogHeroP1);
+    }
+    const additionalContentSection = document.createElement('div');
+    additionalContentSection.append(
+      buildBlock('tags-list', { elems: [] }),
+      buildBlock('related-articles', { elems: [] }),
+    );
+    buildArticleSchema();
   } else {
-    columnElements = [blogH1];
+    section.removeChild(blogH1);
+    let columnElements = '';
+    let blogHeroImage;
+    if (blogHeroP2) {
+      blogHeroImage = blogHeroP2.querySelector(':scope > picture, :scope > img');
+      section.removeChild(blogHeroP1);
+      section.removeChild(blogHeroP2);
+      const divEl = div();
+      divEl.append(blogH1, blogHeroP1);
+      moveImageInstrumentation(blogHeroImage);
+      columnElements = [[divEl, blogHeroImage]];
+    } else if (blogHeroP1) {
+      blogHeroImage = blogHeroP1.querySelector(':scope > picture, :scope > img');
+      moveImageInstrumentation(blogHeroImage);
+      section.removeChild(blogHeroP1);
+      columnElements = [[blogHeroImage, blogH1]];
+    }
+
+    section.prepend(
+      buildBlock('social-media', { elems: [] }),
+      buildBlock('columns', columnElements),
+      buildBlock('article-info', { elems: [] }),
+    );
+
+    const additionalContentSection = document.createElement('div');
+    additionalContentSection.append(
+      buildBlock('tags-list', { elems: [] }),
+      buildBlock('related-articles', { elems: [] }),
+    );
+    section.after(additionalContentSection);
+
+    buildArticleSchema();
+
+    // // make the content section the first element in main, first before the breadcrumb section.
+    // // do that hear to avoid the tag-list and related-articles to be moved as well.
+    // // loading order should be social-media, columns, article-info, breadcrumb, tags-list
+    // // related-articles
+    section.parentElement.prepend(section);
   }
-
-  section.prepend(
-    buildBlock('social-media', { elems: [] }),
-    buildBlock('columns', columnElements),
-    buildBlock('article-info', { elems: [] }),
-  );
-
-  const additionalContentSection = document.createElement('div');
-  additionalContentSection.append(
-    buildBlock('tags-list', { elems: [] }),
-    buildBlock('related-articles', { elems: [] }),
-  );
-  section.after(additionalContentSection);
-
-  buildArticleSchema();
-
-  // make the content section the first element in main, first before the breadcrumb section.
-  // do that hear to avoid the tag-list and related-articles to be moved as well.
-  // loading order should be social-media, columns, article-info, breadcrumb, tags-list
-  // related-articles
-  section.parentElement.prepend(section);
 }

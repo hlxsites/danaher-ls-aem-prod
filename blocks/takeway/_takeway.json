@@ -22,13 +22,13 @@
       "fields": [
         {
           "component": "text",
-          "name": "takeway_title",
-          "label": "Title"
+          "name": "takeway_title1",
+          "label": "Title1"
         },
         {
           "component": "select",
-          "name": "takeway_titleType",
-          "label": "Title Type",
+          "name": "takeway_titleType1",
+          "label": "Title Type1",
           "options": [
             {
               "name": "h1",
@@ -59,10 +59,53 @@
         {
           "component": "richtext",
           "valueType": "string",
-          "name": "takeway_description",
+          "name": "takeway_description1",
           "value": "",
-          "label": "Description"
-      }
+          "label": "Description1"
+        },
+        {
+          "component": "text",
+          "name": "takeway_title2",
+          "label": "Title2"
+        },
+        {
+          "component": "select",
+          "name": "takeway_titleType2",
+          "label": "Title Type2",
+          "options": [
+            {
+              "name": "h1",
+              "value": "h1"
+            },
+            {
+              "name": "h2",
+              "value": "h2"
+            },
+            {
+              "name": "h3",
+              "value": "h3"
+            },
+            {
+              "name": "h4",
+              "value": "h4"
+            },
+            {
+              "name": "h5",
+              "value": "h5"
+            },
+            {
+              "name": "h6",
+              "value": "h6"
+            }
+          ]
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "takeway_description2",
+          "value": "",
+          "label": "Description2"
+        }
       ]
     }
   ],
