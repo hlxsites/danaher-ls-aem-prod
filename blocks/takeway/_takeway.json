@@ -27,7 +27,7 @@
         },
         {
           "component": "select",
-          "name": "takeway_titleType1",
+          "name": "takeway_title1Type",
           "label": "Title Type1",
           "options": [
             {
@@ -70,7 +70,7 @@
         },
         {
           "component": "select",
-          "name": "takeway_titleType2",
+          "name": "takeway_title2Type",
           "label": "Title Type2",
           "options": [
             {
