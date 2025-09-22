@@ -8,7 +8,8 @@ export default async function decorate(block) {
   block.classList.add('py-6');
   const divEl = block.querySelector('div');
   divEl.classList.add(...'flex items-center gap-8 justify-center'.split(' '));
-  const divOfDivEl = block.querySelector(':scope div > div:nth-child(2)');
+  const divOfDivEl = block.querySelector(':scope div > div:nth-child(2)') || block?.firstElementChild?.nextElementSibling;
+  // const divOfDivEl = block?.firstElementChild?.nextElementSibling;
   divOfDivEl.classList.add(...'text-2xl leading-9 font-medium text-danahergreyblue-500 relative'.split(' '));
   const picDivEl = divEl.parentNode.querySelector(':scope div > div:nth-child(1)');
   picDivEl.classList.add(...'hidden lg:block lg:flex-shrink-0'.split(' '));
@@ -20,12 +21,45 @@ export default async function decorate(block) {
     block.classList.add('has-image');
     image.classList.add(...'main-image w-64 h-64 rounded-full'.split(' '));
   }
-  const divElem = block.querySelector('.testimonial > div');
-  const footerElem = div(
-    { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
-    divElem?.querySelectorAll('div')[image ? 2 : 1] ? imagecopy || '' : '',
-    div({ class: 'flex flex-col' }, divElem?.querySelectorAll('div')[image ? 2 : 1] ? divElem?.querySelectorAll('div')[image ? 2 : 1] : '', divElem?.querySelectorAll('div')[image ? 3 : 2] ? divElem?.querySelectorAll('div')[image ? 3 : 2] : ''),
-  );
-  divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(footerElem);
-  divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(buildQuote);
+  if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
+    const authorTextDiv = block?.firstElementChild?.nextElementSibling?.nextElementSibling;
+    block.innerHTML = '';
+    const finalimageDiv = div({ class: 'hidden lg:block lg:flex-shrink-0' });
+    if (image) {
+      finalimageDiv.append(image);
+    }
+    const finaldivOfDivEl = div({ class: 'text-2xl leading-9 font-medium text-danahergreyblue-500 relative' });
+    if (divOfDivEl) {
+      finaldivOfDivEl.innerHTML = divOfDivEl.innerHTML;
+      let authorImageEl = '';
+      if (imagecopy) {
+        authorImageEl = img({ src: imagecopy.src, class: 'rounded-full h-16 w-16' });
+      }
+      const footerElem = div(
+        { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
+        authorImageEl,
+        div({ class: 'flex flex-col' }, authorTextDiv || ''),
+      );
+      finaldivOfDivEl.append(footerElem);
+      const quoteIcon = div(span({ class: 'icon icon-quote' }));
+      decorateIcons(quoteIcon);
+      const icon = quoteIcon.querySelector('.icon-quote');
+      if (icon) {
+        icon.classList.add('absolute', 'top-16', 'left-28', 'text-indigo-200', 'w-36', 'h-36', '-translate-x-8', '-translate-y-24', 'transform', 'opacity-50');
+      }
+      finaldivOfDivEl.append(quoteIcon);
+    }
+    divEl.append(finalimageDiv);
+    divEl.append(finaldivOfDivEl);
+    block.append(divEl);
+  } else {
+    const divElem = block.querySelector('.testimonial > div');
+    const footerElem = div(
+      { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
+      divElem?.querySelectorAll('div')[image ? 2 : 1] ? imagecopy || '' : '',
+      div({ class: 'flex flex-col' }, divElem?.querySelectorAll('div')[image ? 2 : 1] ? divElem?.querySelectorAll('div')[image ? 2 : 1] : '', divElem?.querySelectorAll('div')[image ? 3 : 2] ? divElem?.querySelectorAll('div')[image ? 3 : 2] : ''),
+    );
+    divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(footerElem);
+    divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(buildQuote);
+  }
 }
