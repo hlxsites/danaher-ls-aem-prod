@@ -44,6 +44,14 @@ const URLS_TO_BLOCK_MAP = [
     url: '/new-lab/promotions/topics-template.html',
     blockName: 'Card List (new-lab, url-filtered)',
   },
+  {
+    url: '/new-lab/excedr.html',
+    blockName: 'Card List (new-lab)',
+  },
+  {
+    url: '/new-lab/excedr/topics-template.html',
+    blockName: 'Card List (new-lab, url-filtered)',
+  },
 ];
 
 const createCardList = (main, document) => {
