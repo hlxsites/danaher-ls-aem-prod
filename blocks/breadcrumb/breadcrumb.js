@@ -2,8 +2,10 @@ import {
   a, div, li, ul,
 } from '../../scripts/dom-builder.js';
 import ffetch from '../../scripts/ffetch.js';
+// eslint-disable-next-line import/no-cycle
 import { getEdgeDeliveryPath } from '../../scripts/scripts.js';
 import { includeProdEdsPaths, includeStageEdsPaths } from '../../scripts/delayed.js';
+import { getMetadata } from '../../scripts/lib-franklin.js';
 
 const TEMPLATE_PATH_PATTERN = /\/us\/en\/[^/]+\/topics-template/;
 
@@ -50,11 +52,19 @@ export default async function decorate(block) {
   Array.from(entries.children).forEach((element, index, arr) => {
   /*
   *
-  :::::::::::
+
      breadcrumb EDS supportive code starts
-  ::::::::::::::
+
   *
   */
+    const removableLabels = ['Family', 'Bundles', 'Sku', 'Topics'];
+
+    entries?.querySelectorAll('li')?.forEach((liEle) => {
+      const text = liEle.textContent?.trim() || '';
+      if (removableLabels.includes(text)) {
+        liEle.remove();
+      }
+    });
 
     if ((includeProdEdsPaths.some((prodPath) => window.location.pathname.includes(prodPath)) || (includeStageEdsPaths.some((stagePath) => window.location.pathname.includes(stagePath)) && window.DanaherConfig.host.includes('stage.lifesciences'))) && index > 1) {
       const elementContent = element.textContent.trim().replace(/-/g, ' ');
@@ -99,9 +109,9 @@ export default async function decorate(block) {
 
     /*
   *
-  :::::::::::
+
      breadcrumb EDS supportive code ends
-  ::::::::::::::
+
   *
   */
 
@@ -115,7 +125,16 @@ export default async function decorate(block) {
     element.setAttribute('data-acsb-force-hidden', 'true');
     const anchor = element.children[0];
     anchor.setAttribute('tabindex', '-1');
-    if (entries.children.length - 1 !== index) element.innerHTML = "<svg class='w-6 h-5/6 flex-shrink-0 text-gray-300' viewBox='0 0 24 44' preserveAspectRatio='none' fill='currentColor' xmlns='http://www.w3.org/2000/svg' aria-hidden='true' data-acsb-hidden='true' data-acsb-force-hidden='true' data-di-rand='1697196048881'><path d='M.293 0l22 22-22 22h1.414l22-22-22-22H.293z'></path></svg>";
+    anchor.style.fontFamily = '"Inter"';
+    const svgArrow = '<svg class="w-6 h-full flex-shrink-0 text-gray-300" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" data-acsb-hidden="true" data-acsb-force-hidden="true"><path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z"></path></svg>';
+    const template = getMetadata('template') || '';
+    const total = entries?.children?.length ?? 0;
+
+    if (template === 'pdp' && index < total) {
+      element.innerHTML = svgArrow;
+    } else if (template !== 'pdp' && index !== total - 1) {
+      element.innerHTML = svgArrow;
+    }
     element.prepend(anchor);
 
     // special handling for template pages
@@ -129,6 +148,8 @@ export default async function decorate(block) {
       class: 'breadcrumb-wrapper !flex border-b border-gray-200',
     },
   );
+  bredWrap.style.borderBottomWidth = '1px';
+  bredWrap.style.borderColor = 'rgb(229 231 235)';
   breadcrumbWrapper.innerHTML = '';
   if (includeProdEdsPaths.some((prodPath) => window.location.pathname.includes(prodPath)) || (includeStageEdsPaths.some((stagePath) => window.location.pathname.includes(stagePath)) && window.DanaherConfig.host.includes('stage.lifesciences'))) {
     bredWrap.append(entries);
@@ -148,8 +169,8 @@ export default async function decorate(block) {
 
   // Remove duplicate breadcrumb-wrapper elements, keep only the first one
   const wrappers = document.querySelectorAll('.breadcrumb-wrapper');
-  if (wrappers.length > 1) {
-    for (let i = 1; i < wrappers.length; i++) {
+  if (wrappers?.length > 1) {
+    for (let i = 1; i < wrappers.length; i += 1) {
       wrappers[i].remove();
     }
   }

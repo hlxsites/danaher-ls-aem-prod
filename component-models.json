@@ -1011,6 +1011,10 @@
           {
             "name": "form-wrapper",
             "value": "form-wrapper"
+          },
+          {
+            "name": "multiplecolumns",
+            "value": "multiplecolumns"
           }
         ]
       }

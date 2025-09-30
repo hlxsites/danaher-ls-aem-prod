@@ -44,7 +44,8 @@
           "options": [
             { "name": "default", "value": "" },
             { "name": "itemscenter", "value": "itemscenter" },
-            { "name": "form-wrapper", "value": "form-wrapper" }
+            { "name": "form-wrapper", "value": "form-wrapper" },
+            { "name": "multiplecolumns", "value": "multiplecolumns" }
           ]
         }
       ]
