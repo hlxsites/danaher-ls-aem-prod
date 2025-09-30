@@ -145,6 +145,7 @@
     "components": [
       "text",
       "image",
+      "image-link",
       "button",
       "title",
       "form",
