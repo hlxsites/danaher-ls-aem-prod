@@ -67,7 +67,10 @@ export default function createCard(article, firstCard = false) {
     ),
     span({ class: 'pl-2' }, `${article.readingTime} min read`),
   );
-  if (template !== 'wsaw') cardWrapper.querySelector('.eyebrow-sm')?.after(showDateTime);
+  // if (template !== 'wsaw') cardWrapper.querySelector('.eyebrow-sm')?.after(showDateTime);
+  if (template !== 'wsaw' && !article.path?.includes('/us/en/library/')) {
+    cardWrapper.querySelector('.eyebrow-sm')?.after(showDateTime);
+  }
 
   return li(
     {
