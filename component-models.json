@@ -52,19 +52,8 @@
             "component": "reference",
             "valueType": "string",
             "name": "image",
-            "label": "Image"
-          },
-          {
-            "component": "reference",
-            "valueType": "string",
-            "name": "og:image",
-            "label": "OG Image"
-          },
-          {
-            "component": "reference",
-            "valueType": "string",
-            "name": "og:image:secure_url",
-            "label": "Image Secure URL"
+            "label": "Image",
+            "multi": false
           },
           {
             "component": "text",

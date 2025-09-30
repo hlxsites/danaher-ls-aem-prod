@@ -9,8 +9,8 @@ export default function createCard(article, firstCard = false) {
     : article.title;
 
   const cardWrapper = a(
-    { class: 'group h-full', href: makePublicUrl(article.path), title: cardTitle },
-    imageHelper(article.image, cardTitle, firstCard),
+    { class: 'group h-full', href: makePublicUrl(article.path), title: article.title },
+    imageHelper(article.image, article.title, firstCard),
     div(
       { class: '' },
       p(
