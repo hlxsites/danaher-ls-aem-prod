@@ -2517,6 +2517,14 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
   width: 50% !important;
 }
 
+main div.section.no-padding-top.columns-container {
+  padding-top: 0px;
+}
+
+main div.section.no-padding-top.columns-container.call-to-action-container {
+  padding-top: 0px;
+}
+
 .pointer-events-none {
   pointer-events: none;
 }
@@ -3244,6 +3252,10 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.opacity-50 {
+  opacity: 0.5;
 }
 
 .shadow {
