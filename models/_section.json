@@ -39,6 +39,10 @@
             {
               "name": "thirtyseventy",
               "value": "thirtyseventy"
+            },
+            {
+              "name": "No Padding Top",
+              "value": "no-padding-top"
             }
           ]
         }
@@ -55,6 +59,7 @@
       "banner",
       "text",
       "image",
+      "image-link",
       "form",
       "button",
       "title",

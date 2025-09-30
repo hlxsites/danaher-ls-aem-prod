@@ -1,0 +1,21 @@
+.dhls-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  margin-top: 48px
+}
+
+.image-wrapper :is(.block) {
+  display: block
+}
+
+.image-wrapper :is(.w-full) {
+  width: 100%
+}
+
+.image-wrapper :is(.h-auto) {
+  height: auto
+}
+
+.image-wrapper :is(.object-contain) {
+  object-fit: contain
+}
