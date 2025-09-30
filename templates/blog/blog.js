@@ -30,7 +30,7 @@ export default async function buildAutoBlocks() {
     if (imgElement) return false;
     return true;
   });
-  if (window.location.pathname.includes('/us/en/news/')) {
+  if (window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
     if (blogHeroP2) {
       section.removeChild(blogHeroP1);
       section.removeChild(blogHeroP2);

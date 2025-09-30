@@ -613,7 +613,7 @@ export default function decorate(block) {
   const cols = [...block.firstElementChild.children];
 
   /** ********EDS FORM Starts****************** */
-  if (window.location.pathname.includes('/us/en/we-see-a-way/') || window.location.pathname.includes('/us/en/expert-eds/')) {
+  if (window.location.pathname.includes('/us/en/we-see-a-way/')) {
     const pTags = document.querySelectorAll('p');
     pTags.forEach((p) => {
       if (p.textContent.trim() === 'talk-to-an-expert') {
@@ -646,8 +646,15 @@ export default function decorate(block) {
   const imageAspectRatio = 1.7778;
   block.querySelectorAll('div').forEach((ele, index) => {
     if (index === 0) {
-      if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
-        ele.classList.add(...'align-text-center w-full h-full'.split(' '));
+      if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
+        if (block.className.includes('multiplecolumns')) {
+          const firstDiv = ele.querySelector('div:nth-child(1)');
+          const secondDiv = ele.querySelector('div:nth-child(2)');
+          firstDiv.classList.add('lg:w-1/2');
+          secondDiv?.classList.add('lg:w-1/2');
+        } else {
+          ele.classList.add(...'align-text-center w-full h-full'.split(' '));
+        }
       } else {
         ele.classList.add(...'align-text-top pb-7 py-0 my-0'.split(' '));
         const firstDiv = ele.querySelector('div:nth-child(1)');
@@ -708,7 +715,7 @@ export default function decorate(block) {
           img.height = Math.floor(this.width / imageAspectRatio);
         };
       } else if (!block.className.includes('itemscenter')) {
-        if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
+        if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
           row.classList.add('h-full', 'lg:w-1/2', 'md:pr-16');
           row.querySelectorAll('h1').forEach((ele) => {
             ele.classList.add('pb-4');
@@ -753,8 +760,12 @@ export default function decorate(block) {
         });
       }
       if (block.className.includes('columns-2-cols')) {
-        if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
-          block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col-reverse gap-x-12 lg:flex-col-reverse justify-items-center'.split(' '));
+        if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
+          if (block.className.includes('multiplecolumns')) {
+            block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col gap-x-12 gap-y-4 lg:flex-row justify-items-center'.split(' '));
+          } else {
+            block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col-reverse gap-x-12 lg:flex-col-reverse justify-items-center'.split(' '));
+          }
         } else {
           block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col gap-x-12 gap-y-4 lg:flex-row justify-items-center'.split(' '));
         }
@@ -788,9 +799,14 @@ export default function decorate(block) {
         const picWrapper = pic.closest('div');
         if (picWrapper && picWrapper.children.length === 1) {
           // picture is only content in column
-          if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
-            picWrapper.classList.add(...'columns-img-col order-none relative h-48 md:h-[27rem] block lg:absolute md:inset-y-0 lg:inset-y-0 lg:right-2 lg:w-1/2 lg:mt-56'.split(' '));
-            pic.querySelector('img').classList.add(...'absolute bottom-0 h-full w-full object-cover'.split(' '));
+          if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
+            if (block.className.includes('multiplecolumns')) {
+              picWrapper.classList.add('columns-img-col', 'order-none');
+              pic.querySelector('img').classList.add('block');
+            } else {
+              picWrapper.classList.add(...'columns-img-col order-none relative h-48 md:h-[27rem] block lg:absolute md:inset-y-0 lg:inset-y-0 lg:right-2 lg:w-1/2 lg:mt-56'.split(' '));
+              pic.querySelector('img').classList.add(...'absolute bottom-0 h-full w-full object-cover'.split(' '));
+            }
           } else {
             picWrapper.classList.add('columns-img-col', 'order-none');
             const seventythirtyEl = picWrapper.parentElement
