@@ -247,6 +247,10 @@
           {
             "name": "thirtyseventy",
             "value": "thirtyseventy"
+          },
+          {
+            "name": "No Padding Top",
+            "value": "no-padding-top"
           }
         ]
       }
@@ -1162,6 +1166,36 @@
         "label": "Error URL",
         "required": true,
         "description": "Unique name for the form."
+      }
+    ]
+  },
+  {
+    "id": "image-link",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "altText",
+        "value": "",
+        "label": "Alt Text"
+      },
+      {
+        "component": "aem-content",
+        "name": "href",
+        "label": "Link (href)"
+      },
+      {
+        "component": "boolean",
+        "name": "target",
+        "value": false,
+        "label": "Open link in new tab?"
       }
     ]
   },
