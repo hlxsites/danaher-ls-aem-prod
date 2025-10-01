@@ -14,10 +14,10 @@ function moveImageInstrumentation(picture) {
 export default async function buildAutoBlocks() {
   const main = document.querySelector('main');
   // Remove banner block if present (banner is inserted before main)
-  const bannerBlock = document.querySelector('.banner');
-  if (bannerBlock) {
-    bannerBlock.remove();
-  }
+  // const bannerBlock = document.querySelector('.banner');
+  // if (bannerBlock) {
+  //   bannerBlock.remove();
+  // }
   const section = main.querySelector(':scope > div:nth-child(2)');
   let blogH1 = '';
   let blogHeroP1 = '';
