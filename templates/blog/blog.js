@@ -21,6 +21,8 @@ export default async function buildAutoBlocks() {
   firstThreeChildren.every((child) => {
     if (child.tagName === 'H1' && !blogH1) {
       blogH1 = child;
+    } else if (child.tagName === 'H2') {
+      return false;
     } else if (child.tagName === 'P' && !blogHeroP1) {
       blogHeroP1 = child;
     } else if (child.tagName === 'P' && !blogHeroP2) {
@@ -37,7 +39,6 @@ export default async function buildAutoBlocks() {
       section.removeChild(blogHeroP2);
       const divEl = div();
       divEl.append(blogH1, blogHeroP1);
-      section.prepend(divEl);
     } else if (blogHeroP1) {
       section.removeChild(blogHeroP1);
     }
@@ -46,7 +47,6 @@ export default async function buildAutoBlocks() {
       buildBlock('tags-list', { elems: [] }),
       buildBlock('related-articles', { elems: [] }),
     );
-    // section.after(additionalContentSection);
     buildArticleSchema();
   } else {
     section.removeChild(blogH1);
