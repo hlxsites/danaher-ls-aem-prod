@@ -5,6 +5,7 @@ import {
   decorateIcons,
 } from '../../scripts/lib-franklin.js';
 import loadSFDCForm from '../form/form.js';
+import decorateImageLink from '../image-link/image-link.js';
 
 /** *****JOIN-TODAY FORM Starts ******* */
 
@@ -730,11 +731,108 @@ export default function decorate(block) {
         }
       }
 
+      // IMAGE-LINK HANDLING - Create proper DOM structure matching standalone image-link
+      if (row.dataset && row.dataset.imageLinkJson) {
+        let imageLinkData;
+        try {
+          imageLinkData = JSON.parse(row.dataset.imageLinkJson);
+        } catch (e) {
+          imageLinkData = null;
+        }
+        if (imageLinkData) {
+          // Store any existing non-image-link content (like h2 titles)
+          const existingContent = Array.from(row.children).filter((el) => el.tagName !== 'P' || (!el.querySelector('picture') && !el.querySelector('a')));
+          // Clear the row
+          row.innerHTML = '';
+          // Add back existing content first (titles, etc.)
+          existingContent.forEach((el) => row.appendChild(el));
+          // Create the image-link structure that matches your DOM structure
+          const imageLinkDiv = div({ class: 'image-link' });
+          // Create picture paragraph (wrapped in <p> tag as required)
+          const pictureP = document.createElement('p');
+          const picture = document.createElement('picture');
+          // Add source elements for responsive images (matching your structure)
+          const source1 = document.createElement('source');
+          source1.type = 'image/webp';
+          source1.srcset = `${imageLinkData.fileReference || imageLinkData.image}?width=2000&format=webply&optimize=medium`;
+          source1.media = '(min-width: 600px)';
+          const source2 = document.createElement('source');
+          source2.type = 'image/webp';
+          source2.srcset = `${imageLinkData.fileReference || imageLinkData.image}?width=750&format=webply&optimize=medium`;
+          const source3 = document.createElement('source');
+          source3.type = 'image/png';
+          source3.srcset = `${imageLinkData.fileReference || imageLinkData.image}?width=2000&format=png&optimize=medium`;
+          source3.media = '(min-width: 600px)';
+          const imgEl = img({
+            loading: 'lazy',
+            alt: imageLinkData.altText || '',
+            src: `${imageLinkData.fileReference || imageLinkData.image}?width=750&format=png&optimize=medium`,
+            width: '600',
+            height: '69',
+            class: 'w-full',
+          });
+          picture.appendChild(source1);
+          picture.appendChild(source2);
+          picture.appendChild(source3);
+          picture.appendChild(imgEl);
+          // Wrap picture in <p> tag
+          pictureP.appendChild(picture);
+          // Create alt text paragraph
+          const altP = document.createElement('p');
+          altP.textContent = imageLinkData.altText || '';
+          // Create href paragraph with link
+          const hrefP = document.createElement('p');
+          const linkA = a({
+            href: imageLinkData.href || '#',
+            target: imageLinkData.target === 'true' || imageLinkData.target === '_blank' ? '_blank' : '_self',
+            rel: imageLinkData.target === 'true' || imageLinkData.target === '_blank' ? 'noopener' : '',
+          }, imageLinkData.href || '');
+          hrefP.appendChild(linkA);
+          // Create target paragraph
+          const targetP = document.createElement('p');
+          targetP.textContent = imageLinkData.target || '';
+          // Assemble image-link in correct order (picture in <p>, alt, href, target)
+          imageLinkDiv.appendChild(pictureP);
+          imageLinkDiv.appendChild(altP);
+          imageLinkDiv.appendChild(hrefP);
+          imageLinkDiv.appendChild(targetP);
+          // Add image-link to row
+          row.appendChild(imageLinkDiv);
+          // Decorate the image-link to make it functional
+          decorateImageLink(imageLinkDiv);
+        }
+      } else {
+        const rowChildren = Array.from(row.children);
+        const pTags = rowChildren.filter((el) => el.tagName === 'P');
+        // Only process if we have exactly 4 <p> tags and they match the image-link pattern
+        if (pTags.length === 4) {
+          const hasPicture = pTags[0] && pTags[0].querySelector('picture');
+          const hasAlt = pTags[1] && pTags[1].textContent.trim() && !pTags[1].querySelector('a');
+          const hasLink = pTags[2] && pTags[2].querySelector('a[href]');
+          const hasTarget = pTags[3] && pTags[3].textContent.trim() && !pTags[3].querySelector('a');
+          if (hasPicture && hasAlt && hasLink && hasTarget) {
+            // Store non-<p> elements (like h2 titles)
+            const nonPElements = rowChildren.filter((el) => el.tagName !== 'P');
+            const imageLinkDiv = div({ class: 'image-link' });
+            // Add the 4 <p> elements in correct order
+            imageLinkDiv.appendChild(pTags[0]);
+            imageLinkDiv.appendChild(pTags[1]);
+            imageLinkDiv.appendChild(pTags[2]);
+            imageLinkDiv.appendChild(pTags[3]);
+            // Clear row and add back non-<p> elements first
+            row.innerHTML = '';
+            nonPElements.forEach((el) => row.appendChild(el));
+            // Add image-link
+            row.appendChild(imageLinkDiv);
+            // Decorate the image-link
+            decorateImageLink(imageLinkDiv);
+          }
+        }
+      }
       const ulEle = row.querySelectorAll('div > ul, p > ul');
       ulEle.forEach((ele) => {
         ele.classList.add(...'text-base list-disc pl-10 space-y-2 text-danahergray-700'.split(' '));
       });
-
       const spanEl = row.querySelectorAll('p > span.icon');
       spanEl.forEach((element) => {
         element.classList.add(...'w-12 h-12 relative rounded-md bg-danaherblue-900 text-white shrink-0'.split(' '));
