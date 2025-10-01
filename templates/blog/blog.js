@@ -13,11 +13,6 @@ function moveImageInstrumentation(picture) {
 
 export default async function buildAutoBlocks() {
   const main = document.querySelector('main');
-  // Remove banner block if present (banner is inserted before main)
-  // const bannerBlock = document.querySelector('.banner');
-  // if (bannerBlock) {
-  //   bannerBlock.remove();
-  // }
   const section = main.querySelector(':scope > div:nth-child(2)');
   let blogH1 = '';
   let blogHeroP1 = '';
@@ -35,12 +30,14 @@ export default async function buildAutoBlocks() {
     if (imgElement) return false;
     return true;
   });
+
   if (window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
     if (blogHeroP2) {
       section.removeChild(blogHeroP1);
       section.removeChild(blogHeroP2);
       const divEl = div();
       divEl.append(blogH1, blogHeroP1);
+      section.prepend(divEl);
     } else if (blogHeroP1) {
       section.removeChild(blogHeroP1);
     }
@@ -49,6 +46,7 @@ export default async function buildAutoBlocks() {
       buildBlock('tags-list', { elems: [] }),
       buildBlock('related-articles', { elems: [] }),
     );
+    section.after(additionalContentSection);
     buildArticleSchema();
   } else {
     section.removeChild(blogH1);
@@ -83,11 +81,6 @@ export default async function buildAutoBlocks() {
     section.after(additionalContentSection);
 
     buildArticleSchema();
-
-    // // make the content section the first element in main, first before the breadcrumb section.
-    // // do that hear to avoid the tag-list and related-articles to be moved as well.
-    // // loading order should be social-media, columns, article-info, breadcrumb, tags-list
-    // // related-articles
     section.parentElement.prepend(section);
   }
 }
