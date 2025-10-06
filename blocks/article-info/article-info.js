@@ -70,9 +70,17 @@ export default function decorate(block) {
   const toBeRemoved = ['social-media-wrapper', 'columns-wrapper', 'article-info-wrapper', 'tags-list-wrapper', 'related-articles-wrapper'];
   const sectionEl = document.querySelector('main > div:nth-child(1)');
   sectionEl.classList.remove('article-info-container');
+  const allColumnsWrappers = Array.from(sectionEl.querySelectorAll('.columns-wrapper'));
+  const firstColumnsWrapper = allColumnsWrappers[0]; // First columns stays in original position
+  const otherColumnsWrappers = allColumnsWrappers.slice(1); // All other columns go to mt-4
   const leftSideElements = div({ class: 'mt-4' });
   Array.from(sectionEl.children).forEach((element) => {
-    if (!toBeRemoved.includes(element.classList[0])) {
+    // Skip first columns (it stays in its original position)
+    if (element === firstColumnsWrapper) {
+      return;
+    }
+    const isOtherColumnsWrapper = otherColumnsWrappers.includes(element);
+    if (!toBeRemoved.includes(element.classList[0]) || isOtherColumnsWrapper) {
       leftSideElements.append(element);
     }
   });
@@ -82,5 +90,9 @@ export default function decorate(block) {
     sectionEl.querySelector('.article-info-wrapper'),
     leftSideElements,
   );
-  sectionEl.querySelector('.columns-wrapper')?.after(divEl);
+  if (firstColumnsWrapper) {
+    firstColumnsWrapper.after(divEl);
+  } else {
+    sectionEl.appendChild(divEl);
+  }
 }

@@ -6,6 +6,24 @@ import { getMetadata, toClassName } from '../../scripts/lib-franklin.js';
 import createArticleCard from '../card-list/articleCard.js';
 import { makePublicUrl } from '../../scripts/scripts.js';
 
+function normalizeTopicForFiltering(topic) {
+  if (!topic) return '';
+  return topic
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .trim();
+}
+
+function createTopicSlug(topic) {
+  const normalized = normalizeTopicForFiltering(topic);
+  return toClassName(normalized).toLowerCase();
+}
+
 let tagName = '';
 switch (getMetadata('template')) {
   default:
@@ -101,9 +119,27 @@ export function createFilters(articles, activeTag = '') {
     if (window.location.pathname.startsWith('/us/en/library')) {
       articleType = 'Library';
     }
+
+    // Find the original topic name from articles to display properly
+    let displayName = activeTag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const articleWithTopic = articles.find((article) => {
+      const topicsString = article[tagName] || '';
+      const topicSlugs = topicsString
+        .split(',')
+        .map((topic) => createTopicSlug(topic));
+      return topicSlugs.includes(activeTag);
+    });
+    if (articleWithTopic) {
+      const originalTopics = articleWithTopic[tagName].split(',');
+      const matchingTopic = originalTopics.find((topic) => createTopicSlug(topic) === activeTag);
+      if (matchingTopic) {
+        displayName = normalizeTopicForFiltering(matchingTopic.trim());
+      }
+    }
+
     container.append(
       span({ class: 'font-medium text-danahergray-700' }, `${articleType} topic:`),
-      span({ class: 'font-bold text-black', style: 'margin-left:-4px;' }, activeTag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())),
+      span({ class: 'font-bold text-black', style: 'margin-left:-4px;' }, displayName),
     );
   }
 
@@ -163,10 +199,14 @@ export default async function decorate(block) {
   let filteredArticles = articles;
   if (activeTagFilter) {
     filteredArticles = articles.filter((item) => {
-      const tags = (item[tagName] || '')
+      const topicsString = item[tagName] || '';
+      if (!topicsString) return false;
+      const topicSlugs = topicsString
         .split(',')
-        .map((t) => toClassName(t.trim()).toLowerCase());
-      return tags.includes(activeTagFilter);
+        .map((topic) => createTopicSlug(topic))
+        .filter((slug) => slug.length > 0);
+      const hasMatch = topicSlugs.includes(activeTagFilter);
+      return hasMatch;
     });
   }
 
