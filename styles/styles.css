@@ -3305,6 +3305,14 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
+main div.section.no-padding-top.columns-container {
+  padding-top: 0px;
+}
+
+main div.section.no-padding-top.columns-container.call-to-action-container {
+  padding-top: 0px;
+}
+
 .pointer-events-none {
   pointer-events: none;
 }
@@ -4094,6 +4102,10 @@ main .section .join-today-form-wrapper .join-today-form > div ul {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.opacity-50 {
+  opacity: 0.5;
 }
 
 .bg-opacity-10 {

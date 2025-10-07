@@ -29,12 +29,20 @@
               "value": "highlight"
             },
             {
+              "name": "bg-white",
+              "value": "bg-white"
+            },
+            {
               "name": "bg-white seventythirty",
               "value": "bg-white seventythirty"
             },
             {
               "name": "thirtyseventy",
               "value": "thirtyseventy"
+            },
+            {
+              "name": "No Padding Top",
+              "value": "no-padding-top"
             }
           ]
         }
@@ -50,6 +58,7 @@
       "banner",
       "text",
       "image",
+      "image-link",
       "form",
       "gated-form",
       "button",

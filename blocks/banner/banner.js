@@ -6,8 +6,7 @@ export default function decorate(block) {
   const isBlogPath = window.location.pathname.startsWith('/us/en/blog');
   const isNewsPath = window.location.pathname.startsWith('/us/en/news');
   const isLibraryPath = window.location.pathname.startsWith('/us/en/library');
-  const isVideosPath = window.location.pathname.startsWith('/us/en/videos');
-  if (isBlogPath || isNewsPath || isLibraryPath || isVideosPath) {
+  if (isBlogPath || isNewsPath || isLibraryPath) {
     content.parentNode.setAttribute('style', 'background: white');
     content.parentNode.classList.add(...'px-6'.split(' '));
     content.classList.add(
@@ -47,7 +46,7 @@ export default function decorate(block) {
   }
   if (innerContent?.querySelector('h2')) {
     const contentH2 = innerContent?.querySelector('h2');
-    if (isBlogPath || isNewsPath || isLibraryPath || isVideosPath) {
+    if (isBlogPath || isNewsPath || isLibraryPath) {
       if (contentH2) {
         contentH2.classList.add(
           ...'w-full md:w-3/4 !text-lg font-normal tracking-tight text-black'.split(' '),

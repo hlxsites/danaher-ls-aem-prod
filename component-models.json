@@ -50,21 +50,9 @@
           },
           {
             "component": "reference",
-            "valueType": "string",
             "name": "image",
-            "label": "Image"
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "og:image",
-            "label": "OG Image"
-          },
-          {
-            "component": "text",
-            "valueType": "string",
-            "name": "og:image:secure_url",
-            "label": "Image Secure URL"
+            "label": "Image",
+            "multi": false
           },
           {
             "component": "text",
@@ -152,35 +140,6 @@
         "component": "text",
         "name": "imageAlt",
         "label": "Alt Text"
-      },
-      {
-        "component": "text",
-        "name": "image_href",
-        "label": "Link URL"
-      },
-      {
-        "component": "text",
-        "name": "image_linkTarget",
-        "label": "Link Target",
-        "options": [
-          {
-            "name": "_self",
-            "value": "_self"
-          },
-          {
-            "name": "_blank",
-            "value": "_blank"
-          },
-          {
-            "name": "_parent",
-            "value": "_parent"
-          },
-          {
-            "name": "_top",
-            "value": "_top"
-          }
-        ],
-        "description": "Target for the link (e.g., _blank, _self)"
       }
     ]
   },
@@ -277,12 +236,20 @@
             "value": "highlight"
           },
           {
+            "name": "bg-white",
+            "value": "bg-white"
+          },
+          {
             "name": "bg-white seventythirty",
             "value": "bg-white seventythirty"
           },
           {
             "name": "thirtyseventy",
             "value": "thirtyseventy"
+          },
+          {
+            "name": "No Padding Top",
+            "value": "no-padding-top"
           }
         ]
       }

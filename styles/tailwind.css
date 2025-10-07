@@ -905,6 +905,14 @@
     @apply mt-4 mb-6;
   }
 
+  main div.section.no-padding-top.columns-container {
+    @apply pt-0;
+  }
+
+  main div.section.no-padding-top.columns-container.call-to-action-container {
+    @apply pt-0;
+  }
+
   .seventythirty .columns-2-cols .container .columns-img-col picture img {
     @apply !w-1/2;
   }
