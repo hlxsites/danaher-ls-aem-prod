@@ -8,14 +8,13 @@
   {
     "id": "section",
     "components": [
-      "accordion",
       "article-info",
       "breadcrumb",
       "banner",
       "text",
       "image",
-      "image-link",
       "form",
+      "gated-form",
       "button",
       "title",
       "columns",
@@ -28,10 +27,22 @@
       "product-hero",
       "shop-featured-products",
       "product-card",
-      "call-to-action",
       "accordion",
       "recent-articles",
       "embed",
+      "register",
+      "login",
+      "dashboard",
+      "my-addresses",
+      "cartlanding",
+      "checkout",
+      "order-submit",
+      "order-status",
+      "requested-quote",
+      "approved-quotes",
+      "order-details",
+      "quote-details",
+      "my-profile",
       "carousel",
       "dual-carousel",
       "opco-banner",
@@ -86,6 +97,12 @@
     "id": "accordion",
     "components": [
       "accordion-item"
+    ]
+  },
+  {
+    "id": "approved-quotes",
+    "components": [
+      ""
     ]
   },
   {
@@ -173,6 +190,12 @@
     ]
   },
   {
+    "id": "gated-form",
+    "components": [
+      "gated-form"
+    ]
+  },
+  {
     "id": "image-link",
     "components": [
       ""
@@ -197,6 +220,18 @@
     ]
   },
   {
+    "id": "my-addresses",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "my-profile",
+    "components": [
+      ""
+    ]
+  },
+  {
     "id": "top-selling",
     "components": [
       ""
@@ -212,6 +247,36 @@
     "id": "opco-grid",
     "components": [
       "opco-grid-item"
+    ]
+  },
+  {
+    "id": "order-details",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "order-status",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "order-submit",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "payment-methods",
+    "components": [
+      ""
+    ]
+  },
+  {
+    "id": "pdp-page-tabs",
+    "components": [
+      "pdp-tabs-item"
     ]
   },
   {
@@ -233,12 +298,24 @@
     ]
   },
   {
+    "id": "quote-details",
+    "components": [
+      ""
+    ]
+  },
+  {
     "id": "recent-articles",
     "components": []
   },
   {
     "id": "related-articles",
     "components": []
+  },
+  {
+    "id": "requested-quote",
+    "components": [
+      ""
+    ]
   },
   {
     "id": "top-selling",

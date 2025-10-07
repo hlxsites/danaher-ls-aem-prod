@@ -9,6 +9,9 @@ import {
   li,
 } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
+import { getBasketDetails } from '../../scripts/cart-checkout-utils.js';
+// eslint-disable-next-line import/no-cycle
 import {
   getAuthorization,
   isLoggedInUser,
@@ -16,6 +19,7 @@ import {
   getCommerceBase,
 } from '../../scripts/commerce.js';
 import { getCookie } from '../../scripts/scripts.js';
+// eslint-disable-next-line import/no-cycle
 import { includeProdEdsPaths, includeStageEdsPaths } from '../../scripts/delayed.js';
 
 const baseURL = getCommerceBase();
@@ -25,6 +29,61 @@ const COVEO_PIPELINE = 'Danaher Marketplace';
 const COVEO_MAX_RECENT_SEARCHES = 3;
 
 let selectedSuggestionIndex = -1;
+let minimalistheader = false;
+const minimalistPaths = [
+  window?.EbuyConfig?.cartPageUrl,
+  window?.EbuyConfig?.addressPageUrl,
+  window?.EbuyConfig?.shippingPageUrl,
+  window?.EbuyConfig?.paymentPageUrl,
+  window?.EbuyConfig?.loginPageUrl,
+  window?.EbuyConfig?.registerPageUrl,
+  window?.EbuyConfig?.orderSubmitPageUrl,
+];
+// eslint-disable-next-line max-len
+if (minimalistPaths.some((path) => window.location.pathname.includes(path))) {
+  minimalistheader = true;
+  const headerTag = document.querySelector('header');
+  if (headerTag) {
+    headerTag.style.height = 'auto';
+  }
+}
+/**
+ * Asynchronously creates and returns the header cart element.
+ * Includes cart icon, label, and item quantity. Specifically for E-buy experience.
+ */
+async function loadHeaderCart() {
+  const getBasketData = await getBasketDetails();
+  const cartWrapper = a(
+    {
+      href: window.EbuyConfig?.cartPageUrl,
+      class: 'relative inline-flex text-xs font-semibold text-black hover:text-danaherpurple-800 gap-[5px]',
+    },
+    // Cart icon
+    span({
+      class: 'icon icon-shopping-cart [&_svg>use]:stroke-black',
+    }),
+    // Cart label and quantity
+    div(
+      { class: 'flex flex-col relative' },
+      span(
+        { class: 'text-black text-xs' },
+        'Cart',
+      ),
+      span(
+        {
+          class: 'quantity absolute top-4 left-0 text-danaherpurple-500',
+          id: 'headerCartItemQuantity',
+        },
+        getBasketData?.data?.data?.lineItems?.length || '0', // Default quantity
+      ),
+    ),
+  );
+
+  // Apply icon styling
+  decorateIcons(cartWrapper);
+
+  return cartWrapper;
+}
 
 function shortName(user) {
   if (user) {
@@ -117,10 +176,24 @@ function getCoveoApiPayload(searchValue, type) {
   return payload;
 }
 
-async function submitSearchQuery(searchInput, actionCause = '') {
+// eslint-disable-next-line consistent-return
+
+// eslint-disable-next-line consistent-return
+export async function submitSearchQuery(searchInput, actionCause = '', page = '') {
+  const searchTerm = searchInput.value.trim();
+  if (page === 'cart') {
+    if (searchTerm) {
+      const requestPayload = getCoveoApiPayload(searchTerm, 'search');
+      requestPayload.analytics.actionCause = actionCause
+        || searchInput.getAttribute('data-action-cause')
+        || 'searchFromLink';
+      const resp = await makeCoveoApiRequest('/rest/search/v2', 'searchKey', requestPayload);
+      return resp;
+    }
+  }
+
   let searchLocation = '/us/en/search.html';
   const redirectList = [];
-  const searchTerm = searchInput.value.trim();
   if (searchTerm) {
     const requestPayload = getCoveoApiPayload(searchTerm, 'search');
     const triggerRequestPayload = getCoveoApiPayload(searchTerm, 'trigger');
@@ -452,7 +525,7 @@ function sortFlyoutMenus(menuPath) {
 
 function buildLogosBlock(headerBlock) {
   const logoHtmlBlock = headerBlock.children[0];
-  logoHtmlBlock.className = 'bg-danahergray-150 hidden lg:block';
+  logoHtmlBlock.className = `${minimalistheader ? '!hidden' : 'hidden'}  bg-danahergray-150 lg:block`;
   const logoUl = logoHtmlBlock.querySelector('ul');
   logoUl.className = 'h-14 flex justify-center';
   const logoLis = logoUl.querySelectorAll(':scope > li');
@@ -490,7 +563,7 @@ function buildSearchBlockMobile() {
 }
 
 function buildLoginBlock(loginLink) {
-  loginLink.className = 'text-black hover:text-black relative lg:inline-flex text-xs font-semibold';
+  loginLink.className = 'text-black hover:text-black relative flex text-xs font-semibold flex-row-reverse w-min items-center gap-[5px]';
   const loginIcon = loginLink.querySelector('span');
   loginIcon.className = '';
   loginIcon.innerHTML = `
@@ -499,36 +572,78 @@ function buildLoginBlock(loginLink) {
     </svg>
   `;
   const loginSpan = span(
-    { class: 'w-12 pl-2 lg:block hidden lg:inline' },
+    { class: 'w-12 pl-2 hidden' },
     loginLink.textContent,
   );
   loginLink.setAttribute('aria-label', loginLink.textContent.trim());
-  loginLink.textContent = '';
+  // loginLink.textContent = '';
   loginLink.append(loginIcon);
   loginLink.append(loginSpan);
 }
 
+// function buildLoggedInUserBlock(loginLink, user) {
+//   loginLink.className = 'relative flex items-center justify-between h-15 w-15';
+//   loginLink.href = '/us/en/signin/dashboard.html';
+//   const loginUser = span(
+//     {
+//       class:
+//         'w-12 h-12 p-2 mb-2 overflow-hidden border rounded-full bg-danaherlightblue-500',
+//     },
+//     span(shortName(user)),
+//   );
+//   const loginSpan = span(
+//     { class: 'pl-1 text-xs font-semibold text-black' },
+//     'My Account',
+//   );
+//   loginLink.setAttribute('aria-label', 'My Account');
+//   loginLink.textContent = '';
+//   loginLink.append(loginUser);
+//   loginLink.append(loginSpan);
+// }
+/*
+  adding condition to load UI and links based on url for E-buy.
+*/
 function buildLoggedInUserBlock(loginLink, user) {
-  loginLink.className = 'relative flex items-center justify-between h-15 w-15';
-  loginLink.href = '/us/en/signin/dashboard.html';
-  const loginUser = span(
-    {
-      class:
-        'w-12 h-12 p-2 mb-2 overflow-hidden border rounded-full bg-danaherlightblue-500',
-    },
-    span(shortName(user)),
-  );
-  const loginSpan = span(
-    { class: 'pl-1 text-xs font-semibold text-black' },
-    'My Account',
-  );
+  let loginUser = '';
+  let loginSpan = '';
+  if (window.location.pathname.includes('e-buy')) {
+    loginLink.className = 'relative flex items-center justify-between h-15 w-15';
+    loginLink.href = window.EbuyConfig?.dashboardPage.url;
+    loginUser = span(
+      {
+        class:
+          'icon icon-User [&_svg>use]:stroke-black',
+      },
+    );
+    loginSpan = span(
+      { class: 'pl-1 text-xs font-semibold text-black' },
+      user?.fname,
+    );
+    loginLink.setAttribute('aria-label', 'My Account');
+    loginLink.textContent = '';
+    loginLink.append(loginUser);
+    loginLink.append(loginSpan);
+  } else {
+    loginLink.className = 'relative flex items-center justify-between h-15 w-15';
+    loginLink.href = '/us/en/signin/dashboard.html';
+    loginUser = span(
+      {
+        class:
+          'w-12 h-12 p-2 mb-2 overflow-hidden border rounded-full bg-danaherlightblue-500',
+      },
+      span(shortName(user)),
+    );
+    loginSpan = span(
+      { class: 'pl-1 text-xs font-semibold text-black' },
+      'My Account',
+    );
+  }
   loginLink.setAttribute('aria-label', 'My Account');
   loginLink.textContent = '';
   loginLink.append(loginUser);
   loginLink.append(loginSpan);
 }
-
-function buildSearchBlock(headerBlock) {
+async function buildSearchBlock(headerBlock) {
   const searchHtmlBlock = headerBlock.children[1];
   searchHtmlBlock.className = 'navbar-wrapper lg:h-[100px] bg-white z-50 py-2 md:py-4 lg:pt-4 lg:pb-[6.25rem] mb-[2px] space-y-2 shadow-sm';
   searchHtmlBlock.id = 'sticky-header';
@@ -536,11 +651,11 @@ function buildSearchBlock(headerBlock) {
     class: 'w-full flex flex-row flex-wrap justify-between',
   });
   const searchNewBlock = div({
-    class: 'bg-white flex items-center mx-auto max-w-7xl flex-row lg:px-8',
+    class: 'flex items-center mx-auto max-w-7xl flex-row lg:px-8',
   });
   const extendedSectionBlock = div({
     class:
-      'extended-section md:w-full grid grid-rows-1 lg:grid-rows-2 ml-auto md:ml-14 mr-2 md:mr-4',
+      `extended-section md:w-full ${minimalistheader ? 'flex' : 'grid grid-rows-1 lg:grid-rows-2'} ml-auto md:ml-14 mr-2 md:mr-4`,
   });
   extendedSectionBlock.id = 'extended-section';
 
@@ -562,7 +677,7 @@ function buildSearchBlock(headerBlock) {
       id: 'nav-hamburger',
       type: 'button',
       class:
-        'open-side-menu block lg:hidden btn btn-sm h-full my-auto bg-transparent hover:bg-transparent text-danaherpurple-500 hover:text-danaherpurple-800',
+        `open-side-menu block lg:hidden btn btn-sm h-full my-auto bg-transparent hover:bg-transparent text-danaherpurple-500 hover:text-danaherpurple-800 ${minimalistheader ? '!hidden' : ''}`,
       'aria-label': 'Menu',
       'aria-expanded': false,
       'aria-controls': 'mega-menu-icons',
@@ -586,6 +701,7 @@ function buildSearchBlock(headerBlock) {
   const loginLink = searchLinks[0];
 
   const user = getUser();
+
   if (user) buildLoggedInUserBlock(loginLink, user);
   else buildLoginBlock(loginLink);
 
@@ -624,12 +740,20 @@ function buildSearchBlock(headerBlock) {
   quoteLink.append(quoteCount);
   quoteLink.append(quoteDot);
   const searchIcon = div(
-    { class: 'search-icon md:hidden cursor-pointer' },
+    { class: `${minimalistheader ? '!hidden' : ''} search-icon md:hidden cursor-pointer` },
     span({ class: 'icon icon-search w-6 h-6 flex [&_svg>use]:stroke-black' }),
   );
   loginBlock.append(searchIcon);
   loginBlock.append(loginLink);
   loginBlock.append(quoteLink);
+
+  /*
+    load cart icon with cart item count only for e-buy pages
+  */
+  if (window.location.pathname.includes('e-buy')) {
+    const headerCart = await loadHeaderCart();
+    loginBlock.append(headerCart);
+  }
   // loginBlock.append(loginBlockInner);
   searchHtmlBlockInner.append(loginBlock);
 
@@ -637,7 +761,7 @@ function buildSearchBlock(headerBlock) {
   searchHtmlBlockInner.append(
     div(
       { class: 'hidden md:block w-full md:w-3/5 order-last md:order-none' },
-      getSearchInput(),
+      minimalistheader ? '' : getSearchInput(),
     ),
   );
 
@@ -654,9 +778,6 @@ function buildSearchBlock(headerBlock) {
       sortFlyoutMenus('Menu');
     });
   addEventToSearchInput(searchHtmlBlock);
-  // searchIcon.addEventListener('click', () => {
-  //   console.log('CLicked');
-  // });
 }
 
 function buildNavBlock(headerBlock) {
@@ -718,7 +839,7 @@ function buildNavBlock(headerBlock) {
     }
     navHtmlBlock.append(menuItemEl);
   });
-  extendedSectionBlock.append(navHtmlBlock);
+  if (!minimalistheader) extendedSectionBlock.append(navHtmlBlock);
 }
 
 function buildFlyoutMenus(headerBlock) {
@@ -852,7 +973,7 @@ function handleScroll() {
       'lg:!pb-4',
       'shadow-lg',
     );
-    stickyHeader?.firstElementChild.classList.add('bg-white');
+    // stickyHeader?.firstElementChild.classList.add('bg-white');
     hamburgerIcon?.classList.remove('lg:hidden');
     hamburgerIcon?.classList.add('lg:block');
     extendedSection?.classList.remove('lg:lg:grid-rows-2');
@@ -906,12 +1027,8 @@ async function getQuote(headerBlock, authHeader) {
   }
 }
 /*
-  *
-  :::::::::::
   function to load required css
   breadcrumb EDS supportive code starts
-  ::::::::::::::
-  *
   */
 function loadBreadcrumbCSS(href) {
   if (!document.querySelector(`link[href="${href}"]`)) {
@@ -922,13 +1039,7 @@ function loadBreadcrumbCSS(href) {
   }
 }
 /*
-  *
-  :::::::::::
    function to load required css ends
-  ::::::::::::::
-  *
-  */
-/**
  * decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
@@ -943,7 +1054,7 @@ export default async function decorate(block) {
   headerBlock.innerHTML = html;
 
   buildLogosBlock(headerBlock);
-  buildSearchBlock(headerBlock);
+  await buildSearchBlock(headerBlock);
   buildNavBlock(headerBlock);
   const flyout = buildFlyoutMenus(headerBlock);
 
@@ -956,38 +1067,33 @@ export default async function decorate(block) {
   block.append(flyout);
 
   /*
-  *
-  :::::::::::
     breadcrumb EDS supportive code  starts
-  ::::::::::::::
-  *
   */
 
   if (includeProdEdsPaths.some((prodPath) => window.location.pathname.includes(prodPath)) || (includeStageEdsPaths.some((stagePath) => window.location.pathname.includes(stagePath)) && window.DanaherConfig.host.includes('stage.lifesciences'))) {
     const bred = document.querySelector('breadcrumb');
+    if (minimalistheader) bred?.classList.add('!hidden');
     const edsBreadcrumbWrapper = div(
       {
         class: 'block breadcrumb-wrapper flex bg-white border-b border-gray-200',
       },
-    );
-    bred.append(edsBreadcrumbWrapper);
-    loadBreadcrumbCSS('/blocks/breadcrumb/breadcrumb.css');
+    ); if (edsBreadcrumbWrapper) {
+      bred.append(edsBreadcrumbWrapper);
+      loadBreadcrumbCSS('/blocks/breadcrumb/breadcrumb.css');
 
-    import('../breadcrumb/breadcrumb.js')
-      .then((loadedBreadcrumb) => {
-        loadedBreadcrumb.default(edsBreadcrumbWrapper);
-      })
-      .catch((error) => {
-        console.error('Failed to load breadcrumb module:', error);
-      });
+      import('../breadcrumb/breadcrumb.js')
+        .then((loadedBreadcrumb) => {
+          loadedBreadcrumb.default(edsBreadcrumbWrapper);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to load breadcrumb module:', error);
+        });
+    }
   }
 
   /*
-  *
-  :::::::::::
     breadcrumb EDS supportive code ends
-  ::::::::::::::
-  *
   */
 
   const authHeader = getAuthorization();

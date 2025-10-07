@@ -29,7 +29,8 @@
           "options": [
             { "name": "News", "value": "news" },
             { "name": "Blog", "value": "blog" },
-            { "name": "Library", "value": "library" }
+            { "name": "Library", "value": "library" },
+            { "name": "Videos", "value": "videos" }
           ]
         }
       ]

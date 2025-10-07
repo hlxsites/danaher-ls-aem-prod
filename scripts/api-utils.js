@@ -1,7 +1,7 @@
 /*
-:::::::::::::::::::::::::::::::::::::::::::::::
+
  API POST/GET/PUT/PATH operations
- ::::::::::::::::::::::::::::::
+
 */
 
 /*
@@ -30,14 +30,19 @@ async function request(url, method = 'GET', data = {}, headers = {}) {
     if (!response.ok) {
       let errorMessage = '';
       if (response.status === 400) errorMessage = 'Bad request! please try again.';
-      if (response.status === 401) errorMessage = 'Unauthorized! please try again.';
+      if (response.status === 401) errorMessage = 'Unauthorized!';
       if (response.status === 403) errorMessage = 'Request failed! URL was forbidden, please try again.';
       if (response.status === 404) errorMessage = 'Request not found, please try again.';
       if (response.status === 422) errorMessage = 'Unprocess the request, please try again.';
       if (response.status === 500) errorMessage = 'Server error, unable to get the response.';
       throw new Error(errorMessage);
     }
-    const apiResponse = await response.json();
+    let apiResponse = null;
+    if (response.status === 204) {
+      apiResponse = await response.text();
+    } else {
+      apiResponse = await response.json();
+    }
 
     return { status: 'success', data: apiResponse };
   } catch (error) {
@@ -59,6 +64,7 @@ export async function getApiData(url, headers) {
     return { status: 'error', data: error.message };
   }
 }
+
 /*
  * Sends a POST request to the specified API endpoint with provided data and headers.
  *
@@ -67,7 +73,6 @@ export async function getApiData(url, headers) {
  * @param {Object} headers - Optional headers for the request.
  * @returns {<Object>} - Returns the response object from the API or an error object.
  */
-
 export async function postApiData(url, data, headers) {
   try {
     return await request(url, 'POST', data, headers);
@@ -75,14 +80,15 @@ export async function postApiData(url, data, headers) {
     return { status: 'error', data: error.message };
   }
 }
+
 /*
-::::::::::::::::::
+
  patch api data.. make use of the request function
  * @param {string} url - The URL of the API endpoint.
  * @param {Object} data - The data to be sent in the request body.
  * @param {Object} headers - Optional headers for the request.
  * @returns {<Object>} - Returns the response object from the API or an error object.
- :::::::::::::::::
+
  */
 export async function patchApiData(url, data, headers) {
   try {
@@ -91,14 +97,15 @@ export async function patchApiData(url, data, headers) {
     return { status: 'error', data: error.message };
   }
 }
+
 /*
-::::::::::::::::::
+
  put api data.. make use of the request function
  * @param {string} url - The URL of the API endpoint.
  * @param {Object} data - The data to be sent in the request body.
  * @param {Object} headers - Optional headers for the request.
  * @returns {<Object>} - Returns the response object from the API or an error object.
- :::::::::::::::::
+
  */
 export async function putApiData(url, data, headers) {
   try {

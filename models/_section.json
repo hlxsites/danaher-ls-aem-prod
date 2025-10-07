@@ -29,20 +29,12 @@
               "value": "highlight"
             },
             {
-              "name": "bg-white",
-              "value": "bg-white"
-            },
-            {
               "name": "bg-white seventythirty",
               "value": "bg-white seventythirty"
             },
             {
               "name": "thirtyseventy",
               "value": "thirtyseventy"
-            },
-            {
-              "name": "No Padding Top",
-              "value": "no-padding-top"
             }
           ]
         }
@@ -53,14 +45,13 @@
     {
       "id": "section",
     "components": [
-      "accordion",
       "article-info",
       "breadcrumb",
       "banner",
       "text",
       "image",
-      "image-link",
       "form",
+      "gated-form",
       "button",
       "title",
       "columns",
@@ -73,10 +64,22 @@
       "product-hero",
       "shop-featured-products",
       "product-card",
-      "call-to-action",
       "accordion",
       "recent-articles",
       "embed",
+      "register",
+      "login",
+      "dashboard",
+      "my-addresses",
+      "cartlanding",
+      "checkout",
+      "order-submit",
+      "order-status",
+      "requested-quote",
+      "approved-quotes",
+      "order-details",
+      "quote-details",
+      "my-profile",
       "carousel",
       "dual-carousel",
       "opco-banner",

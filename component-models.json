@@ -52,8 +52,19 @@
             "component": "reference",
             "valueType": "string",
             "name": "image",
-            "label": "Image",
-            "multi": false
+            "label": "Image"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "og:image",
+            "label": "OG Image"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "og:image:secure_url",
+            "label": "Image Secure URL"
           },
           {
             "component": "text",
@@ -141,6 +152,35 @@
         "component": "text",
         "name": "imageAlt",
         "label": "Alt Text"
+      },
+      {
+        "component": "text",
+        "name": "image_href",
+        "label": "Link URL"
+      },
+      {
+        "component": "text",
+        "name": "image_linkTarget",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "_self",
+            "value": "_self"
+          },
+          {
+            "name": "_blank",
+            "value": "_blank"
+          },
+          {
+            "name": "_parent",
+            "value": "_parent"
+          },
+          {
+            "name": "_top",
+            "value": "_top"
+          }
+        ],
+        "description": "Target for the link (e.g., _blank, _self)"
       }
     ]
   },
@@ -237,20 +277,12 @@
             "value": "highlight"
           },
           {
-            "name": "bg-white",
-            "value": "bg-white"
-          },
-          {
             "name": "bg-white seventythirty",
             "value": "bg-white seventythirty"
           },
           {
             "name": "thirtyseventy",
             "value": "thirtyseventy"
-          },
-          {
-            "name": "No Padding Top",
-            "value": "no-padding-top"
           }
         ]
       }
@@ -707,6 +739,10 @@
             "value": "new-lab"
           },
           {
+            "name": "Videos",
+            "value": "videos"
+          },
+          {
             "name": "URL Filtered",
             "value": "url-filtered"
           }
@@ -1018,6 +1054,18 @@
     ]
   },
   {
+    "id": "dashboard",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "dashboardTitle",
+        "value": "",
+        "label": "Page Title"
+      }
+    ]
+  },
+  {
     "id": "dual-carousel",
     "fields": [
       {
@@ -1087,23 +1135,6 @@
     "id": "form",
     "fields": [
       {
-        "component": "select",
-        "name": "formSelection",
-        "label": "Select Form Name",
-        "valueType": "string",
-        "default": "",
-        "options": [
-          {
-            "name": "default",
-            "value": ""
-          },
-          {
-            "name": "talk-to-an-expert",
-            "value": "talk-to-an-expert"
-          }
-        ]
-      },
-      {
         "component": "text",
         "name": "formId",
         "type": "string",
@@ -1166,6 +1197,94 @@
         "label": "Error URL",
         "required": true,
         "description": "Unique name for the form."
+      }
+    ]
+  },
+  {
+    "id": "gated-form",
+    "fields": [
+      {
+        "component": "text",
+        "name": "formId",
+        "type": "string",
+        "label": "Form ID",
+        "required": true,
+        "description": "Unique identifier for the gated form."
+      },
+      {
+        "component": "text",
+        "name": "formName",
+        "type": "string",
+        "label": "Form Name",
+        "required": true,
+        "description": "Name for the gated form."
+      },
+      {
+        "component": "text",
+        "name": "_clientID",
+        "type": "string",
+        "label": "Client ID",
+        "required": true,
+        "description": "Salesforce Marketing Cloud Client ID."
+      },
+      {
+        "component": "text",
+        "name": "_deExternalKey",
+        "type": "string",
+        "label": "Data Extension External Key",
+        "required": true,
+        "description": "Salesforce Marketing Cloud Data Extension External Key."
+      },
+      {
+        "component": "text",
+        "name": "_action",
+        "type": "string",
+        "label": "Action",
+        "required": true,
+        "default": "add",
+        "description": "Form submission action (add/update)."
+      },
+      {
+        "component": "text",
+        "name": "_returnXML",
+        "type": "string",
+        "label": "Return XML",
+        "required": false,
+        "description": "Return format for the form submission."
+      },
+      {
+        "component": "text",
+        "name": "Inquiry_Type",
+        "type": "string",
+        "label": "Inquiry Type",
+        "required": true,
+        "default": "Gated Content",
+        "description": "Type of inquiry for tracking purposes."
+      },
+      {
+        "component": "text",
+        "name": "Form_Type",
+        "type": "string",
+        "label": "Form Type",
+        "required": true,
+        "default": "gated",
+        "description": "Category of the form."
+      },
+      {
+        "component": "text",
+        "name": "_successURL",
+        "type": "string",
+        "label": "Success URL",
+        "required": true,
+        "description": "URL to redirect to after successful form submission."
+      },
+      {
+        "component": "text",
+        "name": "_errorURL",
+        "type": "string",
+        "label": "Error URL",
+        "required": false,
+        "description": "URL to redirect to if form submission fails."
       }
     ]
   },
@@ -1309,6 +1428,109 @@
         "name": "browseDescription",
         "value": "",
         "label": "Browse-Description"
+      }
+    ]
+  },
+  {
+    "id": "login",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginHeading",
+        "value": "",
+        "label": "Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginSubHeading",
+        "value": "",
+        "label": "Sub Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormTitle",
+        "value": "",
+        "label": "Form Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormSubHeading",
+        "value": "",
+        "label": "Form Sub Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormEmailLabel",
+        "value": "",
+        "label": "Email Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormPasswordLabel",
+        "value": "",
+        "label": "Password Field Label"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "loginFormCheckboxText",
+        "value": "",
+        "label": "Form Checkbox Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormForgotPasswordLabel",
+        "value": "",
+        "label": "Forgot Password Label"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "loginFormForgotPasswordLink",
+        "value": "",
+        "label": "Forgot Password Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormSubmitButtonLabel",
+        "value": "",
+        "label": "Submit Button Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormNewAccountText",
+        "value": "",
+        "label": "New Account Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "loginFormNewAccountButtonLabel",
+        "value": "",
+        "label": "New Account Button Label"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "loginFormNewAccountButtonLink",
+        "value": "",
+        "label": "New Account Button Link"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "multi": false
       }
     ]
   },
@@ -1666,6 +1888,131 @@
     "fields": []
   },
   {
+    "id": "pdp-bundle-list",
+    "fields": []
+  },
+  {
+    "id": "pdp-carousel",
+    "fields": []
+  },
+  {
+    "id": "pdp-citations",
+    "fields": []
+  },
+  {
+    "id": "pdp-description",
+    "fields": []
+  },
+  {
+    "id": "pdp-faqs",
+    "fields": []
+  },
+  {
+    "id": "pdp-hero",
+    "fields": []
+  },
+  {
+    "id": "pdp-page-tabs",
+    "fields": []
+  },
+  {
+    "id": "pdp-tabs-item",
+    "fields": [
+      {
+        "component": "radio-group",
+        "label": "Choose an Option",
+        "name": "selectedOption",
+        "valueType": "string",
+        "required": true,
+        "defaultValue": "only-pim",
+        "options": [
+          {
+            "name": "Show only PIM data",
+            "value": "only-pim"
+          },
+          {
+            "name": "Show only Authored data",
+            "value": "only-authored"
+          },
+          {
+            "name": "Show both",
+            "value": "pim-authored"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "tabType",
+        "label": "Product Tab ID",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Overview",
+            "value": "overview"
+          },
+          {
+            "name": "Specifications",
+            "value": "specifications"
+          },
+          {
+            "name": "Resources",
+            "value": "resources"
+          },
+          {
+            "name": "Products",
+            "value": "products"
+          },
+          {
+            "name": "Bundle Parts",
+            "value": "parts"
+          },
+          {
+            "name": "Related Products",
+            "value": "relatedproducts"
+          },
+          {
+            "name": "Citations",
+            "value": "citations"
+          },
+          {
+            "name": "FAQs",
+            "value": "faqs"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "product-tab-title",
+        "value": "",
+        "label": "Product Tab Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "product-tab-content",
+        "value": "",
+        "label": "Product Tab Content"
+      }
+    ]
+  },
+  {
+    "id": "pdp-products",
+    "fields": []
+  },
+  {
+    "id": "pdp-related-products",
+    "fields": []
+  },
+  {
+    "id": "pdp-resources",
+    "fields": []
+  },
+  {
+    "id": "pdp-specifications",
+    "fields": []
+  },
+  {
     "id": "product-banner",
     "fields": [
       {
@@ -1892,6 +2239,102 @@
             "value": ""
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "register",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerHeading",
+        "value": "",
+        "label": "Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerSubHeading",
+        "value": "",
+        "label": "Sub Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormTitle",
+        "value": "",
+        "label": "Form Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormSubHeading",
+        "value": "",
+        "label": "Form Sub Heading"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormFirstNameLabel",
+        "value": "",
+        "label": "First Name Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormLastNameLabel",
+        "value": "",
+        "label": "Last Name Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormCompanyNameLabel",
+        "value": "",
+        "label": "Company Name Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormEmailLabel",
+        "value": "",
+        "label": "Email Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormPasswordLabel",
+        "value": "",
+        "label": "Password Field Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormConfirmPasswordLabel",
+        "value": "",
+        "label": "Confirm Password Field Label"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "registerFormCheckboxText",
+        "value": "",
+        "label": "Form Checkbox Text"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "registerFormSubmitButtonLabel",
+        "value": "",
+        "label": "Submit Button Label"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "backgroundImage",
+        "label": "Background Image",
+        "multi": false
       }
     ]
   },
@@ -2441,6 +2884,10 @@
           {
             "name": "Library",
             "value": "library"
+          },
+          {
+            "name": "Videos",
+            "value": "videos"
           }
         ]
       }
