@@ -378,6 +378,188 @@ const fileMappings = [
     output: './blocks/body-banner/body-banner.css',
     wrapper: 'body-banner-wrapper',
   },
+  {
+    content: './blocks/pdp-page-tabs/pdp-page-tabs.js',
+    output: './blocks/pdp-page-tabs/pdp-page-tabs.css',
+    wrapper: 'pdp-page-tabs-wrapper',
+  },
+  {
+    content: './blocks/pdp-description/pdp-description.js',
+    output: './blocks/pdp-description/pdp-description.css',
+    wrapper: 'pdp-description-wrapper',
+  },
+  {
+    content: './blocks/pdp-hero/pdp-hero.js',
+    output: './blocks/pdp-hero/pdp-hero.css',
+    wrapper: 'pdp-hero-wrapper',
+  },
+  {
+    content: './blocks/pdp-bundle-list/pdp-bundle-list.js',
+    output: './blocks/pdp-bundle-list/pdp-bundle-list.css',
+    wrapper: 'pdp-bundle-list-wrapper',
+  },
+  {
+    content: './blocks/pdp-specifications/pdp-specifications.js',
+    output: './blocks/pdp-specifications/pdp-specifications.css',
+    wrapper: 'pdp-specifications-wrapper',
+  },
+  {
+    content: [
+      './blocks/pdp-products/pdp-products.js',
+      './scripts/coveo/pdp-listing/components/pdp-facet-bradcurmb.js',
+      './scripts/coveo/pdp-listing/components/pdp-facets.js',
+      './scripts/coveo/pdp-listing/components/pdp-pagination.js',
+      './scripts/coveo/pdp-listing/components/pdp-resultlist.js',
+      './scripts/coveo/pdp-listing/components/pdp-side-panel.js',
+    ],
+    output: './blocks/pdp-products/pdp-products.css',
+    wrapper: 'pdp-products-wrapper',
+  },
+  {
+    content: './blocks/pdp-resources/pdp-resources.js',
+    output: './blocks/pdp-resources/pdp-resources.css',
+    wrapper: 'pdp-resources-wrapper',
+  },
+  {
+    content: './blocks/pdp-citations/pdp-citations.js',
+    output: './blocks/pdp-citations/pdp-citations.css',
+    wrapper: 'pdp-citations-wrapper',
+  },
+  {
+    content: './blocks/pdp-faqs/pdp-faqs.js',
+    output: './blocks/pdp-faqs/pdp-faqs.css',
+    wrapper: 'pdp-faqs-wrapper',
+  },
+  {
+    content: './blocks/pdp-carousel/pdp-carousel.js',
+    output: './blocks/pdp-carousel/pdp-carousel.css',
+    wrapper: 'pdp-carousel-wrapper',
+  },
+  {
+    content: './blocks/pdp-related-products/pdp-related-products.js',
+    output: './blocks/pdp-related-products/pdp-related-products.css',
+    wrapper: 'pdp-related-products-wrapper',
+  },
+  {
+    content: './blocks/register/register.js',
+    output: './blocks/register/register.css',
+    wrapper: 'register-wrapper',
+  },
+  {
+    content: './blocks/login/login.js',
+    output: './blocks/login/login.css',
+    wrapper: 'login-wrapper',
+  },
+  {
+    content: ['./blocks/dashboard/dashboard.js',
+      './blocks/dashboard/orderStatus.js',
+      './blocks/dashboard/dashboardutils.js',
+      './scripts/common-utils.js',
+      './blocks/dashboard/recentOrder.js',
+      './blocks/dashboardSideBar/dashboardSideBar.js',
+    ],
+    output: './blocks/dashboard/dashboard.css',
+    wrapper: 'dashboard-wrapper',
+  },
+  {
+    content: ['./blocks/dashboardSideBar/dashboardSideBar.js',
+    ],
+    output: './blocks/dashboardSideBar/dashboardSideBar.css',
+    wrapper: 'dashboardSideBar-wrapper',
+  },
+  {
+    content: ['./blocks/order-status/order-status.js', './blocks/dashboardSideBar/dashboardSideBar.js'],
+    output: './blocks/order-status/order-status.css',
+    wrapper: 'order-status-wrapper',
+  },
+  {
+    content: ['./blocks/my-profile/my-profile.js', './blocks/dashboardSideBar/dashboardSideBar.js'],
+    output: './blocks/my-profile/my-profile.css',
+    wrapper: 'my-profile-wrapper',
+  },
+  {
+    content: ['./blocks/my-addresses/my-addresses.js', './blocks/dashboardSideBar/dashboardSideBar.js'],
+    output: './blocks/my-addresses/my-addresses.css',
+    wrapper: 'my-addresses-wrapper',
+  },
+  {
+    content: ['./blocks/payment-methods/payment-methods.js', './blocks/dashboardSideBar/dashboardSideBar.js',
+      './blocks/checkout/checkoutUtilities.js',
+      './blocks/checkout/paymentModule.js'],
+    output: './blocks/payment-methods/payment-methods.css',
+    wrapper: 'payment-methods-wrapper',
+  },
+  {
+    content: ['./blocks/requested-quote/requested-quote.js', './blocks/dashboardSideBar/dashboardSideBar.js'],
+    output: './blocks/requested-quote/requested-quote.css',
+    wrapper: 'requested-quote-wrapper',
+  },
+  {
+    content: ['./blocks/approved-quotes/approved-quotes.js', './blocks/dashboardSideBar/dashboardSideBar.js'],
+    output: './blocks/approved-quotes/approved-quotes.css',
+    wrapper: 'approved-quotes-wrapper',
+  },
+  {
+    content: ['./blocks/order-details/order-details.js',
+      './blocks/dashboardSideBar/dashboardSideBar.js',
+      './blocks/order-details/customerInformation.js',
+      './blocks/order-details/orderItems.js',
+      './blocks/order-details/orderSummary.js',
+    ],
+    output: './blocks/order-details/order-details.css',
+    wrapper: 'order-details-wrapper',
+  },
+  {
+    content: ['./blocks/quote-details/quote-details.js',
+      './blocks/quote-details/quotesummary.js',
+      './blocks/quote-details/quoteItems.js',
+      './blocks/quote-details/requesterInformation.js',
+      './blocks/dashboardSideBar/dashboardSideBar.js',
+    ],
+    output: './blocks/quote-details/quote-details.css',
+    wrapper: 'quote-details-wrapper',
+  },
+  {
+    content: [
+      './blocks/cartlanding/cartlanding.js',
+      './blocks/cartlanding/cartItem.js',
+      './blocks/cartlanding/addproducts.js',
+      './blocks/cartlanding/addproducts.js',
+      './blocks/cartlanding/mycart.js',
+      './blocks/cartlanding/price.js',
+      './blocks/cartlanding/recommendedproducts.js',
+      './blocks/cartlanding/emptyCart.js',
+      './blocks/cartlanding/cartDetails.js',
+      './blocks/cartlanding/grid-data.js',
+      './blocks/cartlanding/listData.js',
+      './blocks/cartlanding/noProduct.js',
+      './blocks/cartlanding/related-products.js',
+      './scripts/cart-checkout-utils.js',
+      './scripts/common-utils.js',
+    ],
+    output: './blocks/cartlanding/cartlanding.css',
+    wrapper: 'cartlanding-wrapper',
+  },
+  {
+    content: [
+      './blocks/checkout/checkout.js',
+      './blocks/checkout/checkoutUtilities.js',
+      './blocks/checkout/paymentModule.js',
+      './blocks/checkout/shippingAddress.js',
+      './blocks/checkout/shippingMethods.js',
+      './scripts/cart-checkout-utils.js',
+      './scripts/common-utils.js',
+      './blocks/cartlanding/cartlanding.js',
+      './blocks/cartlanding/cartItem.js',
+    ],
+    output: './blocks/checkout/checkout.css',
+    wrapper: 'checkout',
+  },
+  {
+    content: './blocks/order-submit/order-submit.js',
+    output: './blocks/order-submit/order-submit.css',
+    wrapper: 'order-submit-wrapper',
+  },
 ];
 
 const watch = process.argv[2];
@@ -387,10 +569,8 @@ fileMappings.forEach(({
   content, input, output, wrapper,
 }) => {
   process.env.IMPORTANT_WRAPPER = `.${wrapper}`;
-  const command = `npx tailwindcss ${
-    input ? `-i ${input}` : './styles/proxy-tailwind.css'
-  } ${content ? `--content ${content}` : ''} -o ${output} ${
-    watch ? '--watch' : ''
+  const command = `npx tailwindcss ${input ? `-i ${input}` : './styles/proxy-tailwind.css'
+  } ${content ? `--content ${content}` : ''} -o ${output} ${watch ? '--watch' : ''
   }`;
   exec(command, (error, stdout, stderr) => {
     if (error) {

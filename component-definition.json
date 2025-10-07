@@ -145,6 +145,21 @@
           }
         },
         {
+          "title": "Approved Quotes",
+          "id": "approved-quotes",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Approved Quotes",
+                  "model": "approved-quotes"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Article-Info",
           "id": "article-info",
           "plugins": {
@@ -281,6 +296,36 @@
           }
         },
         {
+          "title": "Cart",
+          "id": "cartlanding",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "cartlanding",
+                  "model": "cartlanding"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Checkout",
+          "id": "checkout",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Checkout",
+                  "model": "checkout"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Columns",
           "id": "columns",
           "plugins": {
@@ -293,6 +338,21 @@
                   "class": {
                     "$ref": "classes"
                   }
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Dashboard",
+          "id": "dashboard",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "dashboard",
+                  "model": "dashboard"
                 }
               }
             }
@@ -338,6 +398,21 @@
                 "template": {
                   "name": "Form",
                   "model": "form"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Gated Form",
+          "id": "gated-form",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Gated Form",
+                  "model": "gated-form"
                 }
               }
             }
@@ -405,6 +480,21 @@
           }
         },
         {
+          "title": "Login",
+          "id": "login",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Login",
+                  "model": "login"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Mini-Teasers",
           "id": "mini-teasers",
           "plugins": {
@@ -430,6 +520,36 @@
                 "template": {
                   "name": "Mini Teaser",
                   "model": "mini-teaser"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "My Addresses",
+          "id": "my-addresses",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "My Addresses",
+                  "model": "my-addresses"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "My Profile",
+          "id": "my-profile",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "My Profile",
+                  "model": "my-profile"
                 }
               }
             }
@@ -528,6 +648,51 @@
           }
         },
         {
+          "title": "Order Details",
+          "id": "order-details",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Order Details",
+                  "model": "order-details"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Order Status",
+          "id": "order-status",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Order Status",
+                  "model": "order-status"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Order Submit",
+          "id": "order-submit",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Order Submit",
+                  "model": "order-submit"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Page Tabs",
           "id": "page-tabs",
           "plugins": {
@@ -537,6 +702,202 @@
                 "template": {
                   "name": "Page Tabs",
                   "model": "page-tabs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Payment Methods",
+          "id": "order-status",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Payment Methods",
+                  "model": "payment-methods"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "PDP Bundle List",
+          "id": "pdp-bundle-list",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "PDP Bundle List",
+                  "model": "pdp-bundle-list"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Carousel",
+          "id": "pdp-carousel",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Carousel",
+                  "model": "pdp-carousel"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Citations",
+          "id": "pdp-citations",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Citations",
+                  "model": "pdp-citations"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "PDP Description",
+          "id": "pdp-description",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "PDP Description",
+                  "model": "pdp-description"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp FAQs",
+          "id": "pdp-faqs",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp FAQs",
+                  "model": "pdp-faqs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "PDP Hero",
+          "id": "pdp-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "PDP Hero",
+                  "model": "pdp-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Page Tabs",
+          "id": "pdp-page-tabs",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Page Tabs",
+                  "model": "pdp-page-tabs",
+                  "filter": "pdp-page-tabs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "PDP tabs Item",
+          "id": "pdp-tabs-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "PDP tabs Item",
+                  "model": "pdp-tabs-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Products",
+          "id": "pdp-products",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Products",
+                  "model": "pdp-products"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Related Products",
+          "id": "pdp-related-products",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Related Products",
+                  "model": "pdp-related-products"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Pdp Resources",
+          "id": "pdp-resources",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Pdp Resources",
+                  "model": "pdp-resources"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "PDP Specifications",
+          "id": "pdp-specifications",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "PDP Specifications",
+                  "model": "pdp-specifications"
                 }
               }
             }
@@ -663,6 +1024,20 @@
           }
         },
         {
+          "title": "Quote Details",
+          "id": "quote-details",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Quote Details"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Recent-Articles",
           "id": "recent-articles",
           "plugins": {
@@ -672,6 +1047,21 @@
                 "template": {
                   "name": "Recent-Articles",
                   "model": "recent-articles"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Register",
+          "id": "register",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Register",
+                  "model": "register"
                 }
               }
             }
@@ -702,6 +1092,21 @@
                 "template": {
                   "name": "Related Category",
                   "model": "related-category"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Requested Quote",
+          "id": "requested-quote",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Requested Quote",
+                  "model": "requested-quote"
                 }
               }
             }

@@ -67,6 +67,7 @@ export function getAuthorization() {
   } else {
     env = 'prod';
   }
+
   const tokenInStore = sessionStorage.getItem(`${siteID}_${env}_apiToken`);
   const parsedToken = JSON.parse(tokenInStore);
   if (localStorage.getItem('authToken')) {
@@ -189,6 +190,7 @@ export async function getProductResponse() {
       return response;
     }
     localStorage.removeItem('product-details');
+    response = null;
 
     const host = `https://${window.DanaherConfig.host}/us/en/product-data`;
     const url = window.location.search
@@ -210,7 +212,7 @@ export async function getProductResponse() {
       );
       return response;
     }
-
+    // const template = getMetadata('template');
     if (!response) {
       await fetch('/404.html')
         .then((html) => html.text())
@@ -218,10 +220,24 @@ export async function getProductResponse() {
           const parser = new DOMParser();
           const doc = parser.parseFromString(data, 'text/html');
           document.head.innerHTML = doc.head.innerHTML;
-          document.querySelector('main').innerHTML = doc.querySelector('main')?.innerHTML;
+          // Only copy content if both main elements exist (for SPA or AJAX DOM updates)
+          const mainSrc = doc.querySelector('main');
+          const mainDest = document.querySelector('main');
+          if (mainSrc && mainDest) {
+            mainDest.innerHTML = mainSrc.innerHTML;
+          }
+
+          // Update the title
           document.title = 'Product Not Found';
-          document.querySelector('h1.heading-text').innerText = 'Product Not Found';
-          document.querySelector('p.description-text').innerText = 'The product you are looking for is not available. Please try again later.';
+
+          // Update heading text if present
+          const h1 = document.querySelector('h1.heading-text');
+          if (h1) h1.innerText = 'Product Not Found';
+
+          // Update paragraph description if present
+          const desc = document.querySelector('p.description-text');
+          if (desc) desc.innerText = 'The product you are looking for is not available. Please try again later.';
+
           window.addEventListener('load', () => sampleRUM('404', {
             source: document.referrer,
             target: window.location.href,

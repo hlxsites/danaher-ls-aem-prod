@@ -34,6 +34,7 @@
             { "name": "Info", "value": "info" },
             { "name": "Application", "value": "application" },
             { "name": "New Lab", "value": "new-lab" },
+            { "name": "Videos", "value": "videos" },
             { "name": "URL Filtered", "value": "url-filtered" }
           ]
         },

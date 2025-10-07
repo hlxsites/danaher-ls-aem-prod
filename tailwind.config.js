@@ -102,6 +102,8 @@ module.exports = {
   },
   safelist: [
     "appear",
+    "selected-address",
+    "selected-card",
     "btn",
     "bg-danaherlightblue-50",
     "bottom-border-right",
