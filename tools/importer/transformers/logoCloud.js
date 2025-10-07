@@ -32,8 +32,7 @@ const createLogoCloud = (main, document) => {
         rightDiv.append(desc);
       }
       const a = document.createElement('a');
-      // if (btnRfq) a.setAttribute('href', '#RequestAQuote');
-      if (btnRfq === 'true') a.setAttribute('href', '#RequestAQuote');
+      if (btnRfq) a.setAttribute('href', '#RequestAQuote');
       else a.setAttribute('href', btnHref);
       a.textContent = cardLinkText;
       rightDiv.append(a);
