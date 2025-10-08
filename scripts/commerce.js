@@ -177,6 +177,34 @@ export const getProductDetails = async (product) => {
   }
 };
 
+function isValidUrlForType(objecttype, url) {
+  const lowerUrl = (url || '')?.toLowerCase();
+  const type = (objecttype || '')?.toLowerCase();
+
+  // Helper function to count occurrences of substring
+  function countOccurrences(substring) {
+    const matches = lowerUrl.match(new RegExp(substring, 'g'));
+    return matches ? matches.length : 0;
+  }
+
+  if (!lowerUrl.includes('/products/')) return false;
+
+  const bundlesCount = countOccurrences('/bundles/');
+  const skuCount = countOccurrences('/sku/');
+  const familyCount = countOccurrences('/family/');
+
+  // Check if exactly one segment present in url
+  const totalSegments = (bundlesCount ? 1 : 0) + (skuCount ? 1 : 0) + (familyCount ? 1 : 0);
+  if (totalSegments !== 1) return false;
+
+  // Validate segment count corresponding to objecttype
+  if (type?.trim().toLowerCase() === 'bundle') return bundlesCount === 1;
+  if (type?.trim().toLowerCase() === 'product' || (type !== null && type !== undefined && type === 'sku')) return skuCount === 1;
+  if (type?.trim().toLowerCase() === 'family') return familyCount === 1;
+
+  return false;
+}
+
 /**
  *
  * @returns Product response from local storage
@@ -185,8 +213,10 @@ export const getProductDetails = async (product) => {
 export async function getProductResponse() {
   try {
     let response = JSON.parse(localStorage.getItem('product-details'));
+    const objType = String(response?.[0]?.raw?.objecttype ?? '').toLowerCase();
     const sku = getSKU();
-    if (response && response.at(0)?.raw.sku === sku) {
+    if (response && response.at(0)?.raw.sku === sku
+    && isValidUrlForType(objType, window.location.pathname)) {
       return response;
     }
     localStorage.removeItem('product-details');
@@ -204,16 +234,11 @@ export async function getProductResponse() {
       throw new Error('Sorry, network error, not able to render response.');
     });
 
-    if (fullResponse.results.length > 0) {
-      response = fullResponse.results;
-      localStorage.setItem(
-        'product-details',
-        JSON.stringify(fullResponse.results),
-      );
-      return response;
-    }
-    // const template = getMetadata('template');
-    if (!response) {
+    if (!(fullResponse.results.length > 0)
+    || !isValidUrlForType(
+      String(fullResponse?.results?.at(0)?.raw?.objecttype ?? '').toLowerCase(),
+      window.location.pathname,
+    )) {
       await fetch('/404.html')
         .then((html) => html.text())
         .then((data) => {
@@ -247,6 +272,15 @@ export async function getProductResponse() {
           // eslint-disable-next-line no-console
           console.error('Error:', error);
         });
+      return;
+    }
+    if (fullResponse?.results?.length > 0) {
+      response = fullResponse?.results;
+      localStorage.setItem(
+        'product-details',
+        JSON.stringify(fullResponse.results),
+      );
+      return response;
     }
   } catch (error) {
     // eslint-disable-next-line no-console
