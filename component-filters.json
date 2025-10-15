@@ -13,7 +13,6 @@
       "banner",
       "text",
       "image",
-      "image-link",
       "form",
       "gated-form",
       "button",
@@ -167,6 +166,7 @@
       "button",
       "title",
       "form",
+      "gated-form",
       "embed"
     ]
   },

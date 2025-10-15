@@ -23,12 +23,12 @@
          {
           "component": "text",
           "valueType": "string",
-          "name": "banner",
+          "name": "banner_text",
           "label": "Banner"
         },
         {
           "component": "select",
-          "name": "bannerType",
+          "name": "banner_textType",
           "label": "Banner Type",
           "options": [
             {
@@ -60,12 +60,12 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "description",
+          "name": "banner_description",
           "label": "Description"
         },
         {
           "component": "select",
-          "name": "descriptionType",
+          "name": "banner_descriptionType",
           "label": "Description Type",
           "options": [
             {

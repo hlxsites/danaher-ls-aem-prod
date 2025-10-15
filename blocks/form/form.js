@@ -213,22 +213,67 @@ function loadUTMParams() {
 }
 
 async function loadSFDCForm(block) {
-  const formIdEl = block?.firstElementChild;
-  const formId = formIdEl?.firstElementChild?.textContent || 'TTAE';
-  const formNameEl = formIdEl?.nextElementSibling;
-  const formName = block?.firstElementChild?.nextElementSibling?.textContent || 'TTAE';
-  const clientIdEl = formNameEl?.nextElementSibling;
-  const clientId = formNameEl?.nextElementSibling?.textContent || '546006278';
-  const deExternalKeyEl = clientIdEl?.nextElementSibling;
-  const deExternalKey = deExternalKeyEl?.textContent || 'TTAE';
-  const actionEl = deExternalKeyEl?.nextElementSibling;
-  const action = actionEl?.textContent || 'add';
-  const inquiryTypeEl = actionEl?.nextElementSibling;
-  const inquiryType = inquiryTypeEl?.textContent || 'Talk to an Expert';
-  const successUrlEl = inquiryTypeEl?.nextElementSibling;
-  const successUrl = successUrlEl?.textContent || 'https://stage.lifesciences.danaher.com/us/en/solutions/mabs/cell-line-development.html';
-  const errorUrlEl = successUrlEl?.nextElementSibling;
-  const errorUrl = errorUrlEl?.textContent || 'https://help.salesforce.com/s/articleView?id=sf.mc\_es\_demanager.htm';
+  // const formIdEl = block?.firstElementChild;
+  // const formId = formIdEl?.firstElementChild?.textContent || 'TTAE';
+  // const formNameEl = formIdEl?.nextElementSibling;
+  // const formName = block?.firstElementChild?.nextElementSibling?.textContent || 'TTAE';
+  // const clientIdEl = formNameEl?.nextElementSibling;
+  // const clientId = formNameEl?.nextElementSibling?.textContent || '546006278';
+  // const deExternalKeyEl = clientIdEl?.nextElementSibling;
+  // const deExternalKey = deExternalKeyEl?.textContent || 'TTAE';
+  // const actionEl = deExternalKeyEl?.nextElementSibling;
+  // const action = actionEl?.textContent || 'add';
+  // const inquiryTypeEl = actionEl?.nextElementSibling;
+  // const inquiryType = inquiryTypeEl?.textContent || 'Talk to an Expert';
+  // const successUrlEl = inquiryTypeEl?.nextElementSibling;
+  // const successUrl = successUrlEl?.textContent || 'https://stage.lifesciences.danaher.com/us/en/solutions/mabs/cell-line-development.html';
+  // const errorUrlEl = successUrlEl?.nextElementSibling;
+  // const errorUrl = errorUrlEl?.textContent || 'https://help.salesforce.com/s/articleView?id=sf.mc\_es\_demanager.htm';
+  // const hasForm = Array.from(document.querySelectorAll('[data-aue-prop="form"]'))
+  //   .some((el) => el.textContent && el.textContent.includes('form'));
+  // if (!hasForm) {
+  //   const tags = [...block.querySelectorAll('p')];
+  //   tags.forEach((tag) => {
+  //   tag.style.display = 'none';
+  //   });
+  //   formId = tags[0]?.textContent.trim();
+  //   formName = tags[1]?.textContent.trim();
+  //   clientId = tags[2]?.textContent.trim();
+  //   deExternalKey = tags[3]?.textContent.trim();
+  //   action = tags[4]?.textContent.trim();
+  //   inquiryType = tags[5]?.textContent.trim();
+  //   pageTrackUrl = tags[6]?.textContent.trim();
+  //   successUrl = tags[7]?.textContent.trim();
+  //   errorUrl = tags[8]?.textContent.trim();
+  // }
+  // Extract form configuration from hidden p tags
+  // if (hasForm) {
+  const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+  const formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
+  const clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
+  const deExternalKey = document.querySelector('[data-aue-prop="deExternalKey"]')?.textContent;
+  const action = document.querySelector('[data-aue-prop="action"]')?.textContent;
+  const inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
+  const links = block.querySelectorAll('a');
+  const pageTrackUrl = links[0]?.href;
+  const successUrl = links[1]?.href;
+  const errorUrl = links[2]?.href;
+  [
+    'formId',
+    'formName',
+    'clientID',
+    'deExternalKey',
+    'action',
+    'Inquiry_Type',
+    'Page_Track_URL',
+    'successURL',
+    'errorURL',
+  ].forEach((prop) => {
+    document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
+      el.style.display = 'none';
+    });
+  });
+
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },
     form(
@@ -252,7 +297,7 @@ async function loadSFDCForm(block) {
       input({ type: 'hidden', name: 'UTM_Term' }),
       input({ type: 'hidden', name: 'UTM_Source' }),
       input({ type: 'hidden', name: 'UTM_NLC' }),
-      input({ type: 'hidden', name: 'Page_Track_URL' }),
+      input({ type: 'hidden', name: 'Page_Track_URL', value: `${pageTrackUrl}` }),
       input({ type: 'hidden', name: 'Job_Role', 'data-required': true }),
       input({ type: 'hidden', name: 'Country', 'data-required': true }),
       input({ type: 'hidden', name: '_successURL', value: `${successUrl}` }),
@@ -310,7 +355,6 @@ async function loadSFDCForm(block) {
   decorateIcons(formEl);
   block.append(formEl);
   loadUTMParams();
-
   // document.querySelector('#TTAE').addEventListener('submit', (event) => {
   //   if (formValidate()) {
   //     getInquiry();
