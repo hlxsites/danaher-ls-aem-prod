@@ -6,6 +6,7 @@ import {
 } from '../../scripts/lib-franklin.js';
 import loadSFDCForm from '../form/form.js';
 import decorateImageLink from '../image-link/image-link.js';
+import loadGatedForm from '../gated-form/gated-form.js';
 
 /** *****JOIN-TODAY FORM Starts ******* */
 
@@ -612,37 +613,6 @@ async function loadForm(row, tags) {
 export default function decorate(block) {
   const sectionDiv = block.closest('.section');
   const cols = [...block.firstElementChild.children];
-
-  /** ********EDS FORM Starts****************** */
-  if (window.location.pathname.includes('/us/en/we-see-a-way/')) {
-    const pTags = document.querySelectorAll('p');
-    pTags.forEach((p) => {
-      if (p.textContent.trim() === 'talk-to-an-expert') {
-        p.style.display = 'none';
-      } else {
-        p.style.display = '';
-      }
-    });
-    const hasExpertFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'talk-to-an-expert');
-    if (hasExpertFormTag) {
-      const columnsBlock = document.querySelector('div[class*="form-wrapper"]');
-      const columns = columnsBlock.querySelectorAll(':scope > div');
-      const container = columns[0];
-      const colDivs = container.querySelectorAll(':scope > div');
-      const column2 = colDivs[1];
-      // Check if form already exists
-      if (!column2.querySelector('.talk-to-an-expert-form')) {
-        const expertFormDiv = document.createElement('div');
-        expertFormDiv.className = 'talk-to-an-expert-form block';
-        expertFormDiv.setAttribute('data-block-name', 'talk-to-an-expert-form');
-        expertFormDiv.setAttribute('data-block-status', 'loaded');
-        column2.appendChild(expertFormDiv);
-        loadSFDCForm(expertFormDiv);
-      }
-    }
-  }
-  /** ********EDS FORM Ends****************** */
-
   block.classList.add(`columns-${cols.length}-cols`);
   const imageAspectRatio = 1.7778;
   block.querySelectorAll('div').forEach((ele, index) => {
@@ -655,6 +625,23 @@ export default function decorate(block) {
           secondDiv?.classList.add('lg:w-1/2');
         } else {
           ele.classList.add(...'align-text-center w-full h-full'.split(' '));
+        }
+      }
+      if (window.location.pathname.includes('/us/en/expert')) {
+        if (!sectionDiv.className.includes('thirtyseventy')) {
+          ele.classList.add(...'align-text-center w-full h-full'.split(' '));
+        } else if (sectionDiv.className.includes('thirtyseventy') && block.className.includes('form-wrapper')) {
+          ele.classList.add(...'align-text-top pb-7 py-0 my-0'.split(' '));
+          const firstDiv = ele.querySelector('div:nth-child(1)');
+          const secondDiv = ele.querySelector('div:nth-child(2)');
+          firstDiv.classList.add('lg:w-1/3');
+          secondDiv.classList.add('lg:w-2/3');
+        } else {
+          ele.classList.add(...'align-text-top pb-4 py-10 my-2'.split(' '));
+          const firstDiv = ele.querySelector('div:nth-child(1)');
+          const secondDiv = ele.querySelector('div:nth-child(2)');
+          firstDiv.classList.add('lg:w-1/3');
+          secondDiv.classList.add('lg:w-2/3');
         }
       } else {
         ele.classList.add(...'align-text-top pb-7 py-0 my-0'.split(' '));
@@ -721,6 +708,11 @@ export default function decorate(block) {
           row.querySelectorAll('h1').forEach((ele) => {
             ele.classList.add('pb-4');
           });
+        } else if (window.location.pathname.includes('/us/en/expert') && !sectionDiv.className.includes('thirtyseventy')) {
+          row.classList.add('h-full', 'lg:w-1/2', 'md:pr-16');
+          row.querySelectorAll('h1').forEach((ele) => {
+            ele.classList.add('pb-4');
+          });
         } else {
           row.classList.add('h-full');
           const aTag = row.querySelectorAll('p > a');
@@ -730,7 +722,6 @@ export default function decorate(block) {
           }
         }
       }
-
       // IMAGE-LINK HANDLING - Create proper DOM structure matching standalone image-link
       if (row.dataset && row.dataset.imageLinkJson) {
         let imageLinkData;
@@ -833,6 +824,7 @@ export default function decorate(block) {
       ulEle.forEach((ele) => {
         ele.classList.add(...'text-base list-disc pl-10 space-y-2 text-danahergray-700'.split(' '));
       });
+
       const spanEl = row.querySelectorAll('p > span.icon');
       spanEl.forEach((element) => {
         element.classList.add(...'w-12 h-12 relative rounded-md bg-danaherblue-900 text-white shrink-0'.split(' '));
@@ -864,6 +856,8 @@ export default function decorate(block) {
           } else {
             block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col-reverse gap-x-12 lg:flex-col-reverse justify-items-center'.split(' '));
           }
+        } else if (window.location.pathname.includes('/us/en/expert') && !sectionDiv.className.includes('thirtyseventy')) {
+          block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col-reverse gap-x-12 lg:flex-col-reverse justify-items-center'.split(' '));
         } else {
           block.firstElementChild?.classList.add(...'container max-w-7xl mx-auto flex flex-col gap-x-12 gap-y-4 lg:flex-row justify-items-center'.split(' '));
         }
@@ -897,7 +891,7 @@ export default function decorate(block) {
         const picWrapper = pic.closest('div');
         if (picWrapper && picWrapper.children.length === 1) {
           // picture is only content in column
-          if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/')) {
+          if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/library/') || window.location.pathname.includes('/us/en/expert')) {
             if (block.className.includes('multiplecolumns')) {
               picWrapper.classList.add('columns-img-col', 'order-none');
               pic.querySelector('img').classList.add('block');
@@ -952,4 +946,75 @@ export default function decorate(block) {
       embed.appendChild(iframe);
     }
   });
+  /** ********EDS FORM Starts****************** */
+  // const formWrapperBlock = document.querySelector('div[class*="form-wrapper"]');
+  const formWrapperBlock = block.closest('.form-wrapper');
+  // Get column2 only
+  if (formWrapperBlock) {
+    const columns = formWrapperBlock.querySelectorAll(':scope > div');
+    const container = columns?.[0];
+    const colDivs = container?.querySelectorAll(':scope > div');
+    const column2 = colDivs?.[1];
+
+    if (column2) {
+      const pTags = column2.querySelectorAll('p'); // Only p-tags within column2
+      pTags.forEach((p) => {
+        const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+        const hasAnchor = p.querySelector('a');
+        // Hide p-tags that contain form configuration anchors
+        if (hasAnchor) {
+          p.style.display = 'none';
+        }
+        // Hide p-tags that are form type indicators
+        if (formId && !hasAnchor && (
+          formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform' || formId === 'TTAE' || formId.length < 50
+        )) {
+          p.style.display = 'none';
+        }
+      });
+    }
+
+    // Simplified logic for loading forms
+    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+    if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform' || formId === 'TTAE') {
+      // const columns = formWrapperBlock.querySelectorAll(':scope > div');
+      // const container = columns[0];
+      // const colDivs = container.querySelectorAll(':scope > div');
+      // const column2 = colDivs[1];
+      // Remove any existing expert form div
+      if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
+        const existingExpertForm = column2.querySelector('.form');
+        if (existingExpertForm) {
+          existingExpertForm.remove();
+        }
+      }
+      if (formId === 'TTAE') {
+        const existingGatedForm = column2.querySelector('.gated-form');
+        if (existingGatedForm) {
+          existingGatedForm.remove();
+        }
+      }
+      // Check if form already exists
+      if (!column2.querySelector('.form') || !column2.querySelector('.gated-form')) {
+        const expertFormDiv = document.createElement('div');
+        expertFormDiv.className = 'form block';
+        expertFormDiv.setAttribute('data-block-name', 'form');
+        expertFormDiv.setAttribute('data-block-status', 'loaded');
+        expertFormDiv.style.marginLeft = '-32px';
+        expertFormDiv.style.marginTop = '-32px';
+        // Find and clone configuration p-tags from column2 to the form div (already hidden)
+        const column2PTags = column2.querySelectorAll('p[style*="display: none"]');
+        column2PTags.forEach((p) => {
+          expertFormDiv.appendChild(p.cloneNode(true));
+        });
+        column2.appendChild(expertFormDiv);
+        // Load the correct form
+        if (formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
+          loadGatedForm(expertFormDiv);
+        } else if (formId === 'TTAE') {
+          loadSFDCForm(expertFormDiv);
+        }
+      }
+    }
+  }
 }
