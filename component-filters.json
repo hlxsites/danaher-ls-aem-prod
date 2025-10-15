@@ -13,6 +13,7 @@
       "banner",
       "text",
       "image",
+      "image-link",
       "form",
       "gated-form",
       "button",
