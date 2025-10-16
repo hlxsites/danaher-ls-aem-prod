@@ -50,6 +50,7 @@
           },
           {
             "component": "reference",
+            "valueType": "string",
             "name": "image",
             "label": "Image",
             "multi": false
@@ -454,12 +455,12 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "banner",
+        "name": "banner_text",
         "label": "Banner"
       },
       {
         "component": "select",
-        "name": "bannerType",
+        "name": "banner_textType",
         "label": "Banner Type",
         "options": [
           {
@@ -491,12 +492,12 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "description",
+        "name": "banner_description",
         "label": "Description"
       },
       {
         "component": "select",
-        "name": "descriptionType",
+        "name": "banner_descriptionType",
         "label": "Description Type",
         "options": [
           {
@@ -1106,64 +1107,63 @@
         "name": "formId",
         "type": "string",
         "label": "Form Id",
-        "required": true,
-        "description": "Unique identifier for the form."
+        "required": true
       },
       {
         "component": "text",
         "name": "formName",
         "type": "string",
         "label": "Form Name",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_clientID",
+        "name": "clientID",
         "type": "string",
         "label": "Client ID",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_deExternalKey",
+        "name": "deExternalKey",
         "type": "string",
         "label": "External Key",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_action",
+        "name": "action",
         "type": "string",
         "label": "Action",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
         "name": "Inquiry_Type",
         "type": "string",
         "label": "Inquiry Type",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_successURL",
+        "name": "Page_Track_URL",
+        "type": "string",
+        "label": "Page Track URL",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "successURL",
         "type": "string",
         "label": "Success URL",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_errorURL",
+        "name": "errorURL",
         "type": "string",
         "label": "Error URL",
-        "required": true,
-        "description": "Unique name for the form."
+        "required": true
       }
     ]
   },
@@ -1174,84 +1174,71 @@
         "component": "text",
         "name": "formId",
         "type": "string",
-        "label": "Form ID",
-        "required": true,
-        "description": "Unique identifier for the gated form."
+        "label": "Form Id",
+        "required": true
       },
       {
         "component": "text",
         "name": "formName",
         "type": "string",
         "label": "Form Name",
-        "required": true,
-        "description": "Name for the gated form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_clientID",
+        "name": "clientID",
         "type": "string",
         "label": "Client ID",
-        "required": true,
-        "description": "Salesforce Marketing Cloud Client ID."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_deExternalKey",
+        "name": "deExternalKey",
         "type": "string",
-        "label": "Data Extension External Key",
-        "required": true,
-        "description": "Salesforce Marketing Cloud Data Extension External Key."
+        "label": "External Key",
+        "required": true
       },
       {
         "component": "text",
-        "name": "_action",
+        "name": "action",
         "type": "string",
         "label": "Action",
-        "required": true,
-        "default": "add",
-        "description": "Form submission action (add/update)."
-      },
-      {
-        "component": "text",
-        "name": "_returnXML",
-        "type": "string",
-        "label": "Return XML",
-        "required": false,
-        "description": "Return format for the form submission."
+        "required": true
       },
       {
         "component": "text",
         "name": "Inquiry_Type",
         "type": "string",
         "label": "Inquiry Type",
-        "required": true,
-        "default": "Gated Content",
-        "description": "Type of inquiry for tracking purposes."
+        "required": true
       },
       {
         "component": "text",
         "name": "Form_Type",
         "type": "string",
         "label": "Form Type",
-        "required": true,
-        "default": "gated",
-        "description": "Category of the form."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_successURL",
+        "name": "Page_Track_URL",
+        "type": "string",
+        "label": "Page Track URL",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "successURL",
         "type": "string",
         "label": "Success URL",
-        "required": true,
-        "description": "URL to redirect to after successful form submission."
+        "required": true
       },
       {
         "component": "text",
-        "name": "_errorURL",
+        "name": "errorURL",
         "type": "string",
         "label": "Error URL",
-        "required": false,
-        "description": "URL to redirect to if form submission fails."
+        "required": true
       }
     ]
   },

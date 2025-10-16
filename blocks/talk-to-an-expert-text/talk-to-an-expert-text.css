@@ -11,8 +11,8 @@
 }
 
 .talk-to-an-expert-text-wrapper :is(.my-auto) {
-  margin-top: auto;
-  margin-bottom: auto
+  margin-top: 72px;
+  margin-bottom: auto;
 }
 
 .talk-to-an-expert-text-wrapper :is(.mb-8) {

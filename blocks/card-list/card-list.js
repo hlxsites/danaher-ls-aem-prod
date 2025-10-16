@@ -185,7 +185,6 @@ export default async function decorate(block) {
   const articleType = block.classList.length > 2 ? block.classList[1] : '';
   if (articleType) block.classList.remove(articleType);
   block.textContent = '';
-  // const indexType = getMetadata('template') === 'wsaw' ? 'wsaw' : 'article';
 
   // fetch and sort all articles
   const articles = await ffetch(`/us/en/${indexType}-index.json`)
@@ -198,9 +197,28 @@ export default async function decorate(block) {
     .all();
 
   let filteredArticles = articles;
+  // Check if we're on a videos hub page and filter to show only direct children
+  const isVideosPage = window.location.pathname === '/us/en/videos/' || window.location.pathname === '/us/en/videos';
+  if (isVideosPage) {
+    filteredArticles = articles.filter((article) => {
+      if (article.path) {
+        // Remove leading/trailing slashes and split by '/'
+        const cleanPath = article.path.replace(/^\/+|\/+$/g, '');
+        const pathSegments = cleanPath.split('/');
+        // Check if path starts with 'us/en/videos'
+        if (pathSegments.length >= 3
+          && pathSegments[0] === 'us'
+          && pathSegments[1] === 'en'
+          && pathSegments[2] === 'videos') {
+          return pathSegments.length === 4;
+        }
+      }
+      return false;
+    });
+  }
   const activeTagFilter = block.classList.contains('url-filtered') ? getSelectionFromUrl() : '';
   if (activeTagFilter) {
-    filteredArticles = articles.filter(
+    filteredArticles = filteredArticles.filter(
       (item) => toClassName(item[tagName]).toLowerCase().indexOf(activeTagFilter) > -1,
     );
   }

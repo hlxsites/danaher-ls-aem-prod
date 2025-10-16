@@ -240,32 +240,32 @@ function loadUTMParams() {
 
 async function loadGatedForm(block) {
   block.classList.add('relative');
-
-  // Get form configuration from block content
-  const tags = [...block.querySelectorAll('p')];
-  let formId = 'gatedform';
-  let formName = 'gatedform';
-  let clientId = '';
-  let deExternalKey = '';
-  let action = '';
-  let inquiryType = '';
-  let formType = '';
-  let returnXML = '';
-  let successUrl = '';
-  let errorUrl = '';
-
-  tags.forEach((ele, index) => {
-    const text = ele.textContent.trim();
-    if (index === 0) formId = text || 'gatedform';
-    if (index === 1) formName = text || 'gatedform';
-    if (index === 2) clientId = text;
-    if (index === 3) deExternalKey = text;
-    if (index === 4) action = text;
-    if (index === 5) returnXML = text;
-    if (index === 6) inquiryType = text;
-    if (index === 7) formType = text;
-    if (index === 8) successUrl = text;
-    if (index === 9) errorUrl = text;
+  const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+  const formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
+  const clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
+  const deExternalKey = document.querySelector('[data-aue-prop="deExternalKey"]')?.textContent;
+  const action = document.querySelector('[data-aue-prop="action"]')?.textContent;
+  const inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
+  const formType = document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
+  const links = block.querySelectorAll('a');
+  const pageTrackUrl = links[0]?.href;
+  const successUrl = links[1]?.href;
+  const errorUrl = links[2]?.href;
+  [
+    'formId',
+    'formName',
+    'clientID',
+    'deExternalKey',
+    'action',
+    'Inquiry_Type',
+    'Form_Type',
+    'Page_Track_URL',
+    'successURL',
+    'errorURL',
+  ].forEach((prop) => {
+    document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
+      el.style.display = 'none';
+    });
   });
 
   const formEl = div(
@@ -282,7 +282,7 @@ async function loadGatedForm(block) {
       input({ type: 'hidden', name: '_clientID', value: `${clientId}` }),
       input({ type: 'hidden', name: '_deExternalKey', value: `${deExternalKey}` }),
       input({ type: 'hidden', name: '_action', value: `${action}` }),
-      input({ type: 'hidden', name: '_returnXML', value: `${returnXML}` }),
+      input({ type: 'hidden', name: '_returnXML', value: '1' }),
       input({ type: 'hidden', name: 'Inquiry_Type', value: `${inquiryType}` }),
       input({ type: 'hidden', name: 'Inquiry_Number' }),
       input({ type: 'hidden', name: 'Form_Type', value: `${formType}` }),
@@ -293,7 +293,7 @@ async function loadGatedForm(block) {
       input({ type: 'hidden', name: 'UTM_Term' }),
       input({ type: 'hidden', name: 'UTM_Source' }),
       input({ type: 'hidden', name: 'UTM_NLC' }),
-      input({ type: 'hidden', name: 'Page_Track_URL' }),
+      input({ type: 'hidden', name: 'Page_Track_URL', value: `${pageTrackUrl}` }),
       input({ type: 'hidden', name: 'Country', 'data-required': true }),
       input({ type: 'hidden', name: '_successURL', value: `${successUrl}` }),
       input({ type: 'hidden', name: '_errorURL', value: `${errorUrl}` }),
@@ -304,44 +304,8 @@ async function loadGatedForm(block) {
         buildInputElement('Email_Address', 'Email Address', 'text', 'Email_Address', 'email', true, 'Email_Address'),
         buildInputElement('Phone_Number', 'Phone Number', 'text', 'Phone_Number', 'tel', false, 'Phone_Number'),
         buildInputElement('Company_Name', 'Company Name', 'text', 'Company_Name', 'organization', true, 'Company_Name'),
-        buildInputElement('Postal_Code', 'ZIP/Postal Code', 'text', 'Postal_Code', 'postal-code', true, 'Postal_Code'),
-        buildSelectElement('Job_Role', 'Job Role', 'checkbox', 'Job_Role', 'Job_Role', jobRole),
-        buildSelectElement('Country', 'Country', 'checkbox', 'Country', 'Country', countries),
-        div(
-          { class: 'space-y-2 col-span-1 md:col-span-2' },
-          label(
-            {
-              for: 'drugdiscovery_challenges',
-              class: 'font-normal !text-semibold !text-sm leading-4',
-            },
-            'Are you currently exploring solutions to improve efficiency in your workflows?',
-          ),
-          buildOptionsElement('drugdiscovery_challenges', [
-            { label: 'Yes, actively evaluating options within the next 3–6 months', value: 'actively_evaluating_3_6_months' },
-            { label: 'Yes, but looking for longer-term solutions (6–12 months)', value: 'longer_term_6_12_months' },
-            { label: 'Not right now, but potentially in the future', value: 'potentially_in_future' },
-          ]),
-        ),
-        div(
-          { class: 'space-y-2 col-span-1 md:col-span-2' },
-          label(
-            {
-              for: 'OpCoInterest',
-              class: 'font-normal !text-semibold !text-sm leading-4',
-            },
-            'Interested in hearing from one of our experts? Select all that apply.',
-          ),
-          buildCheckboxElement('OpCo_Interest', 'Abcam', 'checkbox', 'OpCo_Interest', 'Abcam', false),
-          buildCheckboxElement('OpCo_Interest', 'Aldevron', 'checkbox', 'OpCo_Interest', 'Aldevron', false),
-          buildCheckboxElement('OpCo_Interest', 'Beckman Coulter Life Sciences', 'checkbox', 'OpCo_Interest', 'Beckman Coulter Life Sciences', false),
-          buildCheckboxElement('OpCo_Interest', 'Genedata', 'checkbox', 'OpCo_Interest', 'Genedata', false),
-          buildCheckboxElement('OpCo_Interest', 'IDBS', 'checkbox', 'OpCo_Interest', 'IDBS', false),
-          buildCheckboxElement('OpCo_Interest', 'IDT', 'checkbox', 'OpCo_Interest', 'IDT', false),
-          buildCheckboxElement('OpCo_Interest', 'Leica Microsystems', 'checkbox', 'OpCo_Interest', 'Leica Microsystems', false),
-          buildCheckboxElement('OpCo_Interest', 'Molecular Devices', 'checkbox', 'OpCo_Interest', 'Molecular Devices', false),
-          buildCheckboxElement('OpCo_Interest', 'Phenomenex', 'checkbox', 'OpCo_Interest', 'Phenomenex', false),
-          buildCheckboxElement('OpCo_Interest', 'SCIEX', 'checkbox', 'OpCo_Interest', 'SCIEX', false),
-        ),
+        div({ class: 'add-gated-form-fields' }),
+        div({ class: 'add-lab-inquiry' }),
         div(
           { class: 'space-y-2 col-span-1 md:col-span-2' },
           tnc(),
@@ -362,6 +326,150 @@ async function loadGatedForm(block) {
       ),
     ),
   );
+  if (formId === 'gatedform') {
+    const gatedFormFields = div(
+      { class: 'container mx-auto space-y-4' },
+      buildInputElement('Postal_Code', 'ZIP/Postal Code', 'text', 'Postal_Code', 'postal-code', true, 'Postal_Code'),
+      buildSelectElement('Job_Role', 'Job Role', 'checkbox', 'Job_Role', 'Job_Role', jobRole),
+      buildSelectElement('Country', 'Country', 'checkbox', 'Country', 'Country', countries),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'drugdiscovery_challenges',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Are you currently exploring solutions to improve efficiency in your workflows?',
+        ),
+        buildOptionsElement('drugdiscovery_challenges', [
+          { label: 'Yes, actively evaluating options within the next 3–6 months', value: 'actively_evaluating_3_6_months' },
+          { label: 'Yes, but looking for longer-term solutions (6–12 months)', value: 'longer_term_6_12_months' },
+          { label: 'Not right now, but potentially in the future', value: 'potentially_in_future' },
+        ]),
+      ),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'OpCoInterest',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Interested in hearing from one of our experts? Select all that apply.',
+        ),
+        buildCheckboxElement('OpCo_Interest', 'Abcam', 'checkbox', 'OpCo_Interest', 'Abcam', false),
+        buildCheckboxElement('OpCo_Interest', 'Aldevron', 'checkbox', 'OpCo_Interest', 'Aldevron', false),
+        buildCheckboxElement('OpCo_Interest', 'Beckman Coulter Life Sciences', 'checkbox', 'OpCo_Interest', 'Beckman Coulter Life Sciences', false),
+        buildCheckboxElement('OpCo_Interest', 'Genedata', 'checkbox', 'OpCo_Interest', 'Genedata', false),
+        buildCheckboxElement('OpCo_Interest', 'IDBS', 'checkbox', 'OpCo_Interest', 'IDBS', false),
+        buildCheckboxElement('OpCo_Interest', 'IDT', 'checkbox', 'OpCo_Interest', 'IDT', false),
+        buildCheckboxElement('OpCo_Interest', 'Leica Microsystems', 'checkbox', 'OpCo_Interest', 'Leica Microsystems', false),
+        buildCheckboxElement('OpCo_Interest', 'Molecular Devices', 'checkbox', 'OpCo_Interest', 'Molecular Devices', false),
+        buildCheckboxElement('OpCo_Interest', 'Phenomenex', 'checkbox', 'OpCo_Interest', 'Phenomenex', false),
+        buildCheckboxElement('OpCo_Interest', 'SCIEX', 'checkbox', 'OpCo_Interest', 'SCIEX', false),
+      ),
+    );
+    formEl.querySelector('.add-gated-form-fields')?.append(gatedFormFields);
+  }
+  if (formId === 'genedataform') {
+    const genedataformFields = div(
+      { class: 'container mx-auto space-y-4' },
+      buildSelectElement('Country', 'Country', 'checkbox', 'Country', 'Country', countries),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'model_challenges',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Which of the following challenges have you faced when working with microphysiological systems or human-relevant models? (Select all that apply).',
+        ),
+        buildCheckboxElement('model_challenges', 'Limited expertise or tools for cultivation, passaging, and analysis', 'checkbox', 'model_challenges', 'limited_expertise_tools', false),
+        buildCheckboxElement('model_challenges', 'Loss or degradation of organoids during handling or imaging', 'checkbox', 'model_challenges', 'organoid_loss_degradation', false),
+        buildCheckboxElement('model_challenges', 'Difficulty accessing real-time data for faster decision-making', 'checkbox', 'model_challenges', 'difficulty_real_time_data', false),
+        buildCheckboxElement('model_challenges', 'Reproducibility and consistency challenges', 'checkbox', 'model_challenges', 'reproducibility_consistency', false),
+        buildCheckboxElement('model_challenges', 'Lack of workflow standardization and automation', 'checkbox', 'model_challenges', 'lack_standardization_automation', false),
+        buildCheckboxElement('model_challenges', 'Poor data traceability and structured record-keeping', 'checkbox', 'model_challenges', 'poor_data_traceability', false),
+      ),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'drugdiscovery_challenges',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Are you currently exploring solutions to improve efficiency in your workflows?',
+        ),
+        buildOptionsElement('drugdiscovery_challenges', [
+          { label: 'Yes, actively evaluating options within the next 3–6 months', value: 'actively_evaluating_3_6_months' },
+          { label: 'Yes, but looking for longer-term solutions (6–12 months)', value: 'longer_term_6_12_months' },
+          { label: 'Not right now, but potentially in the future', value: 'potentially_in_future' },
+        ]),
+      ),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'OpCoInterest',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Interested in hearing from one of our experts? Select all that apply.',
+        ),
+        buildCheckboxElement('OpCo_Interest', 'Abcam', 'checkbox', 'OpCo_Interest', 'Abcam', false),
+        buildCheckboxElement('OpCo_Interest', 'Aldevron', 'checkbox', 'OpCo_Interest', 'Aldevron', false),
+        buildCheckboxElement('OpCo_Interest', 'Beckman Coulter Life Sciences', 'checkbox', 'OpCo_Interest', 'Beckman Coulter Life Sciences', false),
+        buildCheckboxElement('OpCo_Interest', 'Genedata', 'checkbox', 'OpCo_Interest', 'Genedata', false),
+        buildCheckboxElement('OpCo_Interest', 'IDBS', 'checkbox', 'OpCo_Interest', 'IDBS', false),
+        buildCheckboxElement('OpCo_Interest', 'IDT', 'checkbox', 'OpCo_Interest', 'IDT', false),
+        buildCheckboxElement('OpCo_Interest', 'Leica Microsystems', 'checkbox', 'OpCo_Interest', 'Leica Microsystems', false),
+        buildCheckboxElement('OpCo_Interest', 'Molecular Devices', 'checkbox', 'OpCo_Interest', 'Molecular Devices', false),
+        buildCheckboxElement('OpCo_Interest', 'Phenomenex', 'checkbox', 'OpCo_Interest', 'Phenomenex', false),
+        buildCheckboxElement('OpCo_Interest', 'SCIEX', 'checkbox', 'OpCo_Interest', 'SCIEX', false),
+      ),
+    );
+    formEl.querySelector('.add-gated-form-fields')?.append(genedataformFields);
+  }
+  if (formId === 'wsawgenedataform') {
+    const wsawgenedataformFields = div(
+      { class: 'container mx-auto space-y-4' },
+      buildSelectElement('Country', 'Country', 'checkbox', 'Country', 'Country', countries),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'drugdiscovery_challenges',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Are you currently exploring solutions to improve efficiency in your workflows?',
+        ),
+        buildOptionsElement('drugdiscovery_challenges', [
+          { label: 'Yes, actively evaluating options within the next 3–6 months', value: 'actively_evaluating_3_6_months' },
+          { label: 'Yes, but looking for longer-term solutions (6–12 months)', value: 'longer_term_6_12_months' },
+          { label: 'Not right now, but potentially in the future', value: 'potentially_in_future' },
+        ]),
+      ),
+      div(
+        { class: 'space-y-2 col-span-1 md:col-span-2' },
+        label(
+          {
+            for: 'OpCoInterest',
+            class: 'font-normal !text-semibold !text-sm leading-4',
+          },
+          'Interested in hearing from one of our experts? Select all that apply.',
+        ),
+        buildCheckboxElement('OpCo_Interest', 'Abcam', 'checkbox', 'OpCo_Interest', 'Abcam', false),
+        buildCheckboxElement('OpCo_Interest', 'Aldevron', 'checkbox', 'OpCo_Interest', 'Aldevron', false),
+        buildCheckboxElement('OpCo_Interest', 'Beckman Coulter Life Sciences', 'checkbox', 'OpCo_Interest', 'Beckman Coulter Life Sciences', false),
+        buildCheckboxElement('OpCo_Interest', 'Genedata', 'checkbox', 'OpCo_Interest', 'Genedata', false),
+        buildCheckboxElement('OpCo_Interest', 'IDBS', 'checkbox', 'OpCo_Interest', 'IDBS', false),
+        buildCheckboxElement('OpCo_Interest', 'IDT', 'checkbox', 'OpCo_Interest', 'IDT', false),
+        buildCheckboxElement('OpCo_Interest', 'Leica Microsystems', 'checkbox', 'OpCo_Interest', 'Leica Microsystems', false),
+        buildCheckboxElement('OpCo_Interest', 'Molecular Devices', 'checkbox', 'OpCo_Interest', 'Molecular Devices', false),
+        buildCheckboxElement('OpCo_Interest', 'Phenomenex', 'checkbox', 'OpCo_Interest', 'Phenomenex', false),
+        buildCheckboxElement('OpCo_Interest', 'SCIEX', 'checkbox', 'OpCo_Interest', 'SCIEX', false),
+      ),
+    );
+    formEl.querySelector('.add-gated-form-fields')?.append(wsawgenedataformFields);
+  }
 
   decorateIcons(formEl);
   block.innerHTML = '';
@@ -371,6 +479,22 @@ async function loadGatedForm(block) {
   document.querySelector('#gatedform')?.addEventListener('submit', (event) => {
     if (formValidate()) {
       getInquiry('gatedform');
+    } else {
+      event.preventDefault();
+    }
+  });
+
+  document.querySelector('#genedataform')?.addEventListener('submit', (event) => {
+    if (formValidate()) {
+      getInquiry('genedataform');
+    } else {
+      event.preventDefault();
+    }
+  });
+
+  document.querySelector('#wsawgenedataform')?.addEventListener('submit', (event) => {
+    if (formValidate()) {
+      getInquiry('wsawgenedataform');
     } else {
       event.preventDefault();
     }

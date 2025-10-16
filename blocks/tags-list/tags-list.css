@@ -229,7 +229,7 @@ button,
 [type='submit'] {
   -webkit-appearance: button;
   /* 1 */
-  background-color: transparent;
+  background-color: rgb(117 35 255 / var(--tw-bg-opacity));
   /* 2 */
   background-image: none;
   /* 2 */

@@ -25,64 +25,63 @@
           "name": "formId",
           "type": "string",
           "label": "Form Id",
-          "required": true,
-          "description": "Unique identifier for the form."
+          "required": true
         },
         {
           "component": "text",
           "name": "formName",
           "type": "string",
           "label": "Form Name",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
-          "name": "_clientID",
+          "name": "clientID",
           "type": "string",
           "label": "Client ID",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
-          "name": "_deExternalKey",
+          "name": "deExternalKey",
           "type": "string",
           "label": "External Key",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
-          "name": "_action",
+          "name": "action",
           "type": "string",
           "label": "Action",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
           "name": "Inquiry_Type",
           "type": "string",
           "label": "Inquiry Type",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
-          "name": "_successURL",
+          "name": "Page_Track_URL",
+          "type": "string",
+          "label": "Page Track URL",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "successURL",
           "type": "string",
           "label": "Success URL",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         },
         {
           "component": "text",
-          "name": "_errorURL",
+          "name": "errorURL",
           "type": "string",
           "label": "Error URL",
-          "required": true,
-          "description": "Unique name for the form."
+          "required": true
         }
       ]
     }

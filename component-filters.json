@@ -167,6 +167,7 @@
       "button",
       "title",
       "form",
+      "gated-form",
       "embed"
     ]
   },

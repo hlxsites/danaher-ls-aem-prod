@@ -9,20 +9,26 @@ import {
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
 const template = getMetadata('template');
-let linkText = '';
-switch (template) {
-  case 'new-lab':
-    linkText = 'Unlock All Offers';
-    break;
-  case 'wsaw':
-    linkText = 'Learn More';
-    break;
-  default:
-    linkText = 'Read Article →';
-}
 
 export default function createCard(article, firstCard = false) {
   const cardTitle = article.title.split('| Danaher Life Sciences')[0] || article.title;
+
+  // Determine link text based on template and article path
+  let linkText = '';
+  if (article.path && article.path.includes('/us/en/videos/')) {
+    linkText = 'Watch →';
+  } else {
+    switch (template) {
+      case 'new-lab':
+        linkText = 'Unlock All Offers';
+        break;
+      case 'wsaw':
+        linkText = 'Learn More';
+        break;
+      default:
+        linkText = 'Read Article →';
+    }
+  }
 
   const cardWrapper = a(
     {
@@ -68,7 +74,7 @@ export default function createCard(article, firstCard = false) {
     span({ class: 'pl-2' }, `${article.readingTime} min read`),
   );
   // if (template !== 'wsaw') cardWrapper.querySelector('.eyebrow-sm')?.after(showDateTime);
-  if (template !== 'wsaw' && !article.path?.includes('/us/en/library/')) {
+  if (template !== 'wsaw' && !article.path?.includes('/us/en/library/') && !article.path?.includes('/us/en/videos/')) {
     cardWrapper.querySelector('.eyebrow-sm')?.after(showDateTime);
   }
 

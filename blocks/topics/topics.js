@@ -119,6 +119,9 @@ export function createFilters(articles, activeTag = '') {
     if (window.location.pathname.startsWith('/us/en/library')) {
       articleType = 'Library';
     }
+    if (window.location.pathname.startsWith('/us/en/videos')) {
+      articleType = 'Videos';
+    }
 
     // Find the original topic name from articles to display properly
     let displayName = activeTag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
