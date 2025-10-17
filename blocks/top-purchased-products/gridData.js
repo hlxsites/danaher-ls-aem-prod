@@ -9,7 +9,7 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
  * @returns {HTMLElement} - The rendered grid card element.
  */
 export default function renderGridCard(item) {
-  const imageUrl = item.images?.[0];
+  const imageUrl = item.images?.find((url) => !url.toLowerCase().endsWith('.pdf'));
   const card = a(
     {
       href: item?.url,
