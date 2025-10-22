@@ -547,6 +547,10 @@
     flex-direction: row
   }
 
+  .order-details-wrapper :is(.md\:p-0) {
+    padding: 0px
+  }
+
   .order-details-wrapper :is(.md\:pb-0) {
     padding-bottom: 0px
   }

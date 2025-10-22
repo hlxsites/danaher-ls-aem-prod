@@ -64,65 +64,72 @@ export default async function decorate(block) {
       if (paymentSubHeading) {
         paymentSubHeading.textContent = 'Manage your saved payment methods';
       }
-      module?.querySelector('#paymentMethodInvoice')?.classList.add('opacity-50', 'pointer-events-none');
+      module?.querySelector('#paymentMethodInvoice')?.classList?.add('opacity-50', 'pointer-events-none');
       const paymentMethodStripe = module?.querySelector('#paymentMethodSTRIPE_PAYMENT');
       const savedStripeCardsList = module?.querySelector('#savedStripeCardsList');
-      const newStripeCardsWrapper = module?.querySelector('#newStripeCardsWrapper');
-      const saveStripeCard = module?.querySelector('#saveStripeCard');
-      const savedStripeCardsHeader = module?.querySelector('#savedStripeCardsHeader');
       if (paymentMethodStripe) {
-        savedStripeCardsList.className = 'w-full gap-6 flex flex-col max-h-[645px] pr-2 overflow-auto flex flex-col gap-6 pt-0 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500';
+        if (savedStripeCardsList) {
+          savedStripeCardsList.className = 'w-full gap-6 flex flex-col max-h-[645px] pr-2 overflow-auto flex flex-col gap-6 pt-0 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500';
+        }
         if (paymentMethodStripe?.querySelector('input[type="radio"]')) {
           paymentMethodStripe.querySelector('input[type="radio"]').checked = true;
         }
-        saveStripeCard?.addEventListener('click', async () => {
-          showPreLoader();
-          const getStripe = await getStripeInstance();
-          const stripeEle = await getStripeElements();
-          const savingCard = await confirmSetup(getStripe, stripeEle, `${window.location.origin}/payment`);
-
-          const addressElements = stripeEle.getElement('address');
-          const paymentElements = stripeEle.getElement('payment');
-          // if stripe setup confirmed
-          const confirmSetupStatus = savingCard?.setupIntent?.status;
-          const validConfirmStatus = ['succeeded', 'requires_action'];
-          try {
-            if (!validConfirmStatus.includes(confirmSetupStatus)) {
-              throw new Error('Error Processing Payment');
-            }
-            const updateSavedCards = await getPaymentIntent();
-            if (updateSavedCards?.status !== 'success') throw new Error('No Saved Cards Found.');
-            const getDefaultCard = await setGetCardAsDefault();
-            let defaultCard = '';
-            if (getDefaultCard?.status !== 'success') throw new Error('Error getting default card');
-
-            addressElements?.unmount();
-            paymentElements?.unmount();
-            // check if has saved cards and render list
-            const checkSavedStripeCards = updateSavedCards?.data?.data;
-            defaultCard = getDefaultCard?.data?.invoice_settings?.default_payment_method?.id;
-            if (checkSavedStripeCards?.length > 0) {
-              checkSavedStripeCards?.forEach((item) => {
-                savedStripeCardsList?.append(createCardItem(item, defaultCard));
-              });
-            }
-            newStripeCardsWrapper?.classList.add('hidden');
-            if (savedStripeCardsHeader?.classList?.contains('hidden')) {
-              savedStripeCardsHeader?.classList.remove('hidden');
-            }
-            if (savedStripeCardsList?.classList?.contains('hidden')) {
-              savedStripeCardsList?.classList.remove('hidden');
-            }
-            if (newStripeCardsWrapper?.querySelector('#showStripePaymentList')) {
-              if (newStripeCardsWrapper?.querySelector('#showStripePaymentList')?.classList.contains('hidden')) {
-                newStripeCardsWrapper?.querySelector('#showStripePaymentList').classList.remove('hidden');
+        document.addEventListener('click', async (event) => {
+          if (event.target && event.target.id === 'saveStripeCard') {
+            const newStripeCardsWrapper = document?.querySelector('#newStripeCardsWrapper');
+            const savedStripeCardsHeader = document?.querySelector('#savedStripeCardsHeader');
+            const savedStripeCardsListI = document?.querySelector('#savedStripeCardsList');
+            showPreLoader();
+            const getStripe = await getStripeInstance();
+            const stripeEle = getStripeElements();
+            const savingCard = await confirmSetup(getStripe, stripeEle, `${window.location.origin}/payment`);
+            const addressElements = stripeEle.getElement('address');
+            const paymentElements = stripeEle.getElement('payment');
+            // if stripe setup confirmed
+            const confirmSetupStatus = savingCard?.setupIntent?.status;
+            const validConfirmStatus = ['succeeded', 'requires_action'];
+            try {
+              if (!validConfirmStatus.includes(confirmSetupStatus)) {
+                throw new Error('Error Processing Payment');
               }
+              const updateSavedCards = await getPaymentIntent();
+              if (updateSavedCards?.status !== 'success') throw new Error('No Saved Cards Found.');
+              const getDefaultCard = await setGetCardAsDefault();
+              let defaultCard = '';
+              if (getDefaultCard?.status !== 'success') throw new Error('Error getting default card');
+
+              // check if has saved cards and render list
+              const checkSavedStripeCards = updateSavedCards?.data?.data;
+              defaultCard = getDefaultCard?.data?.invoice_settings?.default_payment_method?.id;
+              if (checkSavedStripeCards?.length > 0) {
+                if (savedStripeCardsListI) {
+                  savedStripeCardsListI.innerHTML = '';
+                  checkSavedStripeCards?.forEach((item) => {
+                    savedStripeCardsListI?.append(createCardItem(item, defaultCard, true));
+                  });
+                  decorateIcons(savedStripeCardsListI);
+                }
+              }
+              newStripeCardsWrapper?.classList.add('hidden');
+              if (savedStripeCardsHeader?.classList?.contains('hidden')) {
+                savedStripeCardsHeader?.classList.remove('hidden');
+              }
+              if (savedStripeCardsListI?.classList?.contains('hidden')) {
+                savedStripeCardsListI?.classList.remove('hidden');
+              }
+              if (newStripeCardsWrapper?.querySelector('#showStripePaymentList')) {
+                if (newStripeCardsWrapper?.querySelector('#showStripePaymentList')?.classList.contains('hidden')) {
+                  newStripeCardsWrapper?.querySelector('#showStripePaymentList').classList.remove('hidden');
+                }
+              }
+              addressElements.destroy();
+              paymentElements.destroy();
+              removePreLoader();
+              showNotification('Card added successfully.', 'success');
+            } catch (error) {
+              removePreLoader();
+              showNotification('Error Processing Request.', 'error');
             }
-            removePreLoader();
-            showNotification('Card added successfully.', 'success');
-          } catch (error) {
-            removePreLoader();
-            showNotification('Error Processing Request.', 'error');
           }
         });
       }

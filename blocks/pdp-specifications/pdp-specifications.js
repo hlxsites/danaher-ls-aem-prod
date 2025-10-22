@@ -61,15 +61,17 @@ export default async function decorate(block) {
 
       const tableTag = table({ class: 'min-w-full border-[0.5px] lg:border divide-gray-300 mb-6' });
 
-      const caption = document.createElement('caption');
-      caption.className = idx === 0
-        ? 'font-medium leading-6 text-black pb-6 text-left'
-        : 'font-medium leading-6 text-black py-6 text-left';
-      caption.style.fontSize = '14px';
-      caption.style.lineHeight = '20px';
-      caption.style.captionSide = 'top';
-      caption.textContent = item.label;
-      tableTag.appendChild(caption);
+      if (item.label.trim().toLowerCase() !== 'specifications' && idx !== 0) {
+        const caption = document.createElement('caption');
+        caption.className = idx === 0
+          ? 'font-medium leading-6 text-black pb-6 text-left'
+          : 'font-medium leading-6 text-black py-6 text-left';
+        caption.style.fontSize = '14px';
+        caption.style.lineHeight = '20px';
+        caption.style.captionSide = 'top';
+        caption.textContent = item.label;
+        tableTag.appendChild(caption);
+      }
 
       const tbodyTag = tbody();
       if (Array.isArray(item.value)) {

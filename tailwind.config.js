@@ -111,6 +111,9 @@ module.exports = {
     "top-border",
     "bg-danaherpurple-800",
     "bg-gray-100",
+    "individual-dd",
+    "pdp-hero-dd",
+    "individual-dd-options",
   ],
   theme: {
     extend: {

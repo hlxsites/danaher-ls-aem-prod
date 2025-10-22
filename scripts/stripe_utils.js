@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-cycle
 import { getCommerceBase } from './commerce.js';
 import {
-  getApiData, patchApiData, postApiData, putApiData,
+  getApiData, patchApiData, postApiData, putApiData, deleteApiData,
 } from './api-utils.js';
 import { updateBasketDetails } from '../blocks/cartlanding/cartSharedFile.js';
 
@@ -274,7 +274,7 @@ export async function updateCardForOrder(data = '') {
     return { status: 'error', data: 'Unauthorized access.' };
   }
   // post card payment intent
-  const addCardToOrderUrl = `${baseURL}/baskets/current/attributes/SelectedCard`;
+  const addCardToOrderUrl = `${baseURL}/baskets/current/attributes/SelectedPM`;
   const addCardToOrderHeaders = new Headers();
   addCardToOrderHeaders.append('Content-Type', 'Application/json');
   addCardToOrderHeaders.append('Accept', 'application/vnd.intershop.basket.v1+json');
@@ -372,4 +372,30 @@ export async function savePaymentMethod(stripe, elements, methodType, userData) 
     return { status: 'error', data: error.message };
   }
   return { status: 'success', data: paymentMethod };
+}
+
+/*
+*
+ Remove Card
+*
+*/
+export async function removeCard(paymentMethodId) {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  const defaultHeader = new Headers({
+    'Content-Type': 'Application/json',
+    'Authentication-Token': authenticationToken.access_token,
+  });
+  const url = `${baseURL}/setup-intent?paymentid=${paymentMethodId}`;
+  try {
+    const response = await deleteApiData(url, defaultHeader);
+    if (response?.status === 'success') {
+      return response;
+    }
+    throw new Error('Error removing card');
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
 }

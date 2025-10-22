@@ -1,4 +1,5 @@
 import { getMetadata } from './lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
 import { makePublicUrl, setJsonLd } from './scripts.js';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -37,8 +38,53 @@ export function buildArticleSchema() {
   setJsonLd(data, 'article');
 }
 
+// Convert attributejson to additionalProperty schema
+function additionalPropertyToSchema(attr) {
+  if (!Array.isArray(attr)) return [];
+
+  return attr.flatMap((section) => {
+    // Ensure section is a valid object
+    if (!section || typeof section !== 'object') return [];
+
+    const sectionLabel = typeof section.label === 'string' ? section.label.trim() : '';
+    if (!sectionLabel) return [];
+
+    const values = Array.isArray(section.value) ? section.value : [];
+
+    return values
+      .filter((item) => item && typeof item === 'object')
+      .filter((item) => typeof item.label === 'string' && item.label.trim() !== '')
+      .map((item) => {
+        const label = item.label?.trim?.() || '';
+        const value = typeof item.value === 'string' ? item.value.trim() : String(item.value ?? '-');
+        const unit = typeof item.unit === 'string' ? item.unit.trim() : '';
+
+        return {
+          '@type': sectionLabel,
+          name: label,
+          value: unit ? `${value} ${unit}` : value,
+        };
+      });
+  });
+}
+
+// Parse attributejson safely
+function parseAdditionalProperty(attributejson) {
+  try {
+    const parsed = JSON.parse(attributejson);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return additionalPropertyToSchema(parsed);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error parsing attributejson:', error);
+    return [];
+  }
+}
+
 // eslint-disable-next-line import/prefer-default-export
-export function buildProductSchema() {
+export function buildProductSchema(response) {
   const data = {
     '@context': 'http://schema.org',
     '@type': 'Product',
@@ -71,6 +117,10 @@ export function buildProductSchema() {
       '@id': `https://lifesciences.danaher.com${makePublicUrl(window.location.pathname)}`,
     },
   };
+  // Add additionalProperty if attributejson exists
+  if (response?.[0]?.raw?.attributejson) {
+    data.additionalProperty = parseAdditionalProperty(response?.[0]?.raw?.attributejson);
+  }
 
   if (getMetadata('creationdate')) data.datePublished = getMetadata('creationdate');
   if (getMetadata('updatedate')) data.dateModified = getMetadata('updatedate');
@@ -226,4 +276,35 @@ export function buildItemListSchema(srcObj, type) {
     data,
     'itemList',
   );
+}
+
+export function buildBreadcrumbSchema() {
+  const rootUrl = window.location.origin;
+  const breadcrumbSelector = ".breadcrumb-wrapper ul[role='list'] > li";
+  const elements = document.querySelectorAll(breadcrumbSelector);
+
+  const items = [];
+  elements.forEach((li, idx) => {
+    const a = li.querySelector('a');
+    if (a) {
+      const name = a.textContent.trim() || 'Home';
+      const href = a.getAttribute('href') || '/';
+      const item = href.startsWith('http') ? href : rootUrl + href;
+      items.push({
+        '@type': 'ListItem',
+        position: idx + 1,
+        name,
+        item,
+      });
+    }
+  });
+
+  if (items.length) {
+    const schema = {
+      '@context': 'https://schema.org/',
+      '@type': 'BreadcrumbList',
+      itemListElement: items,
+    };
+    setJsonLd(schema, 'breadcrumb');
+  }
 }

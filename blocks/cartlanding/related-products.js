@@ -22,7 +22,7 @@ function getCardsPerPageGrid() {
 export default async function relatedProducts(headingText, productIds, divId) {
   const topSellingWrapper = div({
     class:
-      'dhls-container top-selling-rendered mx-auto flex flex-col md:flex-row gap-6 px-5 lg:px-0',
+      'dhls-container top-selling-rendered mx-auto flex flex-col md:flex-row gap-6',
     id: divId,
   });
 
@@ -32,7 +32,7 @@ export default async function relatedProducts(headingText, productIds, divId) {
   let currentIndex = 0;
   let isGridView = true;
   const carouselContainer = div({
-    class: 'carousel-container flex flex-col gap-y-6 w-full justify-center',
+    class: 'carousel-container flex flex-col gap-y-6 w-full justify-center p-3 md:p-0',
   });
   const carouselHead = div({
     class: 'w-full flex flex-row justify-between md:h-10',
@@ -115,8 +115,7 @@ export default async function relatedProducts(headingText, productIds, divId) {
   carouselHead.append(leftGroup, arrows);
 
   const carouselCards = div({
-    class: `carousel-cards flex justify-center lg:justify-normal gap-5 w-full flex-wrap ${
-      isGridView ? 'md:flex-nowrap' : ''
+    class: `carousel-cards flex justify-center lg:justify-normal gap-5 w-full flex-wrap ${isGridView ? 'md:flex-nowrap' : ''
     }`,
   });
   const slideWrapper = div({
@@ -129,14 +128,21 @@ export default async function relatedProducts(headingText, productIds, divId) {
       'pagination-container flex justify-center items-center gap-2 mt-8 w-full',
     style: 'display: none;',
   });
-
-  const results = await Promise.allSettled(
-    // making false as we don't need intershop data for top selling products as of now
-    productIds.map((id) => getProductInfo(id, true, false)),
-  );
+  let results = '';
+  const alsoBoughtCachedProducts = JSON.parse(localStorage.getItem('alsoBoughtCachedProducts'));
+  if (alsoBoughtCachedProducts) {
+    results = alsoBoughtCachedProducts;
+  } else {
+    results = await Promise.allSettled(
+      // making false as we don't need intershop data for top selling products as of now
+      productIds.map((id) => getProductInfo(id, true, false)),
+    );
+    localStorage.setItem('alsoBoughtCachedProducts', JSON.stringify(results));
+  }
   const products = results
     .filter((result) => result.status === 'fulfilled' && result.value?.title?.trim())
     .map((result) => result.value);
+
   // Hide viewModeGroup if no products are available
   if (products.length === 0) {
     topSellingWrapper.style.display = 'none';
@@ -172,11 +178,9 @@ export default async function relatedProducts(headingText, productIds, divId) {
    */
   function updateCarousel() {
     slideWrapper.innerHTML = '';
-    slideWrapper.className = `slide-wrapper w-full py-2 flex ${isGridView ? 'transition-transform duration-1000 ease-in-out' : ''} gap-5 ${
-      isGridView ? 'flex-row' : 'flex-col'
+    slideWrapper.className = `slide-wrapper w-full py-2 flex ${isGridView ? 'transition-transform duration-1000 ease-in-out' : ''} gap-5 ${isGridView ? 'flex-row' : 'flex-col'
     }`;
-    carouselCards.className = `carousel-cards ${isGridView ? 'overflow-hidden' : ''}  flex justify-center lg:justify-normal gap-5 w-full flex-wrap ${
-      isGridView ? 'md:flex-nowrap' : ''
+    carouselCards.className = `carousel-cards ${isGridView ? 'overflow-hidden' : ''}  flex justify-center lg:justify-normal gap-5 w-full flex-wrap ${isGridView ? 'md:flex-nowrap' : ''
     }`;
 
     if (isGridView) {
@@ -232,22 +236,19 @@ export default async function relatedProducts(headingText, productIds, divId) {
         div({ class: 'self-stretch h-0.5 bg-transparent' }),
         div(
           {
-            class: `self-stretch pr-1 pt-4 inline-flex justify-start items-center gap-3 cursor-${
-              prevEnabled ? 'pointer' : 'not-allowed'
+            class: `self-stretch pr-1 pt-4 inline-flex justify-start items-center gap-3 cursor-${prevEnabled ? 'pointer' : 'not-allowed'
             } z-10`,
           },
           div(
             { class: 'w-5 h-5 relative overflow-hidden' },
             span({
-              class: `icon icon-arrow-left w-5 h-5 absolute fill-current ${
-                prevEnabled ? 'text-danaherpurple-500' : 'text-gray-400'
+              class: `icon icon-arrow-left w-5 h-5 absolute fill-current ${prevEnabled ? 'text-danaherpurple-500' : 'text-gray-400'
               } [&_svg>use]:stroke-current`,
             }),
           ),
           div(
             {
-              class: `justify-start text-${
-                prevEnabled ? 'danaherpurple-500' : 'gray-400'
+              class: `justify-start text-${prevEnabled ? 'danaherpurple-500' : 'gray-400'
               } text-sm font-medium leading-tight`,
             },
             'Previous',
@@ -286,8 +287,7 @@ export default async function relatedProducts(headingText, productIds, divId) {
         });
         pageNumber.append(
           div({
-            class: `self-stretch h-0.5 ${
-              currentPage === page ? 'bg-danaherpurple-500' : 'bg-transparent'
+            class: `self-stretch h-0.5 ${currentPage === page ? 'bg-danaherpurple-500' : 'bg-transparent'
             }`,
           }),
           div(
@@ -297,8 +297,7 @@ export default async function relatedProducts(headingText, productIds, divId) {
             },
             div(
               {
-                class: `text-center justify-start text-${
-                  currentPage === page ? 'danaherpurple-500' : 'gray-700'
+                class: `text-center justify-start text-${currentPage === page ? 'danaherpurple-500' : 'gray-700'
                 } text-sm font-medium leading-tight`,
               },
               page.toString(),
@@ -383,14 +382,12 @@ export default async function relatedProducts(headingText, productIds, divId) {
         div({ class: 'self-stretch h-0.5 bg-transparent' }),
         div(
           {
-            class: `self-stretch pl-1 pt-4 inline-flex justify-start items-center gap-3 cursor-${
-              nextEnabled ? 'pointer' : 'not-allowed'
+            class: `self-stretch pl-1 pt-4 inline-flex justify-start items-center gap-3 cursor-${nextEnabled ? 'pointer' : 'not-allowed'
             } z-10`,
           },
           div(
             {
-              class: `justify-start text-${
-                nextEnabled ? 'danaherpurple-500' : 'gray-400'
+              class: `justify-start text-${nextEnabled ? 'danaherpurple-500' : 'gray-400'
               } text-sm font-medium leading-tight`,
             },
             'Next',
@@ -398,8 +395,7 @@ export default async function relatedProducts(headingText, productIds, divId) {
           div(
             { class: 'w-5 h-5 relative overflow-hidden' },
             span({
-              class: `icon icon-arrow-right w-5 h-5 absolute fill-current ${
-                nextEnabled ? 'text-danaherpurple-500' : 'text-gray-400'
+              class: `icon icon-arrow-right w-5 h-5 absolute fill-current ${nextEnabled ? 'text-danaherpurple-500' : 'text-gray-400'
               } [&_svg>use]:stroke-current`,
             }),
           ),

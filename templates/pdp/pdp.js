@@ -116,7 +116,7 @@ async function loadPdpBlocks() {
 export default async function buildAutoBlocks() {
   const response = await getProductResponse();
   if (response === undefined || response.length === 0) return;
-  buildProductSchema();
+  buildProductSchema(response);
   localStorage.setItem('eds-product-details', JSON.stringify(response[0]));
   loadPdpBlocks();
   // designPdp();

@@ -563,7 +563,22 @@ export default async function decorate(block) {
     paginationContainer = div({
       class: 'pagination-container w-full',
     });
+    if ((resourceEngine?.state?.search?.response?.totalCount ?? 0) === 0) {
+      const tabs = document.querySelectorAll('.p-tab');
 
+      if (tabs.length > 0) {
+        tabs.forEach((tab) => {
+          const label = tab?.textContent?.trim?.() || '';
+          if (label === 'Resources' && tab.parentElement) {
+            tab.parentElement.remove();
+          }
+        });
+      }
+
+      if (block instanceof HTMLElement) {
+        block.classList.add('hidden');
+      }
+    }
     pdpResourceWrapperBlockContainer.append(head, infoBox, resCountElement);
 
     renderResourceCards();

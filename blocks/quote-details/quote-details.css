@@ -41,6 +41,10 @@
   display: inline-flex
 }
 
+.quote-details-wrapper :is(.hidden) {
+  display: none
+}
+
 .quote-details-wrapper :is(.\!h-\[24px\]) {
   height: 24px !important
 }
@@ -326,6 +330,10 @@
   padding: 0.625rem
 }
 
+.quote-details-wrapper :is(.p-3) {
+  padding: 0.75rem
+}
+
 .quote-details-wrapper :is(.p-6) {
   padding: 1.5rem
 }
@@ -533,6 +541,10 @@
 
   .quote-details-wrapper :is(.md\:flex-row) {
     flex-direction: row
+  }
+
+  .quote-details-wrapper :is(.md\:p-0) {
+    padding: 0px
   }
 
   .quote-details-wrapper :is(.md\:pb-0) {

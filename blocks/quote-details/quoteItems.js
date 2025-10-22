@@ -43,8 +43,10 @@ export const quoteItems = (response) => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-    const listPriceValue = quoteItemValue.quantity.value * quoteItemValue.product.listPrice.value;
-    const salesPriceValue = quoteItemValue.quantity.value * quoteItemValue.product.salePrice.value;
+    // eslint-disable-next-line max-len, no-unsafe-optional-chaining
+    const listPriceValue = quoteItemValue?.quantity?.value * quoteItemValue?.product?.listPrice?.value;
+    // eslint-disable-next-line max-len, no-unsafe-optional-chaining
+    const salesPriceValue = quoteItemValue?.quantity?.value * quoteItemValue?.product?.salePrice?.value;
     if (listPriceValue !== salesPriceValue) {
       return div(
         {
@@ -81,13 +83,13 @@ export const quoteItems = (response) => {
     );
   };
   const quoteItemDiv = (quoteItemValue) => {
-    const productSKU = quoteItemValue.product.sku;
+    const productSKU = quoteItemValue?.product?.sku;
     const itemsscontainer = a(
       {
         href: `/us/en/products/sku/${productSKU}`,
         class:
          'self-stretch pb-4 relative border-b border-gray-300 inline-flex md:flex-row flex-col justify-start items-center',
-        id: quoteItemValue.id,
+        id: quoteItemValue?.id,
       },
       div(
         {
@@ -115,14 +117,14 @@ export const quoteItems = (response) => {
             {
               class: 'self-stretch justify-start text-black text-base font-bold leading-snug',
             },
-            quoteItemValue.product.productName,
+            quoteItemValue?.product?.productName,
           ),
           div(
             {
               class:
                'self-stretch justify-start text-gray-500 text-sm font-normal leading-tight ',
             },
-            quoteItemValue.product.sku,
+            quoteItemValue?.product?.sku,
           ),
 
         ),
@@ -135,7 +137,7 @@ export const quoteItems = (response) => {
           {
             class: 'w-20 text-right justify-start text-black text-base font-bold leading-snug',
           },
-          quoteItemValue.quantity.value,
+          quoteItemValue?.quantity?.value,
         ),
         unitPriceDiv(quoteItemValue),
       ),
@@ -151,7 +153,7 @@ export const quoteItems = (response) => {
   Object.entries(groupedByBrand).forEach((itemToBeDisplayed) => {
     const manufacturerName = itemToBeDisplayed[0];
     const matchingLineItems = response.items.filter(
-      (item) => item.brand === manufacturerName,
+      (item) => item.brand === manufacturerName && item.sku,
     );
     if (matchingLineItems.length > 0) {
       const quoteItemDisplayWrapper = div({
@@ -163,6 +165,8 @@ export const quoteItems = (response) => {
         quoteItemDisplayWrapper.append(quoteItemDiv(cartItem));
         quoteItemDisplayContainer.append(quoteItemDisplayWrapper);
       });
+    } else {
+      document.querySelector('#quoteItemTitle')?.classList?.add('hidden');
     }
   });
   return quoteItemDisplayContainer;

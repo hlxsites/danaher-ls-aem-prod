@@ -5,6 +5,9 @@ import { getAuthorization, getCommerceBase } from './commerce.js';
 import { getMetadata } from './lib-franklin.js';
 import { addItemToCart } from '../blocks/cartlanding/myCartService.js';
 import { removePreLoader, showNotification } from './common-utils.js';
+import { getAuthenticationToken } from './token-utils.js';
+import { userLogin } from './auth-utils.js';
+import { loadMiniCart } from './cart-checkout-utils.js';
 /**
  * Sets up event delegation for "Add to Cart" button clicks within the container.
  * Efficiently handles clicks even for dynamically added buttons.
@@ -14,7 +17,7 @@ import { removePreLoader, showNotification } from './common-utils.js';
 
 export function decorateBuyButton(wrapper) {
   wrapper.addEventListener('click', async (e) => {
-    
+
     const targetElement = e.target.closest('.add-to-cart-btn');
     if (!targetElement || !wrapper.contains(targetElement)) return;
 
@@ -28,24 +31,24 @@ export function decorateBuyButton(wrapper) {
         itemQuantity = quantityInput?.value || btnProps?.minorderquantity?.value;
       }
       if (itemQuantity <= 0 || itemQuantity > 100) {
-      quantityInput.style.border = '2px solid red';
-      // eslint-disable-next-line no-alert
-      showNotification(`Please enter a valid order quantity which should be greater then 0 and less then 100`, 'error');
-    }
-    else{
-      quantityInput.style.border = ''; 
-      const itemObject = {
-              sku: {
-                value: btnProps?.sku?.value,
-                quantity: itemQuantity,
-              }
-            };
-
-      if (itemQuantity) {
-        await addItemToCart(itemObject);
+        quantityInput.style.border = '2px solid red';
+        // eslint-disable-next-line no-alert
+        showNotification(`Please enter a valid order quantity which should be greater then 0 and less then 100`, 'error');
       }
-    }
-     
+      else {
+        quantityInput.style.border = '';
+        const itemObject = {
+          sku: {
+            value: btnProps?.sku?.value,
+            quantity: itemQuantity,
+          }
+        };
+
+        if (itemQuantity) {
+          await addItemToCart(itemObject);
+        }
+      }
+
     } catch (error) {
       removePreLoader();
       showNotification('Error Processing Request.', 'error');
@@ -113,21 +116,21 @@ if (document.readyState === "loading") {
 } else {
   initUtmParamsUtm();
 }
- /*
-  *
-  :::::::::::
-     include / exclude eds page for Prod and Stage
-  ::::::::::::::
-  *
-  */
+/*
+ *
+ :::::::::::
+    include / exclude eds page for Prod and Stage
+ ::::::::::::::
+ *
+ */
 export const includeProdEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'expert', 'expert.html', 'new-lab/excedr', 'new-lab/excedr.html', 'products/brands', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', '/products.html'];
 
-export const includeStageEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'expert', 'expert.html', 'new-lab/excedr', 'new-lab/excedr.html', 'we-see-a-way', 'we-see-a-way.html', 'products/brands', 'products.html', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'e-buy', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.dashboardPage?.url, window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.addressPageUrl, window.EbuyConfig?.myAddressPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderDetailsPageUrl, window.EbuyConfig?.paymentMethodsPageUrl, window.EbuyConfig?.myProfilePageUrl, window.EbuyConfig?.requestedQuoteDetailsPageUrl, window.EbuyConfig?.requestedQuotesPageUrl];
+export const includeStageEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'expert', 'expert.html', 'new-lab/excedr', 'new-lab/excedr.html', 'we-see-a-way', 'we-see-a-way.html', 'landing/home-eds', 'landing/home-eds.html', 'about-us', 'about-us.html', 'products/brands', 'products.html', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'e-buy', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.dashboardPage?.url, window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.addressPageUrl, window.EbuyConfig?.myAddressPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderDetailsPageUrl, window.EbuyConfig?.paymentMethodsPageUrl, window.EbuyConfig?.myProfilePageUrl, window.EbuyConfig?.requestedQuoteDetailsPageUrl, window.EbuyConfig?.requestedQuotesPageUrl];
 
 
-if(getMetadata('template') === 'pdp'){
-  includeProdEdsPaths.push('/products/family','/products/sku','/products/bundle');
-  includeStageEdsPaths.push('/products/family','/products/sku','/products/bundle');
+if (getMetadata('template') === 'pdp') {
+  includeProdEdsPaths.push('/products/family', '/products/sku', '/products/bundle');
+  includeStageEdsPaths.push('/products/family', '/products/sku', '/products/bundle');
 }
 // Core Web Vitals RUM collection
 sampleRUM('cwv');
@@ -359,13 +362,16 @@ if (!window.location.hostname.includes('localhost')) {
 }
 /* eslint-enable */
 
-// // Attempt to retrieve the authentication token asynchronously
-// const authenticationToken = await getAuthenticationToken();
+if (window.DanaherConfig.host === 'stage.lifesciences.danaher.com') {
+  loadMiniCart();
+  // // Attempt to retrieve the authentication token asynchronously
+  const authenticationToken = await getAuthenticationToken();
 
-// // Check if the token retrieval resulted in an error
-// if (authenticationToken?.status === 'error') {
-//   // If there's an error, wait briefly and then attempt to log in as a guest user
-//   setTimeout(async () => {
-//     await userLogin('guest', '', 'true'); // Login with guest credentials
-//   });
-// }
+  // Check if the token retrieval resulted in an error
+  if (authenticationToken?.status === 'error') {
+    // If there's an error, wait briefly and then attempt to log in as a guest user
+    setTimeout(async () => {
+      await userLogin('guest', '', 'true'); // Login with guest credentials
+    });
+  }
+}

@@ -299,7 +299,7 @@ export default function renderListCard(item) {
           // href: item?.url || '#',
           // target: item?.url?.includes(window.DanaherConfig.host) ? '_self' : '_blank',
           class:
-            'add-to-cart-btn w-24 px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 rounded-[20px] flex justify-center items-center overflow-hidden',
+            'add-to-cart-btn w-24 px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 rounded-[20px] flex justify-center items-center text-white overflow-hidden',
           sku: item.sku,
         },
         // span(

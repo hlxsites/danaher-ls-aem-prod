@@ -6,6 +6,7 @@ import {
   img,
   input,
   h1,
+  label,
 } from '../../scripts/dom-builder.js';
 import {
   getProductDetails,
@@ -16,6 +17,247 @@ import {
 } from '../../scripts/scripts.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { decorateBuyButton } from '../../scripts/delayed.js';
+import { querySummary } from '../../scripts/coveo/pdp-listing/controllers/pdp-controllers.js';
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// ::::: Dropdown implementation Starts:::::
+const keyAliases = { moidification: 'modification', Moidication: 'modification' };
+
+function normalizeKeys(obj) {
+  return Object.keys(obj).reduce((acc, k) => {
+    acc[keyAliases[k] || k] = obj[k];
+    return acc;
+  }, {});
+}
+
+function getDropdownKeys(data) {
+  return Array.from(
+    new Set(data.flatMap((obj) => Object.keys(normalizeKeys(obj)))),
+  ).filter((k) => k !== 'price');
+}
+
+function getAllSkuOptions(data) {
+  return Array.from(new Set(data.map(normalizeKeys).map((obj) => obj.sku).filter(Boolean)));
+}
+
+function getOptions(data, key, filters) {
+  if (key === 'sku') {
+    return getAllSkuOptions(data);
+  }
+  const effectiveFilters = { ...filters };
+  if (filters.sku) effectiveFilters.sku = filters.sku;
+  return Array.from(
+    new Set(
+      data
+        .map(normalizeKeys)
+        .filter((obj) => Object.entries(effectiveFilters)
+          .every(([fKey, fVal]) => !fVal || obj[fKey] === fVal))
+        .map((obj) => obj[key])
+        .filter(Boolean),
+    ),
+  );
+}
+
+function buildDropdown({
+  key, options, selectedValue, onChange, disabled,
+}) {
+  let isOpen = false;
+  const outer = div({ class: 'individual-dd' });
+  const dropdownLabel = label(
+    { class: 'mb-1 text-sm font-medium text-gray-700' },
+    `Select ${key.charAt(0).toUpperCase() + key.slice(1)}`,
+  );
+  dropdownLabel.style.fontFamily = 'Inter';
+  const display = div(
+    {
+      class: `pdp-hero-dd${disabled ? ' opacity-50 pointer-events-none' : ''}`,
+      tabIndex: disabled ? -1 : 0,
+      role: 'button',
+      'aria-disabled': disabled ? 'true' : 'false',
+    },
+    selectedValue || `Select ${key}`,
+    span({
+      class: 'icon icon-chevron-down w-5 h-5 [&_svg>use]:stroke-gray-500 group-hover:[&_svg>use]:stroke-gray-800 ml-1',
+    }),
+  );
+  decorateIcons(display);
+
+  const list = div({
+    class: 'individual-dd-options absolute left-0 hidden px-3 py-2 cursor-pointer text-sm text-gray-700',
+  });
+
+  // const resetDiv = div(
+  //   {
+  //     class: 'px-4 py-2 hover:bg-danaherpurple-50 cursor-pointer text-gray-500 italic',
+  //   },
+  //   `Select ${key}`,
+  // );
+  // resetDiv.addEventListener('click', () => {
+  //   if (!disabled) {
+  //     onChange(key, '');
+  //     list.classList.add('hidden');
+  //     isOpen = false;
+  //     display.childNodes[0].textContent = `Select ${key}`;
+  //   }
+  // });
+  // list.appendChild(resetDiv);
+
+  options.forEach((opt) => {
+    const isSelected = opt === selectedValue;
+    const optionDiv = div(
+      {
+        class: [
+          'px-4', 'py-2', 'hover:bg-danaherpurple-50', 'cursor-pointer',
+          isSelected ? 'text-danaherpurple-500 font-semibold' : '',
+        ].join(' '),
+      },
+      opt,
+    );
+    optionDiv.addEventListener('click', () => {
+      if (!disabled) {
+        onChange(key, opt);
+        list.classList.add('hidden');
+        isOpen = false;
+        display.childNodes[0].textContent = opt;
+      }
+    });
+    list.appendChild(optionDiv);
+  });
+
+  function closeAllDropdowns(exceptList) {
+    document.querySelectorAll('.individual-dd-options').forEach((dd) => {
+      if (dd !== exceptList) dd.classList.add('hidden');
+    });
+  }
+
+  function toggleDropdown(e) {
+    if (disabled) return;
+    isOpen = !isOpen;
+    closeAllDropdowns(list);
+    list.classList.toggle('hidden', !isOpen);
+    e.stopPropagation();
+  }
+
+  display.addEventListener('click', toggleDropdown);
+  display.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') toggleDropdown(e);
+    if (e.key === 'Escape' && isOpen) {
+      isOpen = false;
+      list.classList.add('hidden');
+      display.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!outer.contains(e.target)) {
+      isOpen = false;
+      list.classList.add('hidden');
+    }
+  });
+
+  outer.appendChild(dropdownLabel);
+  outer.appendChild(display);
+  outer.appendChild(list);
+  return outer;
+}
+
+function getCurrentPrice(filtered, keys, selectedVals, dataNorm) {
+  // Only require a selection if that dropdown has options
+  const neededKeys = keys.filter((k) => {
+    if (k === 'sku') return true;
+    const filters = { ...selectedVals, [k]: '' };
+    const opts = getOptions(dataNorm, k, filters);
+    return opts.length > 0;
+  });
+  const allNeededSelected = neededKeys.every((k) => !!selectedVals[k]);
+  if (filtered.length === 1 && allNeededSelected) return filtered[0].price;
+  return 'Select options';
+}
+
+function printSelectedAndPrice(selected, finalPrice) {
+  const priceEl = document.querySelector('.dd-price');
+  if (priceEl) {
+    const startsAtLabel = priceEl.querySelector('.starts-at-label');
+    if (startsAtLabel) startsAtLabel.style.display = 'none';
+    priceEl.childNodes.forEach((node) => {
+      if (
+        node.nodeType === Node.TEXT_NODE
+        && (
+          node.textContent.trim().startsWith('$')
+          || node.textContent.trim() === 'Select options for price'
+          || node.textContent.trim() === 'Select options'
+        )
+      ) {
+        if (finalPrice === 'Select options') {
+          priceEl.setAttribute(
+            'style',
+            'font-weight: 400 !important; line-height: 32px; font-size: 24px;',
+          );
+          // node.textContent = 'Select options for pricee';
+        } else {
+          node.textContent = (finalPrice !== null && finalPrice !== undefined && finalPrice.trim() !== '')
+            ? `$${numberWithCommas(finalPrice)}` : '';
+        }
+      }
+    });
+  }
+  // console.log('Selected:', selected, 'Price:', finalPrice);
+}
+
+export function dynamicDropdownInit({ data, containerId, priceLabelId }) {
+  const dataNorm = data.map(normalizeKeys);
+  const keys = getDropdownKeys(dataNorm);
+  const selected = Object.fromEntries(keys.map((k) => [k, '']));
+  const container = document.getElementById(containerId);
+  const priceLabel = document.getElementById(priceLabelId);
+
+  function onChange(changedKey, value) {
+    selected[changedKey] = value;
+    if (changedKey === 'sku') {
+      keys.forEach((k) => { if (k !== 'sku') selected[k] = ''; });
+    }
+    // eslint-disable-next-line no-use-before-define
+    renderDropdown();
+  }
+
+  function renderDropdown() {
+    container.innerHTML = '';
+    // If single row is left, set all values to what that row has and mark them selected
+    const filtered = dataNorm.filter((obj) => keys.every(
+      (k) => !selected[k] || obj[k] === selected[k],
+    ));
+    if (filtered.length === 1) {
+      const row = filtered[0];
+      keys.forEach((k) => { if (row[k]) selected[k] = row[k]; });
+    }
+
+    keys.forEach((key) => {
+      const filters = { ...selected, [key]: '' };
+      const options = getOptions(dataNorm, key, filters);
+      const disabled = options.length === 0;
+      container.appendChild(buildDropdown({
+        key,
+        options,
+        selectedValue: selected[key],
+        onChange,
+        disabled,
+      }));
+    });
+    // recompute after possibly new selections
+    const filteredNow = dataNorm.filter((obj) => keys.every(
+      (k) => !selected[k] || obj[k] === selected[k],
+    ));
+    const finalPrice = getCurrentPrice(filteredNow, keys, selected, dataNorm);
+    if (priceLabel) priceLabel.textContent = finalPrice;
+    printSelectedAndPrice(selected, finalPrice);
+  }
+
+  renderDropdown();
+}
+
+// ::::: Dropdown implementation Ends:::::
 
 function showImage(e) {
   const selectedImageContainer = document.querySelector('.image-content');
@@ -130,16 +372,15 @@ function updateOrderQuantity(event) {
 }
 
 export default async function decorate(block) {
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
   block.parentElement.parentElement.style.padding = '0';
 
   const titleEl = block.querySelector('h1');
   titleEl?.classList.add('title');
   titleEl?.parentElement.parentElement.remove();
   const result = JSON.parse(localStorage.getItem('eds-product-details'));
-  const productInfo = await getProductDetails(result?.raw?.sku);
+  let sku = result?.raw?.sku || '';
+  sku = sku.replace(/-(abcam|phenomenex|leica)$/i, '');
+  const productInfo = await getProductDetails(sku);
   const allImages = result?.raw.images;
   const verticalImageGallery = imageSlider(allImages, result?.Title);
   const opco = result?.raw?.opco?.toLowerCase();
@@ -234,7 +475,7 @@ export default async function decorate(block) {
     },
     div(
       {
-        class: 'starts-at-price justify-start text-black text-4xl font-normal',
+        class: 'starts-at-price dd-price justify-start text-black text-4xl font-normal',
       },
       div({ class: 'starts-at-label text-black text-base font-extralight' }, 'Starts at'),
     ),
@@ -336,7 +577,7 @@ export default async function decorate(block) {
   const pricingQuoteButton = div(
     {
       class:
-        'inline-flex justify-start items-center gap-3',
+        'pdp-pqb flex flex-col justify-start gap-4',
     },
     div(
       {
@@ -351,40 +592,43 @@ export default async function decorate(block) {
         : '',
     ),
     // For future implementation
-    input({
-      type: 'number',
-      value: '1',
-      min: '1',
-      id: 'pr-input',
-      class:
-        'pr-input w-14 self-stretch py-1.5 bg-white rounded-md shadow-sm outline outline-1 outline-offset-[-1px] outline-gray-300 text-black text-base font-medium leading-normal text-center [&::-webkit-inner-spin-button]:mr-2',
-      oninput: (event) => {
-        event.stopImmediatePropagation();
-        updateOrderQuantity(event);
-      },
-    }),
-    // (result.raw.listpriceusd && result?.raw?.externallink) ?
-    button(
-      {
-        class:
-          'buy-btn cursor-pointer pr-bn px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] flex justify-center items-center overflow-hidden h-12 inherit text-base font-medium leading-snug',
-      },
-      'Buy',
-    ),
     div(
-      {
+      { class: 'inline-flex justify-start items-center gap-3' },
+      input({
+        type: 'number',
+        value: '1',
+        min: '1',
+        id: 'pr-input',
         class:
-          'show-modal-btn pr-rfq cursor-pointer px-5 py-2 h-12 text-danaherpurple-500 hover:text-white bg-white hover:bg-danaherpurple-500 rounded-[20px] outline outline-1 outline-offset-[-1px] outline-[#7523FF] flex justify-center items-center overflow-hidden',
-      },
-      span(
-        {
-          class: 'inherit text-base font-medium leading-snug',
+        'pr-input w-14 self-stretch py-1.5 bg-white rounded-md shadow-sm outline outline-1 outline-offset-[-1px] outline-gray-300 text-black text-base font-medium leading-normal text-center [&::-webkit-inner-spin-button]:mr-2',
+        oninput: (event) => {
+          event.stopImmediatePropagation();
+          updateOrderQuantity(event);
         },
-        'Request a Quote',
+      }),
+      // (result.raw.listpriceusd && result?.raw?.externallink) ?
+      button(
+        {
+          class:
+          'buy-btn cursor-pointer pr-bn px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] flex justify-center items-center overflow-hidden h-12 inherit text-base font-medium leading-snug',
+        },
+        'Buy',
+      ),
+      div(
+        {
+          class:
+          'show-modal-btn pr-rfq cursor-pointer px-5 py-2 h-12 text-danaherpurple-500 hover:text-white bg-white hover:bg-danaherpurple-500 rounded-[20px] outline outline-1 outline-offset-[-1px] outline-[#7523FF] flex justify-center items-center overflow-hidden',
+        },
+        span(
+          {
+            class: 'inherit text-base font-medium leading-snug',
+          },
+          'Request a Quote',
+        ),
       ),
     ),
+    div({ id: 'dropdowns', class: 'flex flex-wrap gap-3' }),
   );
-
   const priceInfoDiv = div({
     class: 'self-stretch flex flex-col justify-start items-start gap-5',
   });
@@ -397,7 +641,7 @@ export default async function decorate(block) {
     priceInfoDiv.style.display = 'none';
   }
   // Intershop
-  if (productInfo?.data?.salePrice?.value > 0.0 && productInfo?.data?.attributes[0]?.value === 'True') {
+  if (productInfo?.data?.salePrice?.value > 0.0 && productInfo?.data?.attributes?.[0]?.value === 'True') {
     infoTab.querySelector('.starts-at-label').style.display = 'none';
 
     const currency = getCurrencySymbol(productInfo?.data?.salePrice?.currencyMnemonic);
@@ -437,44 +681,54 @@ export default async function decorate(block) {
     const showListPrice = !hideListPrice;
 
     const showRFQ = availableOnline.length > 0;
-
+    let skusizeDetailsLength = 0;
+    if (result?.raw?.skusizedetails !== undefined
+      && result?.raw?.skusizedetails !== null && result?.raw?.skusizedetails?.trim()) {
+      skusizeDetailsLength = JSON.parse(result?.raw?.skusizedetails)?.length;
+    }
     const buyDetail = div(
       {
-        class: 'inline-flex justify-start items-center gap-3',
+        class: 'flex flex-col justify-start gap-4',
       },
-      ...(result?.raw?.listpriceusd ? [
-        div(
-          {
-            class: 'buyDetail starts-at-price font-bold justify-start text-black text-2xl font-normal',
-          },
-          div({ class: 'starts-at-label text-black text-base font-bold' }, 'Starts at'),
-          `$${numberWithCommas(result?.raw?.listpriceusd)}`,
-        ),
-        (result.raw.listpriceusd && result?.raw?.externallink) ? a(
+      div(
+        { class: 'inline-flex justify-start items-center gap-3' },
+        ...(result?.raw?.listpriceusd
+          || (result?.raw?.familyskusizeflag !== undefined
+            && result?.raw?.familyskusizeflag !== null && result?.raw?.familyskusizeflag?.includes('True|') && skusizeDetailsLength > 0) ? [
+            div(
+              {
+                class: 'buyDetail starts-at-price dd-price font-bold justify-start text-black text-2xl font-normal',
+              },
+              div({ class: 'starts-at-label text-black text-base font-bold' }, 'Starts at'),
+              `$${result?.raw?.listpriceusd ? numberWithCommas(result?.raw?.listpriceusd) : ''}`,
+            ),
+            (result.raw.listpriceusd && result?.raw?.externallink) ? a(
+              {
+                class:
+            'cursor-pointer pr-bn px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] flex justify-center items-center overflow-hidden h-12',
+              },
+              span(
+                {
+                  class: 'inherit text-base font-medium leading-snug',
+                },
+                'Buy',
+              ),
+            ) : '',
+          ] : []),
+        button(
           {
             class:
-            'cursor-pointer pr-bn px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] flex justify-center items-center overflow-hidden h-12',
+          'show-modal-btn cursor-pointer text-danaherpurple-500 hover:text-white hover:bg-danaherpurple-500 px-5 py-2 bg-white rounded-[20px] outline outline-1 outline-offset-[-1px] outline-[#7523FF] flex justify-center items-center overflow-hidden h-12',
           },
-          span(
+          div(
             {
               class: 'inherit text-base font-medium leading-snug',
             },
-            'Buy',
+            'Request a Quote',
           ),
-        ) : '',
-      ] : []),
-      button(
-        {
-          class:
-          'show-modal-btn cursor-pointer text-danaherpurple-500 hover:text-white hover:bg-danaherpurple-500 flex-1 px-5 py-2 bg-white rounded-[20px] outline outline-1 outline-offset-[-1px] outline-[#7523FF] flex justify-center items-center overflow-hidden h-12',
-        },
-        div(
-          {
-            class: 'inherit text-base font-medium leading-snug',
-          },
-          'Request a Quote',
         ),
       ),
+      div({ id: 'dropdowns', class: 'flex flex-wrap gap-3' }),
     );
 
     if (result?.raw?.objecttype !== 'Family') {
@@ -543,6 +797,9 @@ export default async function decorate(block) {
   const globeImg = div(
     {
       class: 'w-9 h-9 relative overflow-hidden cursor-pointer',
+      onclick: () => {
+        window.open(result?.raw?.externallink, '_blank');
+      },
     },
     span({
       class:
@@ -559,19 +816,26 @@ export default async function decorate(block) {
     }),
   );
   const externalButton = div(
-    { class: 'flex justify-center items-center text-base font-extralight leading-snug gap-3 hover:text-danaherpurple-800' },
+    {
+      class: 'flex justify-center items-center text-base font-extralight leading-snug gap-3 hover:text-danaherpurple-800',
+      onclick: () => {
+        window.open(result?.raw?.externallink, '_blank');
+      },
+    },
     `To learn more visit ${result?.raw.opco} `,
     externalLink,
   );
-  const clickableLink = result?.raw?.externallink;
-  const externalURL = `${clickableLink}?utm_source=dhls_website`;
-  const openLink = () => {
-    const target = externalURL.includes(window.DanaherConfig.host) ? '_self' : '_blank';
-    window.open(externalURL, target);
-  };
+  const host = window?.DanaherConfig?.host || 'lifesciences.danaher.com';
+  const familyIds = Array.isArray(result?.raw?.familyid) ? result.raw.familyid : [];
+  const external = result?.raw?.externallink || '';
 
-  externalButton.addEventListener('click', openLink);
-  globeImg.addEventListener('click', openLink);
+  const familyId = familyIds.length > 0 && typeof familyIds[0] === 'string' ? familyIds[0].trim() : '';
+
+  const clickableLink = familyId
+    ? `https://${host}/us/en/products/family/${encodeURIComponent(familyId)}`
+    : external;
+
+  const externalURL = String(clickableLink || '');
 
   const info = div(
     {
@@ -679,7 +943,7 @@ export default async function decorate(block) {
   );
   decorateIcons(categoryLinkSku);
   categoryLinkSku.addEventListener('click', () => {
-    window.open(externalURL, '_blank');
+    window.open(externalURL, '_self');
   });
 
   const clipBoard = div(
@@ -759,7 +1023,7 @@ export default async function decorate(block) {
     defaultContent.append(
       div(
         {
-          class: 'inline-flex justify-start items-center gap-6 flex-col',
+          class: 'all-family inline-flex justify-start items-center gap-6 flex-col',
         },
         div(
           {
@@ -792,7 +1056,7 @@ export default async function decorate(block) {
         bundleTab,
       ),
     );
-    if (info) {
+    if (result?.raw?.externallink) {
       defaultContent.append(
         div(
           {
@@ -805,7 +1069,7 @@ export default async function decorate(block) {
     }
   } else {
     defaultContent.append(
-      result?.raw?.externallink ? div(
+      result?.raw?.familyid?.length > 0 ? div(
         {
           class:
         'w-full border-t border-b border-gray-300 inline-flex justify-start items-center',
@@ -814,13 +1078,13 @@ export default async function decorate(block) {
           {
             class: 'w-full inline-flex gap-6 flex-col md:flex-row',
           },
-          result?.raw?.externallink ? categoryLinkSku : '',
+          result?.raw?.familyid?.length > 0 ? categoryLinkSku : '',
           ...(result?.raw?.externallink ? [info] : []),
         ),
       ) : '',
     );
   }
-  const categoryDiv = (label, href) => {
+  const categoryDiv = (priceLabel, href) => {
     const list = div(
       {
         class:
@@ -832,7 +1096,7 @@ export default async function decorate(block) {
             'text-center justify-start text-danaherpurple-500 text-lg leading-normal font-medium',
           href: `/us/en/products/${href}`,
         },
-        label,
+        priceLabel,
       ),
     );
     return list;
@@ -850,7 +1114,7 @@ export default async function decorate(block) {
     const slug = slugs[i] || '';
 
     // label = last part
-    const label = name.split('|').pop().trim();
+    const labelEle = name.split('|').pop().trim();
 
     // href = replace "|" with "/", replace spaces with "-", lowercase
     const href = slug
@@ -859,10 +1123,10 @@ export default async function decorate(block) {
       .toLowerCase()
       .trim();
 
-    const key = `${label}|${href}`;
+    const key = `${labelEle}|${href}`;
     if (!seen.has(key)) {
       seen.add(key);
-      categoriesDiv.append(categoryDiv(label, href));
+      categoriesDiv.append(categoryDiv(labelEle, href));
     }
   });
 
@@ -889,4 +1153,30 @@ export default async function decorate(block) {
   );
   decorateModals(block);
   decorateBuyButton(pricingQuoteButton);
+  if (result?.raw?.numproducts === 0 || result?.raw?.familyskusizeflag?.includes('True|')) {
+    block.querySelector('.all-family')?.remove();
+    document.querySelector('.pdp-products-container')?.remove();
+  }
+
+  let globalTotalcounter = 0;
+  querySummary.subscribe(() => {
+    const count = querySummary.state.total;
+    globalTotalcounter += 1;
+    if (globalTotalcounter === 3 && count === 0) {
+      globalTotalcounter = 0;
+      if (block instanceof HTMLElement) {
+        block.querySelector('.all-family')?.remove();
+      }
+    }
+  });
+  if (result?.raw?.familyskusizeflag !== undefined && result?.raw?.familyskusizeflag !== null
+    && result?.raw?.familyskusizeflag?.includes('True|') && result?.raw?.skusizedetails !== undefined
+    && result?.raw?.skusizedetails !== null
+    && JSON.parse(result?.raw?.skusizedetails)?.length > 0) {
+    const data = JSON.parse(result?.raw?.skusizedetails);
+    dynamicDropdownInit({
+      data,
+      containerId: 'dropdowns',
+    });
+  }
 }

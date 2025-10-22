@@ -1,11 +1,8 @@
 import {
   div, span, p, a,
 } from '../../scripts/dom-builder.js';
-import { orderDetails, requestedQuotes } from './dashboardutils.js';
 
-const recentOrders = async () => {
-  const orderDetailResponse = await orderDetails();
-  const requestedQuotesResponse = await requestedQuotes();
+const recentOrders = async (orderDetailResponse, requestedQuotesResponse) => {
   let topRequestedQuote;
   let topRecentOrder;
   if (requestedQuotesResponse?.length > 4) {
@@ -186,7 +183,7 @@ const recentOrders = async () => {
 
   const recentOrder = div(
     {
-      class: 'flex-1 flex justify-start items-start gap-6',
+      class: 'flex-1 flex justify-start items-start md:p-0 p-4 w-full md:w-auto md:gap-6',
     },
     div(
       {
@@ -199,7 +196,7 @@ const recentOrders = async () => {
 
   const recentOrderWrapper = div(
     {
-      class: 'self-stretch w-[480px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center gap-4',
+      class: 'self-stretch w-full md:w-[480px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center gap-4',
     },
   );
   recentOrder.append(recentOrderWrapper);
@@ -290,20 +287,18 @@ const recentOrders = async () => {
 
   const recentQuotes = div(
     {
-      class: 'flex-1 flex justify-start items-start gap-6',
+      class: 'flex-1 flex justify-start items-start md:p-0 p-4 w-full md:w-auto md:gap-6',
     },
     div(
       {
         class: 'flex-1 inline-flex flex-col justify-start items-start gap-4 overflow-hidden',
       },
-
     ),
-
   );
 
   const recentQuotesWrapper = div(
     {
-      class: 'self-stretch w-[480px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center gap-4',
+      class: 'self-stretch w-full md:w-[480px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center gap-4',
     },
   );
   recentQuotes.append(recentQuotesWrapper);

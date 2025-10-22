@@ -75,11 +75,32 @@ function createLayout(block) {
   const resultsGrid = div({ class: 'flex flex-col gap-4' });
   const paginationRow = div({ class: 'flex justify-end w-full', id: 'pagination', style: 'display: none;' });
 
+  let globalTotalcounter = 0;
   querySummary.subscribe(() => {
-    const count = querySummary.state.total;
-    const label = count === 1 ? 'Result' : 'Results';
+    let count = querySummary.state.total;
+    globalTotalcounter++;
+    if (globalTotalcounter === 3 && count === 0) {
+      globalTotalcounter = 0;
+      if (block instanceof HTMLElement) {
+        block.remove();
+      }
+      const tabs = document.querySelectorAll('.p-tab');
+      if (tabs.length > 0) {
+        tabs.forEach((tab) => {
+          const label = tab?.textContent?.trim?.() || '';
+          if (label === 'Products' && tab.parentElement) {
+            tab.parentElement.remove();
+          }
+        });
+      }
+    }
+    let label = count === 1 ? 'Result' : 'Results';
+    if (count === 0){
+      label = 'No Results found';
+      count = '';
+    }
+      
     resultSummary.querySelector('#resultSummaryCount').innerHTML = `${count} ${label}`;
-    // block.style.display = count === 0 ? 'none' : 'block';
   });
 
 
@@ -128,8 +149,12 @@ function subscribeToEngineUpdates(resultsGrid, paginationRow) {
 
   pdpResultList.subscribe(() => {
     if (pdpResultList?.state?.results?.length > 0 && !pdpResultList?.state?.isLoading) {
+      document?.querySelector('.view-type')?.classList.remove('hidden');
       const viewType = localStorage.getItem('pdpListViewType') ?? 'list';
       displayProducts(resultsGrid, viewType);
+    } else {
+      document?.querySelector('.view-type')?.classList.add('hidden');
+      resultsGrid.innerHTML = '';
     }
   })
 
@@ -143,6 +168,22 @@ export default async function decorate(block) {
     : 'stage.lifesciences.danaher.com';
 
   const response = JSON.parse(localStorage.getItem('eds-product-details'));
+
+  if (response?.raw?.familyskusizeflag !== undefined
+    && response?.raw?.familyskusizeflag !== null
+    && response?.raw?.familyskusizeflag === 'True') {
+    document.querySelector('.pdp-products-container')?.remove();
+    const tabs = document.querySelectorAll('.p-tab');
+    if (tabs?.length > 0) {
+      for (const tab of tabs) {
+        const label = tab?.textContent?.trim?.() || '';
+        if (label === 'Products' && tab?.parentElement) {
+          tab?.parentElement?.remove();
+          return;
+        }
+      }
+    }
+  }
 
   // Early exit if no valid product response
   if (!(response !== null && response !==undefined && response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0)) {
@@ -168,7 +209,7 @@ export default async function decorate(block) {
   *
   */
 
-  const viewModeGroup = div({ class: 'flex justify-start items-center gap-0' });
+  const viewModeGroup = div({ class: 'view-type flex justify-start items-center gap-0' });
 
   const listBtn = div(
     {
