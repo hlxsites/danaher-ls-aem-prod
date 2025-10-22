@@ -6,7 +6,7 @@
   *
 */
 // production paths to go through converter
-export const excludeProdPaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo'];
+export const excludeProdPaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo', 'solutions/digital/products', 'solutions/products'];
 
 // include pro paths
 export const includeProdPaths = ['e-buy', 'products/', 'brands', 'products.html', 'blog', 'news', 'videos', 'library', 'new-lab/excedr'];
