@@ -17,10 +17,6 @@
   margin-top: 0px !important
 }
 
-.order-status-wrapper :is(.ml-\[20px\]) {
-  margin-left: 20px
-}
-
 .order-status-wrapper :is(.ml-\[23px\]) {
   margin-left: 23px
 }
@@ -95,10 +91,6 @@
 
 .order-status-wrapper :is(.w-\[186\.4px\]) {
   width: 186.4px
-}
-
-.order-status-wrapper :is(.w-\[70\%\]) {
-  width: 70%
 }
 
 .order-status-wrapper :is(.w-\[930px\]) {
@@ -277,6 +269,10 @@
   padding: 0.75rem
 }
 
+.order-status-wrapper :is(.p-4) {
+  padding: 1rem
+}
+
 .order-status-wrapper :is(.p-6) {
   padding: 1.5rem
 }
@@ -444,12 +440,24 @@
 }
 
 @media (min-width: 768px) {
+  .order-status-wrapper :is(.md\:ml-\[20px\]) {
+    margin-left: 20px
+  }
+
   .order-status-wrapper :is(.md\:w-\[25\%\]) {
     width: 25%
   }
 
+  .order-status-wrapper :is(.md\:w-\[70\%\]) {
+    width: 70%
+  }
+
   .order-status-wrapper :is(.md\:flex-row) {
     flex-direction: row
+  }
+
+  .order-status-wrapper :is(.md\:p-0) {
+    padding: 0px
   }
 }
 

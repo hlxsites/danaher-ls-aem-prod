@@ -10,6 +10,7 @@ import { getAuthenticationToken } from '../../scripts/token-utils.js';
 import {
   getBasketDetails, createBasket,
   logoDiv, divider, cartItemsContainer, updateCheckoutSummary, updateHeaderCart,
+  showMiniCart,
 } from '../../scripts/cart-checkout-utils.js';
 import {
   postApiData,
@@ -18,7 +19,8 @@ import {
 // eslint-disable-next-line import/no-cycle
 import addProducts from './addproducts.js';
 import {
-  updateCartQuantity, getProductDetailObject, productData, updateBasketDetails,
+  // eslint-disable-next-line max-len
+  updateCartQuantity, getProductDetailObject, updateProductDetailObject, productData, updateBasketDetails,
 } from './cartSharedFile.js';
 
 export const cartItemsValue = [];
@@ -1149,7 +1151,7 @@ export const getProductQuantity = async (newItem) => {
     totalProductQuantity = basketData.totalProductQuantity;
     const updatedCart = await updateCart(newItem);
     if (updatedCart) {
-      const cartQuantityResponse = await updateCartQuantity(
+      const cartQuantityResponse = updateCartQuantity(
         totalProductQuantity,
       );
       if (cartQuantityResponse) {
@@ -1230,20 +1232,22 @@ export const addItemToCart = async (item) => {
   if (basketDetails?.status === 'success') {
     const addItem = await addItemToBasket(item);
     if (addItem && addItem?.status === 'success') {
-      const updateCartItem = await updateCartItems(addItem);
-      await updateCheckoutSummary();
       /*
         update header cart item count
       */
-      await updateHeaderCart();
       if (window.location.pathname === window.EbuyConfig.cartPageUrl) {
-        showNotification('Item added to cart successfully.', 'success');
+        const updateCartItem = await updateCartItems(addItem);
+        await updateCheckoutSummary();
+        await updateHeaderCart();
+        showMiniCart();
         removePreLoader();
         return getProductQuantity(updateCartItem);
       }
-      showNotification('Item added to cart successfully.', 'success');
+      await updateHeaderCart();
+      await updateProductDetailObject();
+      showMiniCart();
       removePreLoader();
-      return { status: 'success', data: [] };
+      return { status: 'success' };
     }
     showNotification('Error Processing Request.', 'error');
     removePreLoader();
@@ -1258,23 +1262,36 @@ export const addItemToCart = async (item) => {
         JSON.stringify(response.data.data),
       );
       const addItem = await addItemToBasket(item);
-
       if (addItem) {
         if (addItem.status === 'success') {
           const updateCartItem = await updateCartItems(addItem);
-          return getProductQuantity(updateCartItem);
+          if (window.location.pathname === window.EbuyConfig.cartPageUrl) {
+            await updateCheckoutSummary();
+            removePreLoader();
+            showMiniCart();
+            return getProductQuantity(updateCartItem);
+          }
+          await updateHeaderCart();
+          await updateProductDetailObject();
+          removePreLoader();
+          showMiniCart();
+          return { status: 'success' };
         }
+        removePreLoader();
         return {
           data: addItem.data,
           status: 'error',
         };
       }
+      removePreLoader();
       return { status: 'error', data: addItem.data };
     }
+    removePreLoader();
     return {
       data: response.data,
       status: 'error',
     };
   }
+  removePreLoader();
   return { status: 'error', data: response.data };
 };

@@ -19,9 +19,11 @@ import {
   button,
 } from './dom-builder.js';
 import {
-  postApiData, getApiData, patchApiData, putApiData,
+  postApiData, getApiData, patchApiData, putApiData, deleteApiData,
 } from './api-utils.js';
 import { decorateIcons } from './lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
+import { cartItem } from '../blocks/cartlanding/cartItem.js';
 // eslint-disable-next-line import/no-cycle
 import { addressListModal } from '../blocks/checkout/shippingAddress.js';
 // eslint-disable-next-line import/no-cycle
@@ -63,6 +65,19 @@ import { initializeModules } from '../blocks/checkout/checkoutUtilities.js';
 import { getPaymentMethodType, getStripeElements, getStripeInstance } from '../blocks/checkout/paymentModule.js';
 
 const { getAuthenticationToken } = await import('./token-utils.js');
+
+const siteID = window.DanaherConfig?.siteID;
+const hostName = window.location.hostname;
+let env;
+if (hostName.includes('local')) {
+  env = 'local';
+} else if (hostName.includes('dev')) {
+  env = 'dev';
+} else if (hostName.includes('stage')) {
+  env = 'stage';
+} else {
+  env = 'prod';
+}
 const baseURL = getCommerceBase();
 
 /*
@@ -104,7 +119,7 @@ export const logoDiv = (itemToBeDisplayed, opcoBe, imgsrc) => {
   const logoDivInner = div(
     {
       class:
-        'w-full self-stretch py-3 bg-gray-100 border-t border-gray-300 inline-flex justify-start items-center gap-1',
+        'w-full self-stretch py-3 bg-gray-100 border-t border-gray-300 inline-flex justify-start items-center gap-4',
     },
     div(
       {
@@ -120,26 +135,26 @@ export const logoDiv = (itemToBeDisplayed, opcoBe, imgsrc) => {
     ),
     div(
       {
-        class: 'w-64 justify-start text-black text-base font-semibold',
+        class: 'xl:w-[14rem] lg:w-32 md:w-32 justify-start text-black text-base font-semibold',
         id: `product-Quantity-${opcoBe[0]}`,
       },
       `${itemToBeDisplayed[opcoBe].length} Items`,
     ),
     div(
       {
-        class: 'hidden sm:block w-24 justify-start text-black text-base font-semibold',
+        class: 'hidden lg:block md:w-14 lg:w-18 xl:w-24  justify-start text-black text-base font-semibold',
       },
       'QTY',
     ),
     div(
       {
-        class: 'hidden sm:block w-26 justify-start text-black text-base font-semibold',
+        class: 'hidden lg:block md:w-[20%] xl:w-[150px] justify-start text-black text-base font-semibold',
       },
       'Unit Price',
     ),
     div(
       {
-        class: 'hidden sm:block w-[7rem] justify-start text-right text-black text-base font-semibold',
+        class: 'cart-item-total hidden lg:block w-[7rem] md:w-[20%] justify-start text-black text-base font-semibold',
       },
       'Total',
     ),
@@ -179,7 +194,209 @@ export const checkoutSkeleton = () => {
   );
   return checkoutSkeletonwrapper;
 };
+/*
+skeleton for numbers :
+*/
+export const miniSkeleton = () => {
+  const miniSkeletonwrapper = div(
+    {
+      id: 'miniSkeleton',
+      class: 'animate-pulse w-12 h-6 bg-gray-300 rounded',
+    },
+  );
+  return miniSkeletonwrapper;
+};
 
+/*
+Load Mini Cart Upfront
+*/
+export function loadMiniCart() {
+  const miniCartOverlay = div(
+    {
+      id: 'miniCartOverlay',
+      class: 'fixed inset-0 bg-black bg-opacity-50 hidden z-40',
+    },
+  );
+  const miniCartWrapper = div(
+    {
+      id: 'miniCartWrapper',
+      class: 'fixed top-0 right-0 h-screen bg-white shadow-lg transform translate-x-full transition-transform duration-500 z-50 w-full max-w-[550px]',
+    },
+    div(
+      {
+        class: 'p-6 flex flex-col gap-6',
+      },
+      div(
+        {
+          class: 'flex gap-4 justify-between items-center',
+        },
+        span(
+          {
+            class: 'w-[36px] h-[36px] icon icon-shopping-cart [&_svg>use]:stroke-danaherpurple-500 bg-danaherpurple-50 p-2 rounded-full',
+          },
+        ),
+        h3(
+          {
+            class: 'text-2xl font-normal',
+          },
+          'Item(s) Added to your Cart',
+        ),
+        span(
+          {
+            id: 'closeMiniCart',
+            class: 'icon icon-close cursor-pointer [&_svg>use]:stroke-danaherpurple-500',
+          },
+        ),
+      ),
+      div(
+        {
+          class: 'mini-cart-items overflow-auto md:over h-[75vh] md:max-h-max',
+          id: 'miniCartItems',
+        },
+      ),
+      div(
+        {
+          class: 'space-y-2 pt-6 button-wrapper mt-6 flex items-center gap-4 justify-between border-t border-solid border-gray-200 ',
+        },
+        button(
+          {
+            id: 'miniCartContinue',
+            class: 'w-1/2 text-xl !mt-0 border-danaherpurple-500 border-solid btn btn-lg font-medium bg-white btn-outline-primary rounded-full px-6',
+          },
+          'Continue Shopping',
+        ),
+        a(
+          {
+            id: 'mini-cart-checkout',
+            href: window.EbuyConfig?.addressPageUrl,
+            class: 'text-xl w-1/2 border-danaherblue-500 !mt-0 border-solid btn btn-lg font-medium btn-primary-purple rounded-full px-6',
+          },
+          'Checkout',
+        ),
+      ),
+    ),
+  );
+  decorateIcons(miniCartWrapper);
+  document.querySelector('main').append(miniCartOverlay);
+  document.querySelector('main').append(miniCartWrapper);
+}
+/*
+ Show minicart and overlay when product added to cart
+ */
+export async function showMiniCart() {
+  const miniCartOverlay = document.querySelector('#miniCartOverlay');
+  const miniCartWrapper = document.querySelector('#miniCartWrapper');
+  if (miniCartOverlay && miniCartWrapper) {
+    if (miniCartWrapper?.classList?.contains('hidden')) {
+      miniCartWrapper.classList.remove('hidden');
+    }
+    miniCartWrapper.querySelector('#miniCartItems').textContent = '';
+    const showCartItems = await cartItem();
+    if (showCartItems) {
+      showCartItems.querySelectorAll('button')?.forEach((btn) => {
+        // btn.parentElement.parentElement.classList.add('justify-between');
+        btn.remove();
+      });
+      if (showCartItems?.classList?.contains('border')) {
+        showCartItems?.classList?.remove('border');
+      }
+      showCartItems.querySelectorAll('.cart-item-total')?.forEach((total) => {
+        total?.classList.add('hidden');
+        if (total?.classList?.contains('lg:block')) {
+          total?.classList?.remove('lg:block');
+        }
+      });
+      showCartItems.querySelectorAll('.cart-item-title')?.forEach((total) => {
+        total?.classList.add('w-32');
+        if (total?.classList?.contains('xl:w-[14rem]')) {
+          total?.classList?.remove('xl:w-[14rem]');
+        }
+        if (total?.classList?.contains('lg:w-34')) {
+          total?.classList?.remove('lg:w-34');
+        }
+      });
+      showCartItems.querySelectorAll('.cart-item-container')?.forEach((total) => {
+        if (total?.classList?.contains('flex-col')) {
+          total?.classList?.remove('flex-col');
+        }
+      });
+      showCartItems.querySelectorAll('.cart-item-image')?.forEach((total) => {
+        total?.classList?.add('h-28');
+      });
+      showCartItems.querySelectorAll('.cart-item-input')?.forEach((inpu) => {
+        const inp = inpu?.querySelector('input');
+        inp.removeAttribute('type');
+        if (inp.classList.contains('border-solid')) {
+          inp.classList.remove('border-solid');
+        }
+        inp.classList.add('focus:outline-none');
+        inp.classList.add('outline-none');
+        if (inp.classList.contains('border-2')) {
+          inp.classList.remove('border-2');
+        }
+      });
+      showCartItems.querySelectorAll('.cart-item-unit-price')?.forEach((inp) => {
+        inp?.classList.add('hidden');
+      });
+      miniCartWrapper?.querySelector('#miniCartItems')?.append(showCartItems);
+    }
+    if (miniCartWrapper?.classList?.contains('translate-x-full')) {
+      miniCartWrapper.classList.remove('translate-x-full');
+    }
+    miniCartWrapper.style.transform = 'translateX(0)';
+    if (miniCartOverlay?.classList?.contains('hidden')) {
+      miniCartOverlay.classList.remove('hidden');
+    }
+
+    miniCartWrapper?.querySelector('#closeMiniCart')?.addEventListener('click', () => {
+      miniCartWrapper.classList.add('translate-x-full');
+      miniCartOverlay.classList.add('hidden');
+      miniCartWrapper.style.transform = '';
+    });
+    miniCartWrapper?.querySelector('#miniCartContinue')?.addEventListener('click', () => {
+      miniCartWrapper.classList.add('translate-x-full');
+      miniCartOverlay.classList.add('hidden');
+      miniCartWrapper.style.transform = '';
+    });
+    const authenticationToken = await getAuthenticationToken();
+    if (
+      authenticationToken?.status === 'error'
+      || authenticationToken.user_type === 'guest') {
+      const getChecoutButton = miniCartWrapper.querySelector('#mini-cart-checkout');
+      if (getChecoutButton) {
+        getChecoutButton.textContent = 'Login / Create Account';
+        getChecoutButton.setAttribute('href', `${window.EbuyConfig?.loginPageUrl}?ref_url=${window.location.pathname}`);
+      }
+    }
+  }
+}
+/*
+function to clear all cart items at once.
+*/
+export async function clearCart() {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  const defaultHeader = new Headers({
+    'Content-Type': 'Application/json',
+    'Authentication-Token': authenticationToken.access_token,
+    Accept: 'application/vnd.intershop.basket.v1+json',
+  });
+  const url = `${baseURL}/baskets/current`;
+  try {
+    const response = await deleteApiData(url, defaultHeader);
+    removePreLoader();
+    if (response?.status !== 'success') {
+      showNotification('Error processing request.', 'error');
+    }
+    return response;
+  } catch (error) {
+    removePreLoader();
+    showNotification('Error processing request.', 'error');
+    return { status: 'error' };
+  }
+}
 /*
 default shipping/billing address if available when user lands on checkout page
 */
@@ -710,23 +927,24 @@ export async function getBasketDetails(userType = null, lastBasketId = null, sou
     }
 
     const cachedBasket = JSON.parse(localStorage.getItem('basketData'));
-
     if (cachedBasket?.status === 'success') return cachedBasket;
-    const basketResponse = await getApiData(url, defaultHeader);
-    if (basketResponse && basketResponse.status === 'success') {
-      localStorage.setItem('basketData', JSON.stringify(basketResponse));
-      return basketResponse;
-    }
-    const response = await createBasket(authenticationToken);
-    if (response.status === 'success') {
-      localStorage.setItem('basketData', JSON.stringify(response));
-      if (response.data.invoiceToAddress && !source) {
-        const setUseBillingAddress = response.data.invoiceToAddress.split(':')[4];
-        await setUseAddress(setUseBillingAddress, 'billing');
+    if (userType === 'customer') {
+      const basketResponse = await getApiData(url, defaultHeader);
+      if (basketResponse && basketResponse.status === 'success') {
+        localStorage.setItem('basketData', JSON.stringify(basketResponse));
+        return basketResponse;
       }
+      const response = await createBasket(authenticationToken);
+      if (response.status === 'success') {
+        localStorage.setItem('basketData', JSON.stringify(response));
+        if (response.data.invoiceToAddress && !source) {
+          const setUseBillingAddress = response.data.invoiceToAddress.split(':')[4];
+          await setUseAddress(setUseBillingAddress, 'billing');
+        }
+      }
+      return response;
     }
-
-    return response;
+    return undefined;
   } catch (error) {
     return { status: 'error', data: error.message };
   }
@@ -1158,10 +1376,84 @@ export const getPromotionDetails = async (promotionId) => {
   return {};
 };
 
+// Helper function to convert file to base64
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result.split(',')[1]; // Remove data URL prefix
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+// Get MIME Type from File Name
+function getMimeType(fileName) {
+  const extension = fileName.split('.').pop().toLowerCase();
+
+  const mimeTypes = {
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+  };
+
+  return mimeTypes[extension] || 'application/octet-stream';
+}
+
+// upload document
+async function uploadTaxDocument(uploadedFileName, base64File) {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  const defaultHeader = new Headers({
+    'Content-Type': 'application/json',
+    'Authentication-Token': authenticationToken.access_token,
+  });
+  const url = `${baseURL}/uploadTaxCertificate`;
+  const data = JSON.stringify({
+    fileName: uploadedFileName.split('.')[0],
+    fileType: getMimeType(uploadedFileName),
+    data: base64File,
+  });
+  return postApiData(url, data, defaultHeader);
+}
+
+// delete document
+async function deleteTaxDocument(uploadedFileName) {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  const defaultHeader = new Headers({
+    'Content-Type': 'application/json',
+    'Authentication-Token': authenticationToken.access_token,
+  });
+  const body = JSON.stringify({ fileName: uploadedFileName });
+  const url = `${baseURL}/uploadTaxCertificate`;
+  return deleteApiData(url, defaultHeader, body);
+}
+
+// add timestamp to file name during upload
+function addTimestamp(filename) {
+  const now = new Date();
+  const pad = (n) => n.toString().padStart(2, '0');
+  const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  const [name, ext] = filename.split('.');
+  return `${name}_${timestamp}.${ext}`;
+}
 /*
  tax exempt module.feed the create modal function with tax exempt content
  */
-export const taxExemptModal = () => {
+export const taxExemptModal = async (taxExemptUploadedFile = '') => {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
   const taxExemptWrapper = div(
     {
       class: 'flex w-full flex-col gap-7',
@@ -1194,19 +1486,13 @@ export const taxExemptModal = () => {
           ),
         ),
       ),
-      p(
-        {
-          class: 'text-extralight text-center',
-        },
-        'Please upload the tax exempt certificate for our team to validate Formats: .JPG, .PNG, .PDF, .DOC and .DOCX',
-      ),
     ),
     /*
     tax exempt body
     */
     div(
       {
-        class: 'tax-exempt-body cursor-pointer flex flex-col items-center',
+        class: 'tax-exempt-body cursor-pointer flex flex-col gap-6 items-center bg-gray-50 p-6',
         id: 'taxExemptUpload',
       },
       div(
@@ -1235,6 +1521,12 @@ export const taxExemptModal = () => {
           id: 'taxExemptModalErrorContainer',
         },
         'Error Uploading File. Only JPG, .PNG, .PDF, .DOC and .DOCX are allowed.',
+      ),
+      p(
+        {
+          class: 'text-extralight text-center',
+        },
+        'Please upload the tax exempt certificate for our team to validate Formats: .JPG, .PNG, .PDF, .DOC and .DOCX',
       ),
     ),
 
@@ -1271,16 +1563,16 @@ export const taxExemptModal = () => {
 
   const cloudFileIconWrapper = div(
     {
-      class: 'absolute right-2 bottom-2',
+      class: 'flex',
     },
     span(
       {
-        class: 'icon icon-file [&_svg>use]:stroke-danaherpurple-500 ',
+        class: 'icon icon-file [&_svg>use]:stroke-danaherpurple-500 w-[36px] h-[36px]',
       },
     ),
   );
   decorateIcons(cloudFileIconWrapper);
-  cloudFileIcon?.insertAdjacentElement('beforeend', cloudFileIconWrapper);
+  cloudFileIcon?.insertAdjacentElement('afterbegin', cloudFileIconWrapper);
   /*
     upload file icon for tax exempt modal
     */
@@ -1289,11 +1581,11 @@ export const taxExemptModal = () => {
   );
   const cloudUploadIconWrapper = div(
     {
-      class: 'absolute right-2 bottom-2',
+      class: '',
     },
     span(
       {
-        class: 'icon icon-cloud-upload [&_svg>use]:stroke-danaherpurple-500 ',
+        class: 'icon icon-cloud-upload [&_svg>use]:stroke-danaherpurple-500 h-[122px] w-[122px] ',
       },
     ),
   );
@@ -1310,8 +1602,11 @@ export const taxExemptModal = () => {
       taxExemptFileInput.click();
     });
   }
+  const checkoutSummaryTax = document.querySelector(
+    '#checkoutSummaryTax',
+  );
   if (taxExemptFileInput) {
-    taxExemptFileInput.addEventListener('change', (f) => {
+    taxExemptFileInput.addEventListener('change', async (f) => {
       f.preventDefault();
       const file = f.target.files[0];
       if (file) {
@@ -1324,55 +1619,40 @@ export const taxExemptModal = () => {
           'doc',
           'docx',
         ];
-        const fileName = file.name;
-        const fileType = fileName.split('.')[1].toLowerCase();
-        if (allowedTaxExemptFileFormats.includes(fileType)) {
-          const taxExemptUploadedFile = div(
-            {
-              class: ' flex flex-1 justify-between',
-              id: 'taxExemptUploadedFile',
-            },
-            div(
-              {},
-              p(
-                {
-                  class: 'text-black text-md',
-                },
-                'Tax Exempt Document',
-              ),
-              p(
-                {
-                  class: 'text-danaherpurple-500 text-md',
-                },
-                fileName,
-              ),
-            ),
-            div(
-              {
-                class: 'close-button',
-                name: 'close',
-              },
-              span({
-                class: 'icon icon-close cursor-pointer',
-                id: 'removeTaxExemptUploadedFile',
-              }),
-            ),
-          );
 
-          const checkoutSummaryTax = document.querySelector(
-            '#checkoutSummaryTax',
-          );
+        const uploadedFileName = addTimestamp(file.name);
+        const uploadedFileType = uploadedFileName.split('.')[1].toLowerCase();
+        const base64File = await readFileAsBase64(file);
+
+        if (allowedTaxExemptFileFormats.includes(uploadedFileType)) {
+          showPreLoader();
           if (checkoutSummaryTax) {
-            const checkoutSummaryTaxExempt = checkoutSummaryTax.querySelector(
-              '#checkoutSummaryTaxExempt',
-            );
-            if (checkoutSummaryTaxExempt) {
-              checkoutSummaryTaxExempt.classList.add('hidden');
+            const response = await uploadTaxDocument(uploadedFileName, base64File);
+            if (response?.status === 'success') {
+              const checkoutSummaryTaxExempt = checkoutSummaryTax.querySelector(
+                '#checkoutSummaryTaxExempt',
+              );
+              if (checkoutSummaryTaxExempt) {
+                checkoutSummaryTaxExempt.classList.add('hidden');
+              }
+              checkoutSummaryTax.classList.add('flex-wrap');
+              if (taxExemptUploadedFile) {
+                if (taxExemptUploadedFile?.querySelector('#removeTaxExemptUploadedFile')) {
+                  taxExemptUploadedFile.querySelector('#removeTaxExemptUploadedFile').dataset.file = uploadedFileName;
+                }
+                taxExemptUploadedFile.querySelector('#tax-exempt-filename').textContent = uploadedFileName;
+                checkoutSummaryTax.append(taxExemptUploadedFile);
+              }
+              updateBasketDetails();
+              removePreLoader();
+              closeUtilityModal();
+              showNotification(response?.data?.message, 'success');
+              return response;
             }
-            decorateIcons(taxExemptUploadedFile);
-            checkoutSummaryTax.classList.add('flex-wrap');
-            checkoutSummaryTax.append(taxExemptUploadedFile);
+            removePreLoader();
             closeUtilityModal();
+            showNotification('Error uploading document.', 'error');
+            return response;
           }
         } else {
           const taxExemptModalErrorContainer = document.querySelector(
@@ -1384,41 +1664,13 @@ export const taxExemptModal = () => {
             }
             setTimeout(() => {
               taxExemptModalErrorContainer.classList.add('hidden');
-            }, 10000);
+            }, 5000);
           }
+          return {};
         }
-
-        const removeTaxExemptUploadedFile = document.querySelector(
-          '#removeTaxExemptUploadedFile',
-        );
-        if (removeTaxExemptUploadedFile) {
-          removeTaxExemptUploadedFile.addEventListener('click', (e) => {
-            e.preventDefault();
-            const taxExemptUploadedFile = document.querySelector(
-              '#taxExemptUploadedFile',
-            );
-            if (taxExemptUploadedFile) {
-              taxExemptUploadedFile.remove();
-              const checkoutSummaryTaxExempt = document.querySelector(
-                '#checkoutSummaryTaxExempt',
-              );
-              if (checkoutSummaryTaxExempt) {
-                if (checkoutSummaryTaxExempt.classList.contains('hidden')) {
-                  checkoutSummaryTaxExempt.classList.remove('hidden');
-                }
-              }
-              const checkoutSummaryTax = document.querySelector(
-                '#checkoutSummaryTax',
-              );
-              if (checkoutSummaryTax) {
-                if (checkoutSummaryTax.classList.contains('flex-wrap')) {
-                  checkoutSummaryTax.classList.remove('flex-wrap');
-                }
-              }
-            }
-          });
-        }
+        return {};
       }
+      return {};
     });
   }
   return taxExemptWrapper;
@@ -1653,6 +1905,7 @@ export const changeStep = async (step) => {
         }
 
         localStorage.setItem('submittedOrderData', JSON.stringify(submittingOrder));
+        localStorage.removeItem(`${siteID}_${env}_currentBasketId`);
         localStorage.removeItem('productDetailObject');
         localStorage.removeItem('basketData');
         sessionStorage.removeItem('useStripeCardId');
@@ -1799,34 +2052,48 @@ export const changeStep = async (step) => {
 
         const getConfirmedPI = await getPaymentIntent();
         if (getConfirmedPI?.status !== 'success') throw new Error('Failed to get payment intent.');
-        // eslint-disable-next-line max-len
-        const getConfirmedPID = getConfirmedPI?.data?.data?.filter((dat) => dat?.id === paymentMethodId);
-        if (!getConfirmedPID) throw new Error('Failed to process payment.');
-        // Remove email from the first item
-        if (getConfirmedPID[0]?.billing_details?.email) {
-          delete getConfirmedPID[0]?.billing_details?.email;
-        }
 
         /*
-         Add / Update Card for Order
-        */
-        const updatingCardData = {
-          name: 'SelectedCard',
-          value: JSON.stringify(getConfirmedPID[0]),
-          type: 'String',
-        };
-        const addingCardData = {
-          name: 'SelectedCard',
-          value: JSON.stringify(getConfirmedPID[0]),
-          type: 'String',
-        };
-        const updateCardToOrder = await updateCardForOrder(updatingCardData);
+     check if basket has the SelectedPM attribute
+    */
+        if (getBasketForOrder?.data?.data?.attributes?.some(
+          (attr) => attr?.name === 'SelectedPM',
+        )
+        ) {
+          const selectedPM = getBasketForOrder?.data?.data?.attributes?.find(
+            (attr) => attr?.name === 'SelectedPM',
+          );
+          let selectedPmValue = '';
+          if (selectedPM?.value && selectedPM?.name && selectedPM?.type) {
+            selectedPmValue = selectedPM?.value;
+          }
+          /*
+           Add / Update Card for Order
+          */
 
-        if (updateCardToOrder?.status !== 'success') {
+          const updatingCardData = {
+            name: selectedPM?.name,
+            value: selectedPmValue,
+            type: selectedPM?.type,
+          };
+          const updateCardToOrder = await updateCardForOrder(updatingCardData);
+          if (updateCardToOrder?.status !== 'success') throw new Error('Error Processing Request');
+        } else {
+          // eslint-disable-next-line max-len
+          const getConfirmedPID = getConfirmedPI?.data?.data?.filter((dat) => dat?.id === paymentMethodId);
+          if (!getConfirmedPID) throw new Error('Failed to process payment.');
+          // Remove email from the first item
+          if (getConfirmedPID[0]?.billing_details?.email) {
+            delete getConfirmedPID[0]?.billing_details?.email;
+          }
+          const addingCardData = {
+            name: 'SelectedCard',
+            value: JSON.stringify(getConfirmedPID[0]),
+            type: 'String',
+          };
           const addingCardForOrder = await addCardToOrder(addingCardData);
-          if (addingCardForOrder?.status !== 'success') throw new Error('Error Processing Request 5');
+          if (addingCardForOrder?.status !== 'success') throw new Error('Error Processing Request');
         }
-
         if (getBasketForOrder?.status !== 'success') throw new Error('Failed to get basket.');
 
         /*
@@ -1849,6 +2116,7 @@ export const changeStep = async (step) => {
         */
         localStorage.setItem('submittedOrderData', JSON.stringify(submittingOrder));
         localStorage.removeItem('productDetailObject');
+        localStorage.removeItem(`${siteID}_${env}_currentBasketId`);
         localStorage.removeItem('basketData');
         sessionStorage.removeItem('useStripeCardId');
         sessionStorage.removeItem('selectedStripeMethod');
@@ -2368,6 +2636,7 @@ get price type if its net or gross
   let discountPrice = '';
   let checkoutSummaryData = false;
   let userLoggedInStatus = false;
+  let basketAttributes = '';
   if (orderId !== '') {
     getCheckoutSummaryData = JSON.parse(localStorage.getItem('submittedOrderData'));
 
@@ -2388,6 +2657,7 @@ get price type if its net or gross
   } else {
     getCheckoutSummaryData = await getBasketDetails();
     if (getCheckoutSummaryData?.status === 'success') {
+      basketAttributes = getCheckoutSummaryData?.data?.data?.attributes;
       checkoutSummaryData = getCheckoutSummaryData.data.data;
       discountCode = getCheckoutSummaryData?.data?.data?.discounts?.valueBasedDiscounts?.[0]
         ?? '';
@@ -2521,10 +2791,20 @@ get price type if its net or gross
   /*
   generate checkout summary  module
   */
+  let checkoutFullWidth = false;
+  const fullWidthPaths = [
+    window?.EbuyConfig?.addressPageUrl,
+    window?.EbuyConfig?.shippingPageUrl,
+    window?.EbuyConfig?.paymentPageUrl,
+  ];
+  // eslint-disable-next-line max-len
+  if (fullWidthPaths.some((path) => window.location.pathname.includes(path))) {
+    checkoutFullWidth = true;
+  }
   const summaryModule = div(
     {
       id: 'checkoutSummaryContainer',
-      class: 'flex flex-col justify-start items-start gap-4 w-full',
+      class: `flex flex-col justify-start items-start gap-4 w-full ${checkoutFullWidth ? 'lg:w-full' : 'lg:w-[30%]'}`,
     },
     div(
       {
@@ -2638,7 +2918,7 @@ get price type if its net or gross
               {
                 id: 'checkoutSummaryTaxExempt',
                 class:
-                  `text-right text-sm cursor-pointer hidden text-danaherpurple-500 hover:text-danaherpurple-800 font-normal underline ${window.location.pathname === window.EbuyConfig?.orderSubmitPageUrl ? 'hidden' : ''}`,
+                  `text-right text-sm cursor-pointer ${userLoggedInStatus ? '' : 'hidden'} text-danaherpurple-500 hover:text-danaherpurple-800 font-normal underline ${window.location.pathname === window.EbuyConfig?.orderSubmitPageUrl ? 'hidden' : ''}`,
               },
               'Tax exempt?',
             ),
@@ -2751,8 +3031,8 @@ get price type if its net or gross
           {
             class: `proceed-button w-full text-white text-xl  btn btn-lg font-medium btn-primary-purple rounded-full px-6 ${((authenticationToken.user_type === 'guest') || window.location.pathname === window.EbuyConfig?.orderSubmitPageUrl) ? 'hidden' : ''} `,
             id: 'proceed-button',
-            'data-tab': 'shippingMethods',
-            'data-activetab': 'shippingAddress',
+            'data-tab': 'shippingAddress',
+            'data-activetab': 'shippingMethods',
           },
           'Checkout',
         ),
@@ -2824,10 +3104,14 @@ get price type if its net or gross
       /*
       Update checkout summary button
       */
-      if (currentPath === window.EbuyConfig?.addressPageUrl) proceedButton.textContent = 'Proceed to Shipping';
+      if (currentPath === window.EbuyConfig?.addressPageUrl) {
+        proceedButton.textContent = 'Proceed to Shipping';
+        proceedButton?.setAttribute('data-tab', 'shippingMethods');
+        proceedButton?.setAttribute('data-activetab', 'shippingMethods');
+      }
       if (currentPath === window.EbuyConfig?.shippingPageUrl) {
         proceedButton.textContent = 'Proceed to Payment';
-        proceedButton?.setAttribute('data-activetab', 'shippingMethod');
+        proceedButton?.setAttribute('data-activetab', 'shippingMethods');
         proceedButton?.setAttribute('data-tab', 'payment');
       }
       if (currentPath === window.EbuyConfig?.paymentPageUrl) {
@@ -3049,9 +3333,100 @@ get price type if its net or gross
     const checkoutSummaryTaxExempt = summaryModule.querySelector(
       '#checkoutSummaryTaxExempt',
     );
+    const checkoutSummaryTax = summaryModule.querySelector(
+      '#checkoutSummaryTax',
+    );
     if (checkoutSummaryTaxExempt) {
-      checkoutSummaryTaxExempt.addEventListener('click', () => {
-        const taxModal = taxExemptModal();
+      const taxExemptUploadedFile = div(
+        {
+          class: ' flex flex-1 justify-between',
+          id: 'taxExemptUploadedFile',
+        },
+        div(
+          {},
+          p(
+            {
+              class: 'text-black text-md',
+            },
+            'Tax Exempt Document',
+          ),
+          p(
+            {
+              id: 'tax-exempt-filename',
+              class: 'text-danaherpurple-500 text-md',
+            },
+          ),
+        ),
+        div(
+          {
+            class: '',
+            id: 'delete-document',
+          },
+          span({
+            class: 'mt-2 icon icon-cross cursor-pointer w-4 h-4 [&_svg>use]:stroke-danaherpurple-500',
+            id: 'removeTaxExemptUploadedFile',
+          }),
+        ),
+      );
+      decorateIcons(taxExemptUploadedFile);
+      setTimeout(() => {
+        taxExemptUploadedFile?.querySelector('#removeTaxExemptUploadedFile')?.querySelector('svg')?.classList?.add('!h-4', '!w-4');
+      }, 0);
+
+      const removeTaxExemptUploadedFile = taxExemptUploadedFile.querySelector(
+        '#removeTaxExemptUploadedFile',
+      );
+
+      removeTaxExemptUploadedFile?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (taxExemptUploadedFile) {
+          // Traverse up to the parent with the ID
+          const parentWithId = e.target.closest('#removeTaxExemptUploadedFile');
+
+          if (parentWithId) {
+            showPreLoader();
+            const deleteFileId = parentWithId.dataset.file;
+            if (deleteFileId) {
+              const deleteResponse = await deleteTaxDocument(deleteFileId);
+              if (deleteResponse?.status === 'success') {
+                taxExemptUploadedFile.remove();
+                if (checkoutSummaryTaxExempt) {
+                  if (checkoutSummaryTaxExempt.classList.contains('hidden')) {
+                    checkoutSummaryTaxExempt.classList.remove('hidden');
+                  }
+                }
+                if (checkoutSummaryTax) {
+                  if (checkoutSummaryTax.classList.contains('flex-wrap')) {
+                    checkoutSummaryTax.classList.remove('flex-wrap');
+                  }
+                }
+                removePreLoader();
+                updateBasketDetails();
+                showNotification(deleteResponse?.data?.message, 'success');
+                return deleteResponse;
+              }
+              removePreLoader();
+              showNotification('Error deleting document.', 'error');
+              return { status: 'error' };
+            }
+          }
+        }
+        return {};
+      });
+      if (basketAttributes) {
+        const taxExemptFile = basketAttributes.find((item) => item.name === 'TaxExemptFileName');
+
+        if (taxExemptFile && taxExemptUploadedFile && removeTaxExemptUploadedFile) {
+          checkoutSummaryTax?.append(taxExemptUploadedFile);
+          taxExemptUploadedFile.querySelector('#tax-exempt-filename').textContent = taxExemptFile.value;
+          taxExemptUploadedFile.querySelector('#removeTaxExemptUploadedFile').dataset.file = taxExemptFile.value;
+          checkoutSummaryTax.append(taxExemptUploadedFile);
+          checkoutSummaryTax.classList.add('flex-wrap');
+          checkoutSummaryTaxExempt.classList.add('hidden');
+        }
+      }
+      checkoutSummaryTaxExempt.addEventListener('click', async () => {
+        const taxModal = await taxExemptModal(taxExemptUploadedFile);
         createModal(taxModal, false, true);
       });
     }
@@ -3063,13 +3438,15 @@ export async function updateCheckoutSummary() {
   const checkoutSummaryWrapper = document.querySelector(
     '#checkoutSummaryContainer',
   );
+  const containerListWrapper = document.querySelector(
+    '#containerListWrapper',
+  );
+  const updatedCheckoutSummary = await checkoutSummary();
   if (checkoutSummaryWrapper) {
-    const updatedCheckoutSummary = await checkoutSummary();
-    checkoutSummaryWrapper.innerHTML = '';
-    checkoutSummaryWrapper.append(updatedCheckoutSummary);
-    return { status: 'success', data: 'updated checkout summary' };
+    checkoutSummaryWrapper.replaceWith(updatedCheckoutSummary);
+  } else {
+    containerListWrapper.insertAdjacentElement('afterend', updatedCheckoutSummary);
   }
-  return { status: 'error', data: 'Error updating checkout summary' };
 }
 
 // load module on navigation.
@@ -3094,6 +3471,7 @@ export async function loadingModule() {
     });
   });
 }
+
 export const cartItemsContainer = (cartItemValue) => {
   const formattedAmount = (orderTotal) => parseFloat(orderTotal).toLocaleString('en-US', {
     minimumFractionDigits: 2,
@@ -3163,7 +3541,7 @@ export const cartItemsContainer = (cartItemValue) => {
   };
   const deleteButton = button(
     {
-      class: 'sm:w-[5.5rem] sm:h-[3.5rem] bg-white',
+      class: 'sm:w-max sm:h-[3.5rem]',
     },
     span({
       id: `delteItem-${cartItemValue.sku}`,
@@ -3212,19 +3590,19 @@ export const cartItemsContainer = (cartItemValue) => {
     if (cartItemValue.listPrice.value !== cartItemValue.salePrice.value) {
       return div(
         {
-          class: 'w-[150px] justify-start text-black text-base font-semibold',
+          class: 'md:w-[120px] lg:w-[150px] justify-start text-black text-base font-semibold',
         },
         div(
           {
             class:
-              'w-[150px] justify-start text-gray-500 text-base font-semibold item line-through',
+              'md:w-[150px] justify-start text-gray-500 text-base font-semibold item line-through',
           },
           `$${formattedAmount(cartItemValue.listPrice.value)}`,
         ),
         div(
           {
             class:
-              'unit-price w-48 justify-start text-black text-base',
+              'unit-price md:w-48 justify-start text-black text-base',
           },
           `$${formattedAmount(cartItemValue.salePrice.value)}`,
         ),
@@ -3233,12 +3611,12 @@ export const cartItemsContainer = (cartItemValue) => {
 
     return div(
       {
-        class: 'w-[150px] justify-start text-black text-base font-semibold',
+        class: 'cart-item-unit-price md:w-[40%] xl:w-[150px] xl:pl-4 justify-start text-black text-base font-semibold',
       },
       div(
         {
           class:
-            'unit-price w-[150px] justify-start text-black text-base',
+            'unit-price w-full justify-start text-black text-base',
         },
         `$${formattedAmount(cartItemValue.salePrice.value)}`,
       ),
@@ -3248,16 +3626,16 @@ export const cartItemsContainer = (cartItemValue) => {
   const itemsscontainer = div(
     {
       class:
-        'w-full py-3 cart-item-wrapper border-t border-gray-300 inline-flex md:flex-row flex-col justify-start items-center gap-1',
+        'cart-item-container w-full py-3 cart-item-wrapper  border-t border-gray-300 inline-flex lg:flex-row flex-col justify-start items-center gap-4',
       id: cartItemValue.lineItemId,
     },
     div(
       {
-        class: 'py-3 inline-flex gap-2 ',
+        class: 'py-3 inline-flex gap-4 ',
       },
       div(
         {
-          class: 'w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300',
+          class: 'cart-item-image w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300',
         },
         div(
           {
@@ -3271,7 +3649,7 @@ export const cartItemsContainer = (cartItemValue) => {
       ),
       div(
         {
-          class: 'md:w-64 w-[11rem] flex flex-col justify-center items-center text-black text-base font-semibold',
+          class: 'cart-item-title md:w-32 xl:w-[14rem] lg:w-34 flex flex-col justify-center items-center text-black text-base font-semibold',
           // id: `product-Quantity-${opcoBe[0]}`,
         },
         div(
@@ -3292,11 +3670,11 @@ export const cartItemsContainer = (cartItemValue) => {
     ),
     div(
       {
-        class: 'md:pl-[0px] pl-[13px] inline-flex justify-start items-center',
+        class: 'md:pl-[0px] pl-[13px] gap-4 w-full flex justify-between md:justify-start items-center',
       },
       div(
         {
-          class: 'w-24 justify-start text-black text-base font-semibold',
+          class: 'cart-item-input md:w-14 lg:w-18 xl:w-16 justify-start text-black text-base font-semibold',
         },
         inputBox,
       ),
@@ -3304,7 +3682,7 @@ export const cartItemsContainer = (cartItemValue) => {
       unitPriceDiv(),
       div(
         {
-          class: 'total-price w-[99px] justify-start text-black text-base font-semibold sm:m-[0px] m-[7px]',
+          class: 'total-price md:w-[40%] xl:pl-8 justify-end text-black text-base font-semibold sm:m-[0px] m-[7px]',
           // id: 'total-price',
         },
         `$${formattedAmount(totalItemValue)}`,

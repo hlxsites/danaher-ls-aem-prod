@@ -14,7 +14,7 @@ export default async function decorate(block) {
   const quoteId = new URLSearchParams(window.location.search).get('quoteId');
   const requestedQuotesDetailsResponse = await requestedQuotesDetails(quoteId);
   const quoteDetailsWrapper = div({
-    class: 'w-[70%] inline-flex flex-col justify-start items-start gap-5 ',
+    class: 'w-[70%] inline-flex flex-col justify-start items-start gap-5 md:p-0 p-3',
   });
   const wrapper = div({
     id: 'dashboardWrapper',
@@ -63,6 +63,7 @@ export default async function decorate(block) {
   const quoteItemTitle = div(
     {
       class: 'self-stretch inline-flex justify-start items-start gap-5',
+      id: 'quoteItemTitle',
     },
     div({
       class: 'justify-start font-bold text-black text-xl font-normal leading-7',

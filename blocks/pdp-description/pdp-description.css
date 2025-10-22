@@ -95,6 +95,10 @@
   gap: 2rem
 }
 
+.pdp-description-wrapper :is(.gap-12) {
+  gap: 3rem
+}
+
 .pdp-description-wrapper :is(.border-b) {
   border-bottom-width: 1px
 }
@@ -117,6 +121,11 @@
 .pdp-description-wrapper :is(.bg-gray-100) {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+}
+
+.pdp-description-wrapper :is(.py-6) {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem
 }
 
 .pdp-description-wrapper :is(.\!pb-6) {
@@ -143,4 +152,10 @@
 .pdp-description-wrapper :is(.text-black) {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity))
+}
+
+@media (min-width: 768px) {
+  .pdp-description-wrapper :is(.md\:grid-cols-2) {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
 }

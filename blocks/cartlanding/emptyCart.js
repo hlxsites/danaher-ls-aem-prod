@@ -44,7 +44,7 @@ export default function emptyCart() {
       ),
       div(
         {
-          class: 'w-[692px] flex flex-col justify-start items-start',
+          class: 'w-full flex flex-col justify-start items-start',
         },
         div(
           {

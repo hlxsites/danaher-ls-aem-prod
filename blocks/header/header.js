@@ -606,7 +606,7 @@ function buildLoginBlock(loginLink) {
 function buildLoggedInUserBlock(loginLink, user) {
   let loginUser = '';
   let loginSpan = '';
-  if (window.location.pathname.includes('e-buy')) {
+  if (window.DanaherConfig.host === 'stage.lifesciences.danaher.com') {
     loginLink.className = 'relative flex items-center justify-between h-15 w-15';
     loginLink.href = window.EbuyConfig?.dashboardPage.url;
     loginUser = span(
@@ -750,7 +750,7 @@ async function buildSearchBlock(headerBlock) {
   /*
     load cart icon with cart item count only for e-buy pages
   */
-  if (window.location.pathname.includes('e-buy')) {
+  if (window.DanaherConfig.host === 'stage.lifesciences.danaher.com') {
     const headerCart = await loadHeaderCart();
     loginBlock.append(headerCart);
   }

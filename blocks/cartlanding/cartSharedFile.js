@@ -182,6 +182,36 @@ export const getProductDetailObject = async () => {
   return null;
 };
 
+// function to get or create if not there -  product detail object from the session
+
+export const updateProductDetailObject = async () => {
+  // localStorage.setItem("productDetailObject", JSON.stringify([]));
+  const getAllItemsDetails = await getAllItemsFromBasket();
+  if (getAllItemsDetails?.data?.length > 0 && getAllItemsDetails?.status === 'success') {
+    // Deduplicate by product.id
+    const uniqueProducts = getAllItemsDetails?.data?.filter(
+      (p, index, self) => index === self.findIndex((q) => q.id === p.id),
+    );
+    const productDetailsList = await Promise.all(
+      uniqueProducts?.map(async (product) => {
+        const productDataResponse = await productData(product);
+        return productDataResponse;
+      }),
+    );
+    if (productDetailsList) {
+      return {
+        status: 'success',
+      };
+    }
+  } else {
+    localStorage.setItem('productDetailObject', JSON.stringify([]));
+    return {
+      status: 'success',
+    };
+  }
+  return null;
+};
+
 export const sessionObject = async (
   type,
   quantity,
@@ -331,7 +361,7 @@ export const updateCartItemQuantity = async (item) => {
               item.manufacturer,
             );
             if (qunatityUpdate) {
-              const cartQuantityResponse = await updateCartQuantity(
+              const cartQuantityResponse = updateCartQuantity(
                 totalProductQuantity,
               );
               if (cartQuantityResponse) {

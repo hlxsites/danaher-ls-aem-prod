@@ -1,19 +1,17 @@
 import dashboardSidebar from '../dashboardSideBar/dashboardSideBar.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { showPreLoader, removePreLoader } from '../../scripts/common-utils.js';
 import {
   div, table, tbody, tr, span, a,
 } from '../../scripts/dom-builder.js';
 import { requestedQuotes, requestedQuotesDetails } from '../dashboard/dashboardutils.js';
+import { checkoutSkeleton } from '../../scripts/cart-checkout-utils.js';
 
 export default async function decorate(block) {
-  showPreLoader();
   block?.parentElement?.parentElement?.removeAttribute('class');
   block?.parentElement?.parentElement?.removeAttribute('style');
   document.querySelector('main').style = 'background: #f4f4f4';
-  const requestedQuotesResponse = await requestedQuotes();
   const requestedQuoteWrapper = div({
-    class: 'w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5',
+    class: 'w-full md:w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5 md:p-0 p-4',
   });
   const resquestedquoteTitleDiv = div(
     {
@@ -29,12 +27,12 @@ export default async function decorate(block) {
   const wrapper = div({
     id: 'dashboardWrapper',
     class:
-            'flex flex-col gap-5 md:flex-row w-full !mt-0  dhls-container dhlsBp:py-12',
+      'flex flex-col gap-5 md:flex-row w-full !mt-0  dhls-container dhlsBp:py-12',
   });
   const quoteWrapper = div(
     {
       class:
-          'w-full ml-[20px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center',
+        'w-full md:ml-[20px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center',
       id: 'orderWrapper',
     },
   );
@@ -55,12 +53,12 @@ export default async function decorate(block) {
         div(
           {
             class:
-            'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
+              'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
           },
           div(
             {
               class:
-              'self-stretch justify-start text-left text-danaherpurple-500 text-medium font-[400] leading-tight',
+                'self-stretch justify-start text-left text-danaherpurple-500 text-medium font-[400] leading-tight',
             },
             quoteNo,
           ),
@@ -68,12 +66,12 @@ export default async function decorate(block) {
         div(
           {
             class:
-            'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
+              'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
           },
           div(
             {
               class:
-              'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
+                'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
             },
             formattedDate,
           ),
@@ -81,12 +79,12 @@ export default async function decorate(block) {
         div(
           {
             class:
-            'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
+              'w-[263px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-start',
           },
           div(
             {
               class:
-              'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
+                'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
             },
             brand,
           ),
@@ -125,7 +123,7 @@ export default async function decorate(block) {
     const row = div(
       {
         class:
-              'w-[280.4px] h-[46px] self-stretch p-3 border-b-2 border-gray-200 inline-flex justify-start items-center gap-1',
+          'w-[280.4px] h-[46px] self-stretch p-3 border-b-2 border-gray-200 inline-flex justify-start items-center gap-1',
       },
       div(
         {
@@ -149,12 +147,12 @@ export default async function decorate(block) {
   };
   const quoteTable = div(
     {
-      class: 'w-full max-h-[642px] border border-solid border-gray-300',
+      class: 'w-full max-h-[642px] border border-solid border-gray-300 md:overflow-hidden overflow-auto',
     },
     table(
       {
         class:
-        'self-stretch md:w-full w-[980px] inline-flex flex-col justify-start items-start',
+          'self-stretch md:w-full w-[980px] inline-flex flex-col justify-start items-start',
         id: 'orderTable',
       },
       tr(
@@ -168,21 +166,23 @@ export default async function decorate(block) {
 
     ),
   );
+
+  quoteTable.append(checkoutSkeleton());
   const noContentDiv = a(
     {
       class: 'inline-flex justify-start border-b border-gray-200 gap-1',
-    // href: `${window.EbuyConfig?.orderDetailsPageUrl}?orderId=${orderId}`,
+      // href: `${window.EbuyConfig?.orderDetailsPageUrl}?orderId=${orderId}`,
     },
 
     div(
       {
         class:
-        'w-[262px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[262px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
+            'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
         },
 
       ),
@@ -190,12 +190,12 @@ export default async function decorate(block) {
     div(
       {
         class:
-        'w-[262px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[262px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'justify-start text-gray-900 text-base font-bold leading-snug',
+            'justify-start text-gray-900 text-base font-bold leading-snug',
         },
         'No Records Found',
       ),
@@ -203,31 +203,37 @@ export default async function decorate(block) {
     div(
       {
         class:
-        'w-[260px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[260px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'self-stretch text-right justify-start text-gray-900 text-medium font-[400] leading-tight',
+            'self-stretch text-right justify-start text-gray-900 text-medium font-[400] leading-tight',
         },
 
       ),
     ),
   );
+
   quoteWrapper.append(quoteTable);
-  if (requestedQuotesResponse?.length !== 0) {
-    const orderRows = await dynamicTableContent(requestedQuotesResponse);
-    quoteTable.append(orderRows);
-  } else {
-    quoteTable.append(noContentDiv);
-  }
+
   requestedQuoteWrapper.append(resquestedquoteTitleDiv);
   requestedQuoteWrapper.append(quoteWrapper);
   const dashboardSideBarContent = await dashboardSidebar();
+  setTimeout(async () => {
+    const requestedQuotesResponse = await requestedQuotes();
+    if (requestedQuotesResponse?.length !== 0) {
+      const orderRows = await dynamicTableContent(requestedQuotesResponse);
+      quoteTable.querySelector('#checkoutSkeleton')?.remove();
+      quoteTable.append(orderRows);
+    } else {
+      quoteTable.querySelector('#checkoutSkeleton')?.remove();
+      quoteTable.append(noContentDiv);
+    }
+  }, 0);
   wrapper.append(dashboardSideBarContent, requestedQuoteWrapper);
   block.innerHTML = '';
   block.textContent = '';
   block.append(wrapper);
   decorateIcons(wrapper);
-  removePreLoader();
 }

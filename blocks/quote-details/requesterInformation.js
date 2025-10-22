@@ -2,8 +2,16 @@ import { div } from '../../scripts/dom-builder.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const requesterInformation = (quoteDetailsResponse) => {
-  const custInfo = quoteDetailsResponse.address;
-
+  const custInfo = {};
+  if (quoteDetailsResponse.address) {
+    custInfo.firstName = quoteDetailsResponse.address.firstName;
+    custInfo.lastName = quoteDetailsResponse.address.lastName;
+    custInfo.email = quoteDetailsResponse.email;
+  } else {
+    custInfo.firstName = '';
+    custInfo.lastName = '';
+    custInfo.email = '';
+  }
   const requesterInformationWrapper = div({
     class:
       'w-[325px] self-stretch border border-solid border-gray-300 p-[20px] bg-white inline-flex flex-col justify-start items-start gap-6',
@@ -69,7 +77,7 @@ export const requesterInformation = (quoteDetailsResponse) => {
             class:
               'self-stretch justify-start text-black text-[16px] font-bold  leading-snug',
           },
-          `${quoteDetailsResponse.email}`,
+          `${custInfo.email}`,
         ),
       ),
       div(

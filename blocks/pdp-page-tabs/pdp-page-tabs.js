@@ -81,9 +81,6 @@ function highlightActiveTab(forcedLabel = null) {
       indicator.classList.toggle('rounded-[5px]', isActive);
     }
 
-    // Only scroll into view if:
-    // 1. Mobile view
-    // 2. Active tab is NOT the first tab when above the section
     if (
       isActive
       && window.innerWidth < 768
@@ -96,30 +93,75 @@ function highlightActiveTab(forcedLabel = null) {
       });
     }
   });
+
+  // --- ✅ Skip hidden tabs without scroll interference ---
+  const activeTab = Array.from(allTabs).find((tab) => tab.classList.contains('text-danaherpurple-500'));
+
+  if (activeTab && window.getComputedStyle(activeTab.parentElement).display === 'none') {
+    let nextTab = activeTab.parentElement.nextElementSibling;
+
+    // Find next visible tab
+    while (nextTab && window.getComputedStyle(nextTab).display === 'none') {
+      nextTab = nextTab.nextElementSibling;
+    }
+
+    if (nextTab) {
+      const nextLabel = nextTab.querySelector('.p-tab')?.textContent.trim();
+      if (nextLabel) {
+        // Temporarily disable scroll tracking to avoid recursion
+        const prevManualScroll = isManualScroll;
+        isManualScroll = true;
+
+        // Just visually update highlight
+        allTabs.forEach((tab) => {
+          const label = tab.textContent.trim();
+          const isActive = label === nextLabel;
+          tab.classList.toggle('text-danaherpurple-500', isActive);
+          tab.classList.toggle('font-bold', isActive);
+          tab.classList.toggle('text-black', !isActive);
+          tab.classList.toggle('font-medium', !isActive);
+
+          const indicator = tab.previousElementSibling;
+          if (indicator) {
+            indicator.classList.toggle('bg-danaherpurple-500', isActive);
+            indicator.classList.toggle('rounded-[5px]', isActive);
+          }
+        });
+
+        isManualScroll = prevManualScroll;
+      }
+    }
+  }
 }
 
 function updatePageTabs(event) {
   const label = event.target.textContent.trim();
   const targetId = dynamicTabMap[label];
   const targetEl = document.querySelector(`#${targetId}`);
-
-  if (targetEl) {
-    const offset = 100;
-    const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - offset;
-
-    isManualScroll = true;
-    highlightActiveTab(label);
-
-    window.scrollTo({
-      top: targetPosition,
-      behavior: 'smooth',
-    });
-
-    setTimeout(() => {
-      isManualScroll = false;
-    }, 600);
-  }
+  if (!targetEl) return;
+  const offset = 100;
+  isManualScroll = true; // lock highlight updates
+  highlightActiveTab(label); // manually set active tab now
+  const rect = targetEl.getBoundingClientRect();
+  const absoluteTop = rect.top + window.scrollY - offset;
+  // Smooth scroll
+  window.scrollTo({
+    top: absoluteTop,
+    behavior: 'smooth',
+  });
+  // Poll scroll position until target reached (instead of fixed timeout)
+  const scrollCheck = setInterval(() => {
+    const distance = Math.abs(window.scrollY - absoluteTop);
+    // When we’re within ~2px of target → scrolling finished
+    if (distance < 2) {
+      clearInterval(scrollCheck);
+      setTimeout(() => {
+        isManualScroll = false; // re-enable automatic highlighting
+      }, 150);
+    }
+  }, 50);
 }
+
 export default async function decorate(block) {
   block.classList.add('bg-white');
   block.parentElement.parentElement.style.padding = '0px';

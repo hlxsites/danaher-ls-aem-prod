@@ -7,7 +7,7 @@ import {
   createModal,
 } from './common-utils.js';
 import { setAuthenticationToken } from './token-utils.js';
-import { getBasketDetails, getAddressDetails } from './cart-checkout-utils.js';
+import { getBasketDetails } from './cart-checkout-utils.js';
 
 const siteID = window.DanaherConfig?.siteID;
 const hostName = window.location.hostname;
@@ -154,9 +154,7 @@ export async function userLogin(type, data = {}, source = '') {
         urlencoded,
         headers,
       );
-
       if (userLoggedIn?.status === 'success') {
-        sessionStorage.removeItem('addressList');
         let userInfoData = {};
         if (type !== 'guest') {
           const userLoggedInData = await getUserData(
@@ -167,42 +165,13 @@ export async function userLogin(type, data = {}, source = '') {
           }
         }
         setAuthenticationToken(userLoggedIn.data, userInfoData, type);
-
         /*
-
- get the basket details and create if doen't exists
-
-   */
-        const basketData = await getBasketDetails(type, lastBasketId, source);
-
-        if (basketData.status === 'success') {
-          localStorage.setItem(`${siteID}_${env}_currentBasketId`, basketData?.data?.data?.id);
-          if (type !== 'guest') {
-            const useAddressObject = {};
-            let addressDetails = '';
-            if (basketData?.data?.data?.invoiceToAddress) {
-              const invoiceToAddressURI = basketData?.data?.data?.invoiceToAddress?.split(':')[4];
-              addressDetails = await getAddressDetails(
-                `customers/-/addresses/${invoiceToAddressURI}`,
-              );
-              Object.assign(useAddressObject, {
-                invoiceToAddress: addressDetails,
-              });
-            }
-            if (basketData.data.data.commonShipToAddress) {
-              const commonShipToAddressURI = basketData?.data?.data?.commonShipToAddress?.split(':')[4];
-              addressDetails = await getAddressDetails(
-                `customers/-/addresses/${commonShipToAddressURI}`,
-              );
-              Object.assign(useAddressObject, {
-                commonShipToAddress: addressDetails,
-              });
-            }
-
-            sessionStorage.setItem(
-              'useAddress',
-              JSON.stringify({ status: 'success', data: useAddressObject }),
-            );
+       get the basket details and create if doen't exists
+    */
+        if (type !== 'guest') {
+          const basketData = await getBasketDetails(type, lastBasketId, source);
+          if (basketData?.status === 'success') {
+            localStorage.setItem(`${siteID}_${env}_currentBasketId`, basketData?.data?.data?.id);
           }
         }
         return userLoggedIn;
@@ -264,7 +233,7 @@ function deleteCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 export function userLogOut() {
-  deleteCookie(`${siteID}_${env}_apiToken`);
+  deleteCookie(`eb_${siteID}_${env}_apiToken`);
   deleteCookie(`${siteID}_${env}_user_data`);
   deleteCookie(`${siteID}_${env}_user_type`);
   deleteCookie('first_name');

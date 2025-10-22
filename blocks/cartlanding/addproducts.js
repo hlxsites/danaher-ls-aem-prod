@@ -16,6 +16,7 @@ export default async function addProducts() {
 
   async function handleSearchInput() {
     const clearIcon = document.querySelector('span.searchbox-clear');
+    clearIcon?.querySelector('svg')?.classList?.add('!w-[32px]');
     const inputValue = document.getElementById('searchInput');
     if (inputValue.value) {
       clearIcon.classList.add('cursor-pointer');
@@ -76,7 +77,7 @@ export default async function addProducts() {
   };
 
   const productSearchcontainer = div({
-    class: 'w-full',
+    class: 'dhls-container mt-0 w-full p-4 md:px-10',
     id: 'productSearchcontainer',
   });
   const searchBlock = div(
@@ -85,7 +86,7 @@ export default async function addProducts() {
     },
     div(
       {
-        class: 'md:w-[640px]  w-[280px] inline-flex flex-col justify-start items-start gap-4',
+        class: 'md:w-[640px]  w-full flex flex-col justify-start items-start gap-4',
       },
       div(
         {
@@ -102,11 +103,11 @@ export default async function addProducts() {
     ),
     div(
       {
-        class: 'lg:w-[590px] inline-flex flex-col justify-start items-start',
+        class: ' flex flex-col justify-start items-start',
       },
       div(
         {
-          class: 'inline-flex flex-col justify-end items-start gap-4',
+          class: 'flex flex-col justify-end items-start gap-4 w-full',
         },
         div(
           {
@@ -117,7 +118,7 @@ export default async function addProducts() {
         ),
         div(
           {
-            class: 'inline-flex lg:flex-row flex-col justify-center items-right lg:items-center  gap-4',
+            class: 'flex md:flex-row flex-col justify-center items-right lg:items-center  gap-4 w-full md:w-full',
           },
           buildSearchWithIcon(
             '',
@@ -135,7 +136,7 @@ export default async function addProducts() {
             },
             button(
               {
-                class: 'w-[200px] btn btn-lg btn-primary-purple m-0  rounded-full',
+                class: 'w-full md:w-[200px] btn btn-lg btn-primary-purple m-0  rounded-full',
               },
               'Search',
             ),
@@ -144,7 +145,8 @@ export default async function addProducts() {
       ),
     ),
   );
-
+  searchBlock?.querySelector('.search-with-icon')?.classList.add('md:w-full', 'w-full');
+  searchBlock?.querySelector('#searchWithIcon')?.classList.add('w-full');
   const onClickCoveoResponse = async () => {
     showPreLoader();
     const inputValue = document.getElementById('searchInput').value;

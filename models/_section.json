@@ -106,7 +106,7 @@
       "tiny-carousel",
       "tabs-container",
       "accordion-container",
-      "opco-grid", 
+      "opco-grid",
       "offer-advertisement",
       "related-category",
       "product-hero-content",
@@ -130,7 +130,8 @@
       "pdp-related-products",
       "pdp-resources",
       "pdp-specifications",
-      "talk-to-an-expert-text"
+      "talk-to-an-expert-text",
+      "see-all"
     ]
     }
   ]

@@ -2,28 +2,24 @@ import { showPreLoader, removePreLoader } from '../../scripts/common-utils.js';
 import { div, a } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import dashboardSidebar from '../dashboardSideBar/dashboardSideBar.js';
-import { getCookie } from '../../scripts/scripts.js';
+import { getAuthenticationToken } from '../../scripts/token-utils.js';
 
+// eslint-disable-next-line consistent-return
 export default async function decorate(block) {
   showPreLoader();
+  const authenticationToken = await getAuthenticationToken();
+  if (!authenticationToken) {
+    window.location.href = window.EbuyConfig?.loginPageUrl;
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
   block?.parentElement?.parentElement?.removeAttribute('class');
   block?.parentElement?.parentElement?.removeAttribute('style');
   document.querySelector('main').style = 'background: #f4f4f4';
-  const siteID = window.DanaherConfig?.siteID;
-  const hostName = window.location.hostname;
-  let env;
-  if (hostName.includes('local')) {
-    env = 'local';
-  } else if (hostName.includes('dev')) {
-    env = 'dev';
-  } else if (hostName.includes('stage')) {
-    env = 'stage';
+  const userDataFromSession = JSON.parse(authenticationToken.user_data);
+  let userData;
+  if (userDataFromSession) {
+    userData = userDataFromSession;
   } else {
-    env = 'prod';
-  }
-  const userData = getCookie(`${siteID}_${env}_user_data`);
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
-  if (basketDataFromSession?.data?.data?.buyer === undefined) {
     window.location.href = window.EbuyConfig?.loginPageUrl;
   }
   const wrapper = div({
@@ -33,11 +29,11 @@ export default async function decorate(block) {
   });
   const myProfileWrapper = div({
     class:
-      'w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5',
+      'w-full md:w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5 md:p-0 p-4',
   });
   const profileWrapper = div({
     class:
-      'w-full ml-[20px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center',
+      'w-full md:ml-[20px] p-6 bg-white border border-solid border-gray-300 inline-flex flex-col justify-start items-center',
     id: 'profileWrapper',
   });
   const profileTitleDiv = div(
@@ -155,7 +151,7 @@ export default async function decorate(block) {
                   class:
                     'self-stretch justify-start text-black text-base font-bold leading-snug',
                 },
-                userData.userData.email,
+                userData?.userData?.email,
               ),
             ),
             div(
@@ -199,7 +195,7 @@ export default async function decorate(block) {
                   class:
                     'self-stretch justify-start text-black text-base font-bold leading-snug',
                 },
-                userData.customerData.preferredInvoiceToAddress.country,
+                userData?.customerData?.preferredInvoiceToAddress?.country,
               ),
             ),
             div(
@@ -218,7 +214,7 @@ export default async function decorate(block) {
                   class:
                     'self-stretch justify-start text-black text-base font-bold leading-snug',
                 },
-                userData.customerData.companyName,
+                userData?.customerData?.companyName,
               ),
             ),
             div(
@@ -237,7 +233,7 @@ export default async function decorate(block) {
                   class:
                     'self-stretch justify-start text-black text-base font-bold leading-snug',
                 },
-                userData.userData.title !== ' ' ? userData.userData.title : 'N/A',
+                userData?.userData?.title !== ' ' ? userData?.userData?.title : 'N/A',
               ),
             ),
           ),

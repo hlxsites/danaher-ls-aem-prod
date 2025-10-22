@@ -1,6 +1,6 @@
 import dashboardSidebar from '../dashboardSideBar/dashboardSideBar.js';
+import { getAuthenticationToken } from '../../scripts/token-utils.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { showPreLoader, removePreLoader } from '../../scripts/common-utils.js';
 import {
   div,
   table,
@@ -15,22 +15,31 @@ import {
   approvedQuotesDetails,
   productData,
 } from '../dashboard/dashboardutils.js';
+import { checkoutSkeleton } from '../../scripts/cart-checkout-utils.js';
 
+// eslint-disable-next-line consistent-return
 export default async function decorate(block) {
-  showPreLoader();
+  const authenticationToken = await getAuthenticationToken();
+  if (!authenticationToken) {
+    window.location.href = window.EbuyConfig?.loginPageUrl;
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  // showPreLoader();
   block?.parentElement?.parentElement?.removeAttribute('class');
   block?.parentElement?.parentElement?.removeAttribute('style');
   document.querySelector('main').style = 'background: #f4f4f4';
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
-  if (basketDataFromSession?.data?.data?.buyer === undefined) {
+  const userDataFromSession = JSON.parse(authenticationToken.user_data);
+  let userId;
+  if (userDataFromSession) {
+    userId = userDataFromSession?.userData?.login;
+  } else {
     window.location.href = window.EbuyConfig?.loginPageUrl;
   }
-  const customerName = `${basketDataFromSession?.data?.data?.buyer?.firstName} ${basketDataFromSession?.data?.data?.buyer?.lastName}`;
-  const userId = basketDataFromSession?.data?.data?.buyer?.accountID;
-  const approvedQuotesResponse = await approvedQuotes();
+  const customerName = `${userDataFromSession?.userData?.firstName} ${userDataFromSession?.userData?.lastName}`;
+
   const approvedQuoteWrapper = div({
     class:
-      'w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5',
+      'w-full md:w-[70%] self-stretch inline-flex flex-col justify-start items-start gap-5 md:p-0 p-4',
   });
   const approvedquoteTitleDiv = div(
     {
@@ -508,7 +517,7 @@ export default async function decorate(block) {
 
     // Return the tbody with all rows
     return tbody(
-      { class: 'w-full flex flex-col', id: 'tableRow' },
+      { class: 'w-full flex flex-col ', id: 'tableRow' },
       ...tableRows,
     );
   };
@@ -574,17 +583,17 @@ export default async function decorate(block) {
   };
   const quoteTable = div(
     {
-      class: 'w-full max-h-[642px] border border-solid border-gray-300',
+      class: 'w-full max-h-[642px] border border-solid border-gray-300 md:overflow-hidden overflow-auto',
     },
     table(
       {
         class:
-        'self-stretch md:w-full w-[980px] inline-flex flex-col justify-start items-start',
+          'self-stretch md:w-full w-[980px] inline-flex flex-col justify-start items-start',
         id: 'orderTable',
       },
       tr(
         {
-          class: 'self-stretch w-[980px]',
+          class: 'self-stretch w-[980px] border border-solid-b border-gray-300',
         },
         tableData('Quote #'),
         tableData('Quote Date'),
@@ -596,17 +605,17 @@ export default async function decorate(block) {
   const noContentDiv = a(
     {
       class: 'inline-flex justify-start border-b border-gray-200 gap-1',
-    // href: `${window.EbuyConfig?.orderDetailsPageUrl}?orderId=${orderId}`,
+      // href: `${window.EbuyConfig?.orderDetailsPageUrl}?orderId=${orderId}`,
     },
     div(
       {
         class:
-        'w-[190px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[190px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'self-stretch justify-start text-left text-danaherpurple-500 text-medium font-[400] leading-tight',
+            'self-stretch justify-start text-left text-danaherpurple-500 text-medium font-[400] leading-tight',
         },
 
       ),
@@ -615,12 +624,12 @@ export default async function decorate(block) {
     div(
       {
         class:
-        'w-[190px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[190px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
+            'self-stretch justify-start text-gray-900 text-medium font-[400] leading-tight',
         },
 
       ),
@@ -628,12 +637,12 @@ export default async function decorate(block) {
     div(
       {
         class:
-        'w-[226px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[226px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'justify-start text-gray-900 text-base font-bold leading-snug',
+            'justify-start text-gray-900 text-base font-bold leading-snug',
         },
         'No Records Found',
       ),
@@ -641,12 +650,12 @@ export default async function decorate(block) {
     div(
       {
         class:
-        'w-[226px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
+          'w-[226px] h-[46px] self-stretch p-3 inline-flex flex-col justify-start items-center',
       },
       div(
         {
           class:
-          'self-stretch text-right justify-start text-gray-900 text-medium font-[400] leading-tight',
+            'self-stretch text-right justify-start text-gray-900 text-medium font-[400] leading-tight',
         },
 
       ),
@@ -654,21 +663,31 @@ export default async function decorate(block) {
 
   );
   quoteWrapper.append(quoteTable);
-  if (approvedQuotesResponse?.length !== 0) {
-    const orderRows = await dynamicTableContent(approvedQuotesResponse);
-    quoteTable.append(orderRows);
-  } else {
-    quoteTable.append(noContentDiv);
-  }
+  quoteWrapper.append(checkoutSkeleton());
+  approvedQuoteWrapper.append(approvedquoteTitleDiv);
+  const dashboardSideBarContent = await dashboardSidebar();
+  setTimeout(async () => {
+    const approvedQuotesResponse = await approvedQuotes();
+    // quoteWrapper.textContent = "";
+    if (approvedQuotesResponse?.length !== 0) {
+      const orderRows = await dynamicTableContent(approvedQuotesResponse);
+      quoteTable.append(orderRows);
+    } else {
+      quoteTable.append(noContentDiv);
+    }
+    quoteWrapper.textContent = '';
+    quoteWrapper.append(quoteTable);
+  }, 0);
+
   // const orderRows = await dynamicTableContent(approvedQuotesResponse);
   // quoteTable.append(orderRows);
-  approvedQuoteWrapper.append(approvedquoteTitleDiv);
+
   approvedQuoteWrapper.append(quoteWrapper);
-  const dashboardSideBarContent = await dashboardSidebar();
+
   wrapper.append(dashboardSideBarContent, approvedQuoteWrapper);
   block.innerHTML = '';
   block.textContent = '';
   block.append(wrapper);
   decorateIcons(wrapper);
-  removePreLoader();
+  // removePreLoader();
 }

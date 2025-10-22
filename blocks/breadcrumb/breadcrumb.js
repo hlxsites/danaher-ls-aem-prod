@@ -6,6 +6,7 @@ import ffetch from '../../scripts/ffetch.js';
 import { getEdgeDeliveryPath } from '../../scripts/scripts.js';
 import { includeProdEdsPaths, includeStageEdsPaths } from '../../scripts/delayed.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
+import { buildBreadcrumbSchema } from '../../scripts/schema.js';
 
 const TEMPLATE_PATH_PATTERN = /\/us\/en\/[^/]+\/topics-template/;
 
@@ -174,4 +175,5 @@ export default async function decorate(block) {
       wrappers[i].remove();
     }
   }
+  buildBreadcrumbSchema();
 }

@@ -137,8 +137,8 @@
   width: 40px
 }
 
-.approved-quotes-wrapper :is(.w-\[70\%\]) {
-  width: 70%
+.approved-quotes-wrapper :is(.w-\[930px\]) {
+  width: 930px
 }
 
 .approved-quotes-wrapper :is(.w-\[980px\]) {
@@ -221,12 +221,8 @@
   align-self: stretch
 }
 
-.approved-quotes-wrapper :is(.overflow-x-auto) {
-  overflow-x: auto
-}
-
-.approved-quotes-wrapper :is(.overflow-y-auto) {
-  overflow-y: auto
+.approved-quotes-wrapper :is(.overflow-auto) {
+  overflow: auto
 }
 
 .approved-quotes-wrapper :is(.rounded-full) {
@@ -343,6 +339,10 @@
 
 .approved-quotes-wrapper :is(.p-3) {
   padding: 0.75rem
+}
+
+.approved-quotes-wrapper :is(.p-4) {
+  padding: 1rem
 }
 
 .approved-quotes-wrapper :is(.p-5) {
@@ -496,12 +496,24 @@
     width: 25%
   }
 
+  .approved-quotes-wrapper :is(.md\:w-\[70\%\]) {
+    width: 70%
+  }
+
   .approved-quotes-wrapper :is(.md\:w-full) {
     width: 100%
   }
 
   .approved-quotes-wrapper :is(.md\:flex-row) {
     flex-direction: row
+  }
+
+  .approved-quotes-wrapper :is(.md\:overflow-hidden) {
+    overflow: hidden
+  }
+
+  .approved-quotes-wrapper :is(.md\:p-0) {
+    padding: 0px
   }
 }
 
@@ -510,34 +522,6 @@
     padding-top: 3rem;
     padding-bottom: 3rem
   }
-}
-
-.approved-quotes-wrapper :is(.\[\&\:\:-webkit-scrollbar-thumb\]\:bg-gray-300)::-webkit-scrollbar-thumb {
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity))
-}
-
-@media (prefers-color-scheme: dark) {
-  .approved-quotes-wrapper :is(.dark\:\[\&\:\:-webkit-scrollbar-thumb\]\:bg-neutral-500)::-webkit-scrollbar-thumb {
-    --tw-bg-opacity: 1;
-    background-color: rgb(115 115 115 / var(--tw-bg-opacity))
-  }
-}
-
-.approved-quotes-wrapper :is(.\[\&\:\:-webkit-scrollbar-track\]\:bg-gray-100)::-webkit-scrollbar-track {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity))
-}
-
-@media (prefers-color-scheme: dark) {
-  .approved-quotes-wrapper :is(.dark\:\[\&\:\:-webkit-scrollbar-track\]\:bg-neutral-700)::-webkit-scrollbar-track {
-    --tw-bg-opacity: 1;
-    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
-  }
-}
-
-.approved-quotes-wrapper :is(.\[\&\:\:-webkit-scrollbar\]\:w-1)::-webkit-scrollbar {
-  width: 0.25rem
 }
 
 .approved-quotes-wrapper :is(.\[\&_svg\>use\]\:stroke-black svg>use) {

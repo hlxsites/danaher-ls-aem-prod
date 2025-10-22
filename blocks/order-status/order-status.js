@@ -7,10 +7,11 @@ import {
   a,
 } from '../../scripts/dom-builder.js';
 import { getAuthenticationToken } from '../../scripts/token-utils.js';
-import { baseURL, showPreLoader, removePreLoader } from '../../scripts/common-utils.js';
+import { baseURL } from '../../scripts/common-utils.js';
 import { getApiData } from '../../scripts/api-utils.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import dashboardSidebar from '../dashboardSideBar/dashboardSideBar.js';
+import { checkoutSkeleton } from '../../scripts/cart-checkout-utils.js';
 
 // let totalOrdersPlaced = '';
 const orderDetails = async () => {
@@ -249,7 +250,7 @@ const noContentDiv = a(
 );
 
 export default async function decorate(block) {
-  showPreLoader();
+  // showPreLoader();
   block?.parentElement?.parentElement?.removeAttribute('class');
   block?.parentElement?.parentElement?.removeAttribute('style');
   document.querySelector('main').style = 'background: #f4f4f4';
@@ -270,10 +271,10 @@ export default async function decorate(block) {
       class: 'self-stretch justify-start text-black text-base font-extralight leading-snug',
     }, 'Track your order every step of the way see real-time updates and delivery details here.'),
   );
-  const orderDetailsResponse = await orderDetails();
+
   const orderWrapper = div({
     class:
-      'w-full ml-[20px] p-6 bg-white border-t border-l border-r border-b border-gray-300 inline-flex flex-col justify-start ',
+      'w-full md:ml-[20px] p-6 bg-white border-t border-l border-r border-b border-gray-300 inline-flex flex-col justify-start ',
     id: 'orderWrapper',
   });
   const orderDesc = div(
@@ -346,18 +347,26 @@ export default async function decorate(block) {
 
   );
   orderWrapper.append(orderDesc);
-  if (orderDetailsResponse?.length !== 0) {
-    const orderRows = await dynamicTableContent(orderDetailsResponse);
-    orderTable.append(orderRows);
-  } else {
-    orderTable.append(noContentDiv);
-  }
-  orderWrapper.append(orderTable);
-
   const orderStatusPageWrapper = div({
-    class: 'w-[70%] inline-flex flex-col gap-4',
+    class: 'w-full md:w-[70%] inline-flex flex-col gap-4 md:p-0 p-4',
   });
+
   orderStatusPageWrapper.append(orderStatusTitle);
+  orderWrapper.append(checkoutSkeleton());
+  setTimeout(async () => {
+    const orderDetailsResponse = await orderDetails();
+    orderWrapper.textContent = '';
+    if (orderDetailsResponse?.length !== 0) {
+      const orderRows = await dynamicTableContent(orderDetailsResponse);
+      orderTable.append(orderRows);
+    } else {
+      orderTable.append(noContentDiv);
+    }
+    // orderStatusPageWrapper.append(orderStatusTitle);
+    orderWrapper.append(orderDesc);
+    orderWrapper.append(orderTable);
+  }, 0);
+
   orderStatusPageWrapper.append(orderWrapper);
   wrapper.append(dashboardSideBarContent, orderStatusPageWrapper);
 
@@ -365,6 +374,4 @@ export default async function decorate(block) {
   block.textContent = '';
   block.append(wrapper);
   decorateIcons(wrapper);
-
-  removePreLoader();
 }

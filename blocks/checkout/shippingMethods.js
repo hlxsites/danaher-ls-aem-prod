@@ -24,7 +24,6 @@ import {
   setShippingNotes,
   updateShippingNotes,
   validateBasket,
-  silentNavigation,
 } from '../../scripts/cart-checkout-utils.js';
 import { updateBasketDetails } from '../cartlanding/cartSharedFile.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
@@ -446,7 +445,7 @@ const shippingMethodsModule = async () => {
     scrollViewToTop();
     showNotification(error.message, 'error');
     if (error.message === 'Invalid Basket') {
-      silentNavigation(window.EbuyConfig?.addressPageUrl);
+      window.location.href = window.EbuyConfig?.addressPageUrl;
     }
     return false;
   }

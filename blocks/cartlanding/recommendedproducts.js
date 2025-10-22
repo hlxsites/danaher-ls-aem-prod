@@ -21,7 +21,7 @@ export const updateCartButton = (itemID) => {
 
 export const recommendedProducts = async () => {
   const content = div({
-    class: 'inline-flex flex-col recommendedProduct',
+    class: 'flex flex-col recommendedProduct',
   });
   const productsCategories = recommendedProduct;
   function getCardsPerPage() {
@@ -316,7 +316,7 @@ export const recommendedProducts = async () => {
     skuarray,
     'recentlyVisited',
   );
-
+  othersBoughtDiv?.classList?.add('xl:px-8');
   productSearchcontainer.append(othersBoughtDiv);
   productSearchcontainer.append(recentlyVisitedDiv);
   carouselContainer.append(productSearchcontainer);

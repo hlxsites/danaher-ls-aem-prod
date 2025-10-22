@@ -62,6 +62,7 @@ export default async function decorate(block) {
   paragraphs.forEach((p) => {
     p.style.fontSize = '16px';
     p.style.lineHeight = '22px';
+    p.style.fontWeight = '200';
   });
 
   block.querySelectorAll('[id^="overviewdesc_"]').forEach((container) => {
@@ -77,7 +78,7 @@ export default async function decorate(block) {
     if (img && text) {
       const position = imgDiv.getAttribute('data-position')?.toLowerCase() || 'right';
 
-      container.className = 'grid grid-cols-2 items-center w-full gap-8';
+      container.className = 'grid md:grid-cols-2 py-6 w-full gap-12';
       const textWrapper = div({ class: 'w-full text-left' });
       text.forEach((p) => {
         p.className = 'w-full text-left';

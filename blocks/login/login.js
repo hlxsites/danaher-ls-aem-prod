@@ -15,8 +15,27 @@ import {
   buildInputElement,
   buildButton,
 } from '../../scripts/common-utils.js';
+// eslint-disable-next-line import/no-cycle
+import { getCookie } from '../../scripts/scripts.js';
+// eslint-disable-next-line import/no-cycle
+
+const siteID = window.DanaherConfig?.siteID;
+const hostName = window.location.hostname;
+let env;
+if (hostName.includes('local')) {
+  env = 'local';
+} else if (hostName.includes('dev')) {
+  env = 'dev';
+} else if (hostName.includes('stage')) {
+  env = 'stage';
+} else {
+  env = 'prod';
+}
 
 export default async function decorate(block) {
+  if (getCookie(`${siteID}_${env}_user_type`) === 'customer') {
+    window.location.href = window.EbuyConfig?.cartPageUrl;
+  }
   block?.parentElement?.parentElement?.removeAttribute('class');
   block?.parentElement?.parentElement?.removeAttribute('style');
   const [

@@ -36,12 +36,12 @@ export const requestedQuotes = async () => {
   const defaultHeader = new Headers({
     'Authentication-Token': token,
   });
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
+  const userDataFromSession = JSON.parse(authenticationToken.user_data);
   let userId;
   let customerNo;
-  if (basketDataFromSession) {
-    userId = basketDataFromSession?.data?.data?.buyer?.accountID;
-    customerNo = basketDataFromSession?.data?.data?.buyer?.customerNo;
+  if (userDataFromSession) {
+    userId = userDataFromSession?.userData?.login;
+    customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
     window.location.href = window.EbuyConfig?.loginPageUrl;
   }
@@ -72,12 +72,12 @@ export const approvedQuotes = async () => {
   const defaultHeader = new Headers({
     'Authentication-Token': token,
   });
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
+  const userDataFromSession = JSON.parse(authenticationToken.user_data);
   let userId;
   let customerNo;
-  if (basketDataFromSession) {
-    userId = basketDataFromSession?.data?.data?.buyer?.accountID;
-    customerNo = basketDataFromSession?.data?.data?.buyer?.customerNo;
+  if (userDataFromSession) {
+    userId = userDataFromSession?.userData?.login;
+    customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
     window.location.href = window.EbuyConfig?.loginPageUrl;
   }
@@ -94,7 +94,7 @@ export const approvedQuotes = async () => {
     }
     return { status: 'error', data: 'No response data.' };
   } catch (error) {
-    window.location.href = '/us/en/e-buy/login';
+    window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Exception occurred, redirecting.' };
   }
 };
@@ -135,10 +135,6 @@ export const requestedQuotesDetails = async (quoteId) => {
     'Authentication-Token': token,
     // Accept: 'application/vnd.intershop.order.v1+json',
   });
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
-  if (!basketDataFromSession) {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
-  }
   const url = `${baseURL}/rfqcart/${quoteId}`;
   try {
     const response = await getApiData(url, defaultHeader);
@@ -166,12 +162,12 @@ export const approvedQuotesDetails = async (quoteId) => {
     'Authentication-Token': token,
     // Accept: 'application/vnd.intershop.order.v1+json',
   });
-  const basketDataFromSession = JSON.parse(localStorage.getItem('basketData'));
+  const userDataFromSession = JSON.parse(authenticationToken.user_data);
   let userId;
   let customerNo;
-  if (basketDataFromSession) {
-    userId = basketDataFromSession?.data?.data?.buyer?.accountID;
-    customerNo = basketDataFromSession?.data?.data?.buyer?.customerNo;
+  if (userDataFromSession) {
+    userId = userDataFromSession?.userData?.login;
+    customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
     window.location.href = window.EbuyConfig?.loginPageUrl;
   }

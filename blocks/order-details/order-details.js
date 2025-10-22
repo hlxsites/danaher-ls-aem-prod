@@ -19,7 +19,7 @@ export default async function decorate(block) {
   // Assuming `response` is the full JSON object you provided
 
   const orderDetailsWrapper = div({
-    class: 'w-[70%] inline-flex flex-col justify-start items-start gap-5 ',
+    class: 'w-[70%] inline-flex flex-col justify-start items-start gap-5 md:p-0 p-3 ',
   });
   const wrapper = div({
     id: 'dashboardWrapper',

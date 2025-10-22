@@ -17,10 +17,6 @@
   margin-top: 0px !important
 }
 
-.my-profile-wrapper :is(.ml-\[20px\]) {
-  margin-left: 20px
-}
-
 .my-profile-wrapper :is(.mt-4) {
   margin-top: 1rem
 }
@@ -75,10 +71,6 @@
 
 .my-profile-wrapper :is(.w-\[100px\]) {
   width: 100px
-}
-
-.my-profile-wrapper :is(.w-\[70\%\]) {
-  width: 70%
 }
 
 .my-profile-wrapper :is(.w-full) {
@@ -229,6 +221,10 @@
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
 }
 
+.my-profile-wrapper :is(.p-4) {
+  padding: 1rem
+}
+
 .my-profile-wrapper :is(.p-6) {
   padding: 1.5rem
 }
@@ -343,12 +339,24 @@
 }
 
 @media (min-width: 768px) {
+  .my-profile-wrapper :is(.md\:ml-\[20px\]) {
+    margin-left: 20px
+  }
+
   .my-profile-wrapper :is(.md\:w-\[25\%\]) {
     width: 25%
   }
 
+  .my-profile-wrapper :is(.md\:w-\[70\%\]) {
+    width: 70%
+  }
+
   .my-profile-wrapper :is(.md\:flex-row) {
     flex-direction: row
+  }
+
+  .my-profile-wrapper :is(.md\:p-0) {
+    padding: 0px
   }
 }
 

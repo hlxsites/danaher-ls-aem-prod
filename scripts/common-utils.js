@@ -523,11 +523,6 @@ export async function getCountries() {
 Function to get countries from the API
 */
 export async function updateCountries() {
-  const authenticationToken = await getAuthenticationToken();
-  if (authenticationToken?.status === 'error') {
-    return { status: 'error', data: 'Unauthorized access.' };
-  }
-
   try {
     localStorage.removeItem('countires');
     const url = `${baseURL}/countries`;

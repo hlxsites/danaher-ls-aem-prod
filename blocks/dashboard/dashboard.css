@@ -328,16 +328,8 @@
   width: 310px
 }
 
-.dashboard-wrapper :is(.w-\[480px\]) {
-  width: 480px
-}
-
 .dashboard-wrapper :is(.w-\[55px\]) {
   width: 55px
-}
-
-.dashboard-wrapper :is(.w-\[70\%\]) {
-  width: 70%
 }
 
 .dashboard-wrapper :is(.w-\[82px\]) {
@@ -1018,16 +1010,40 @@
 }
 
 @media (min-width: 768px) {
+  .dashboard-wrapper :is(.md\:w-1\/2) {
+    width: 50%
+  }
+
   .dashboard-wrapper :is(.md\:w-\[25\%\]) {
     width: 25%
+  }
+
+  .dashboard-wrapper :is(.md\:w-\[480px\]) {
+    width: 480px
+  }
+
+  .dashboard-wrapper :is(.md\:w-\[70\%\]) {
+    width: 70%
   }
 
   .dashboard-wrapper :is(.md\:w-\[80\%\]) {
     width: 80%
   }
 
+  .dashboard-wrapper :is(.md\:w-auto) {
+    width: auto
+  }
+
   .dashboard-wrapper :is(.md\:flex-row) {
     flex-direction: row
+  }
+
+  .dashboard-wrapper :is(.md\:gap-6) {
+    gap: 1.5rem
+  }
+
+  .dashboard-wrapper :is(.md\:p-0) {
+    padding: 0px
   }
 
   .dashboard-wrapper :is(.md\:p-6) {
@@ -1036,6 +1052,10 @@
 
   .dashboard-wrapper :is(.md\:pb-0) {
     padding-bottom: 0px
+  }
+
+  .dashboard-wrapper :is(.md\:pl-6) {
+    padding-left: 1.5rem
   }
 }
 

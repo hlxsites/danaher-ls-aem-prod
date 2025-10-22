@@ -17,10 +17,6 @@
   margin-top: 0px !important
 }
 
-.requested-quote-wrapper :is(.ml-\[20px\]) {
-  margin-left: 20px
-}
-
 .requested-quote-wrapper :is(.mt-4) {
   margin-top: 1rem
 }
@@ -101,10 +97,6 @@
   width: 280.4px
 }
 
-.requested-quote-wrapper :is(.w-\[70\%\]) {
-  width: 70%
-}
-
 .requested-quote-wrapper :is(.w-\[980px\]) {
   width: 980px
 }
@@ -161,12 +153,8 @@
   align-self: stretch
 }
 
-.requested-quote-wrapper :is(.overflow-x-auto) {
-  overflow-x: auto
-}
-
-.requested-quote-wrapper :is(.overflow-y-auto) {
-  overflow-y: auto
+.requested-quote-wrapper :is(.overflow-auto) {
+  overflow: auto
 }
 
 .requested-quote-wrapper :is(.rounded-full) {
@@ -256,6 +244,10 @@
 
 .requested-quote-wrapper :is(.p-3) {
   padding: 0.75rem
+}
+
+.requested-quote-wrapper :is(.p-4) {
+  padding: 1rem
 }
 
 .requested-quote-wrapper :is(.p-6) {
@@ -375,8 +367,16 @@
 }
 
 @media (min-width: 768px) {
+  .requested-quote-wrapper :is(.md\:ml-\[20px\]) {
+    margin-left: 20px
+  }
+
   .requested-quote-wrapper :is(.md\:w-\[25\%\]) {
     width: 25%
+  }
+
+  .requested-quote-wrapper :is(.md\:w-\[70\%\]) {
+    width: 70%
   }
 
   .requested-quote-wrapper :is(.md\:w-full) {
@@ -386,6 +386,14 @@
   .requested-quote-wrapper :is(.md\:flex-row) {
     flex-direction: row
   }
+
+  .requested-quote-wrapper :is(.md\:overflow-hidden) {
+    overflow: hidden
+  }
+
+  .requested-quote-wrapper :is(.md\:p-0) {
+    padding: 0px
+  }
 }
 
 @media (min-width: 1280px) {
@@ -393,34 +401,6 @@
     padding-top: 3rem;
     padding-bottom: 3rem
   }
-}
-
-.requested-quote-wrapper :is(.\[\&\:\:-webkit-scrollbar-thumb\]\:bg-gray-300)::-webkit-scrollbar-thumb {
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity))
-}
-
-@media (prefers-color-scheme: dark) {
-  .requested-quote-wrapper :is(.dark\:\[\&\:\:-webkit-scrollbar-thumb\]\:bg-neutral-500)::-webkit-scrollbar-thumb {
-    --tw-bg-opacity: 1;
-    background-color: rgb(115 115 115 / var(--tw-bg-opacity))
-  }
-}
-
-.requested-quote-wrapper :is(.\[\&\:\:-webkit-scrollbar-track\]\:bg-gray-100)::-webkit-scrollbar-track {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity))
-}
-
-@media (prefers-color-scheme: dark) {
-  .requested-quote-wrapper :is(.dark\:\[\&\:\:-webkit-scrollbar-track\]\:bg-neutral-700)::-webkit-scrollbar-track {
-    --tw-bg-opacity: 1;
-    background-color: rgb(64 64 64 / var(--tw-bg-opacity))
-  }
-}
-
-.requested-quote-wrapper :is(.\[\&\:\:-webkit-scrollbar\]\:w-1)::-webkit-scrollbar {
-  width: 0.25rem
 }
 
 .requested-quote-wrapper :is(.\[\&_svg\>use\]\:stroke-black svg>use) {

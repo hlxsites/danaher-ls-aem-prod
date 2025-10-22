@@ -38,7 +38,7 @@ function createCarrierFreeBadge(carrierFreeText) {
 export default function renderGridCard(item) {
   const card = div({
     class:
-      'transform transition duration-500 hover:shadow-md min-w-[100%] w-full md:min-w-[285px] md:w-[285px] min-h-[485px] bg-white border border-1 border-gray-300 flex flex-col justify-start items-start',
+      'transform transition duration-500 hover:shadow-md min-w-full  md:min-w-[calc(50%-20px)] md:w-[calc(50%-20px)] lg:w-[calc(33%-15px)]  lg:min-w-[calc(25%-15px)] bg-white border border-1 border-gray-300 flex flex-col justify-start items-start',
   });
 
   const fallbackImagePath = '/content/dam/danaher/products/fallbackImage.jpeg';
