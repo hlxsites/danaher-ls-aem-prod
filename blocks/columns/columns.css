@@ -1009,20 +1009,7 @@
 
 /* Mobile-specific styles (up to 767px) */
 @media (max-width: 767px) {
-  /* Mobile column ordering */
-  .columns-wrapper .columns-2-cols > div > div:has(picture),
-  .columns-wrapper .columns-2-cols > div > div.picdiv {
-    order: 2 !important;
-  }
-  
-  .columns-wrapper .columns-2-cols > div > div:has(h1),
-  .columns-wrapper .columns-2-cols > div > div:has(h2),
-  .columns-wrapper .columns-2-cols > div > div:has(h3),
-  .columns-wrapper .columns-2-cols > div > div:not(.picdiv) {
-    order: 1 !important;
-  }
-  
-  /* Force flex column direction on mobile */
+  /* Mobile: stack columns in natural DOM order (left above right) */
   .columns-wrapper .columns-2-cols > div {
     flex-direction: column !important;
   }
