@@ -72,7 +72,7 @@ export default async function buildAutoBlocks() {
     additionalContentSection.append();
     section.after(additionalContentSection);
     buildArticleSchema();
-    section.parentElement.prepend(section);
+    // section.parentElement.prepend(section);
   } else {
     section.removeChild(blogH1);
     let columnElements = '';
