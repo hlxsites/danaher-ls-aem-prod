@@ -198,7 +198,7 @@ export default async function decorate(block) {
 
   let filteredArticles = articles;
   // Check if we're on a videos hub page and filter to show only direct children
-  const isVideosPage = window.location.pathname === '/us/en/videos/' || window.location.pathname === '/us/en/videos';
+  const isVideosPage = window.location.pathname === '/us/en/videos-eds/' || window.location.pathname === '/us/en/videos-eds';
   if (isVideosPage) {
     filteredArticles = articles.filter((article) => {
       if (article.path) {
@@ -209,7 +209,7 @@ export default async function decorate(block) {
         if (pathSegments.length >= 3
           && pathSegments[0] === 'us'
           && pathSegments[1] === 'en'
-          && pathSegments[2] === 'videos') {
+          && pathSegments[2] === 'videos-eds') {
           return pathSegments.length === 4;
         }
       }
