@@ -67,7 +67,7 @@ export default async function buildAutoBlocks() {
       columnElements = [[blogHeroImage, blogH1]];
     }
 
-    // section.prepend(
+    section.prepend();
     //   buildBlock('social-media', { elems: [] }),
     //   buildBlock('columns', columnElements),
     //   buildBlock('article-info', { elems: [] }),
