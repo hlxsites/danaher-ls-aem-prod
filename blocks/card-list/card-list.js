@@ -198,8 +198,7 @@ export default async function decorate(block) {
 
   let filteredArticles = articles;
   // Check if we're on a videos hub page and filter to show only direct children
-  const isVideosPage = window.location.pathname === '/us/en/videos-eds/' || window.location.pathname === '/us/en/videos-eds';
-  if (isVideosPage) {
+  if (window.location.pathname.includes('/us/en/videos-eds/') || window.location.pathname.includes('/us/en/videos-eds')) {
     filteredArticles = articles.filter((article) => {
       if (article.path) {
         // Remove leading/trailing slashes and split by '/'
