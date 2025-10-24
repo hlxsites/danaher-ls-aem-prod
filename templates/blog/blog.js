@@ -78,10 +78,10 @@ export default async function buildAutoBlocks() {
       buildBlock('tags-list', { elems: [] }),
       buildBlock('related-articles', { elems: [] }),
     );
-    section.after(additionalContentSection);
+    // section.after(additionalContentSection);
 
     buildArticleSchema();
-    section.parentElement.prepend(section);
+    // section.parentElement.prepend(section);
   } else {
     section.removeChild(blogH1);
     let columnElements = '';
