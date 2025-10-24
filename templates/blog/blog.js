@@ -67,10 +67,19 @@ export default async function buildAutoBlocks() {
       columnElements = [[blogHeroImage, blogH1]];
     }
 
-    section.prepend();
+    // section.prepend(
+    //   buildBlock('social-media', { elems: [] }),
+    //   // buildBlock('columns', columnElements),
+    //   buildBlock('article-info', { elems: [] }),
+    // );
+
     const additionalContentSection = document.createElement('div');
-    additionalContentSection.append();
-    section.after(additionalContentSection);
+    additionalContentSection.append(
+      buildBlock('tags-list', { elems: [] }),
+      buildBlock('related-articles', { elems: [] }),
+    );
+    // section.after(additionalContentSection);
+
     buildArticleSchema();
     section.parentElement.prepend(section);
   } else {
