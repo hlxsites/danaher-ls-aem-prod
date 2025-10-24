@@ -1004,16 +1004,16 @@ export default function decorate(block) {
           expertFormDiv.style.marginLeft = '-32px';
           expertFormDiv.style.marginTop = '-32px';
           // Create hidden input elements with form data
-          Object.keys(formData).forEach((key) => {
-            if (formData[key]) {
-              const hiddenInput = document.createElement('input');
-              hiddenInput.type = 'hidden';
-              hiddenInput.name = key;
-              hiddenInput.value = formData[key];
-              hiddenInput.dataset.formConfig = 'true';
-              expertFormDiv.appendChild(hiddenInput);
-            }
-          });
+          // Object.keys(formData).forEach((key) => {
+          //   if (formData[key]) {
+          //     const hiddenInput = document.createElement('input');
+          //     hiddenInput.type = 'hidden';
+          //     hiddenInput.name = key;
+          //     hiddenInput.value = formData[key];
+          //     hiddenInput.dataset.formConfig = 'true';
+          //     expertFormDiv.appendChild(hiddenInput);
+          //   }
+          // });
           // Find and clone configuration p-tags from column2 to the form div (already hidden)
           const column2PTags = column2.querySelectorAll('p[style*="display: none"]');
           column2PTags.forEach((p) => {
