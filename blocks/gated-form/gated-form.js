@@ -240,33 +240,47 @@ function loadUTMParams() {
 
 async function loadGatedForm(block) {
   block.classList.add('relative');
-  const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-  const formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
-  const clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
-  const deExternalKey = document.querySelector('[data-aue-prop="deExternalKey"]')?.textContent;
-  const action = document.querySelector('[data-aue-prop="action"]')?.textContent;
-  const inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
-  const formType = document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
-  const links = block.querySelectorAll('a');
-  const pageTrackUrl = links[0]?.href;
-  const successUrl = links[1]?.href;
-  const errorUrl = links[2]?.href;
-  [
-    'formId',
-    'formName',
-    'clientID',
-    'deExternalKey',
-    'action',
-    'Inquiry_Type',
-    'Form_Type',
-    'Page_Track_URL',
-    'successURL',
-    'errorURL',
-  ].forEach((prop) => {
-    document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
-      el.style.display = 'none';
+  // const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+  // const formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
+  // const clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
+  // const deExternalKey = document.querySelector('[data-aue-prop="deExternalKey"]')?.textContent;
+  // const action = document.querySelector('[data-aue-prop="action"]')?.textContent;
+  // const inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
+  // const formType = document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
+  // const links = block.querySelectorAll('a');
+  // const pageTrackUrl = links[0]?.href;
+  // const successUrl = links[1]?.href;
+  // const errorUrl = links[2]?.href;
+  // [
+  //   'formId',
+  //   'formName',
+  //   'clientID',
+  //   'deExternalKey',
+  //   'action',
+  //   'Inquiry_Type',
+  //   'Form_Type',
+  //   'Page_Track_URL',
+  //   'successURL',
+  //   'errorURL',
+  // ].forEach((prop) => {
+  //   document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
+  //     el.style.display = 'none';
+  //   });
+  // });
+  const tags = [...block.querySelectorAll('p')];
+    tags.forEach((tag) => {
+    tag.style.display = 'none';
     });
-  });
+    const formId = tags[0]?.textContent.trim();
+    const formName = tags[1]?.textContent.trim();
+    const clientId = tags[2]?.textContent.trim();
+    const deExternalKey = tags[3]?.textContent.trim();
+    const action = tags[4]?.textContent.trim();
+    const inquiryType = tags[5]?.textContent.trim();
+    const formType = tags[6]?.textContent.trim();
+    const pageTrackUrl = tags[7]?.textContent.trim();
+    const successUrl = tags[8]?.textContent.trim();
+    const errorUrl = tags[9]?.textContent.trim();
 
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },
