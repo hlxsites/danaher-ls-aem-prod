@@ -35,7 +35,7 @@ export default async function buildAutoBlocks() {
     return true;
   });
 
-  if (window.location.pathname.includes('/us/en/news/')) {
+  if (window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/videos-eds/')) {
     if (blogHeroP2) {
       section.removeChild(blogHeroP1);
       section.removeChild(blogHeroP2);
