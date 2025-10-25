@@ -957,24 +957,25 @@ export default function decorate(block) {
     const container = columns?.[0];
     const colDivs = container?.querySelectorAll(':scope > div');
     const column2 = colDivs?.[1];
-    // if (!formWrapperBlock) return; // Exit if no form wrapper found
-    const pTags = formWrapperBlock.querySelectorAll('p'); // Only p-tags within form wrapper
-    const aTag = formWrapperBlock.querySelectorAll('p > a'); // Only anchors within form wrapper
+    let pTags = '';
+    // const aTag = formWrapperBlock.querySelectorAll('p > a'); // Only anchors within form wrapper
     const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     // Extract form data from anchor tags and hide p-tags containing form config
-    if (aTag.length > 0) {
-      aTag.forEach((anchor) => {
-        // Hide the parent p-tag that contains form configuration
-        const parentP = anchor.closest('p');
-        if (parentP) {
-          parentP.style.display = 'none';
-        }
-      });
-    }
+    // if (aTag.length > 0) {
+    //   aTag.forEach((anchor) => {
+    //     // Hide the parent p-tag that contains form configuration
+    //     const parentP = anchor.closest('p');
+    //     if (parentP) {
+    //       parentP.style.display = 'none';
+    //     }
+    //   });
+    // }
     // Process p-tags and hide form configuration and type indicators
     // Only within the form wrapper scope
     if (column2) {
+    pTags = column2.querySelectorAll('p');
     pTags.forEach((p) => {
+      const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
       const pText = p.textContent.trim();
       const hasAnchor = p.querySelector('a');
       // Hide p-tags that contain form configuration anchors
