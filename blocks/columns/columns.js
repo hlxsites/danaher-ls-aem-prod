@@ -955,7 +955,6 @@ export default function decorate(block) {
     const colDivs = container?.querySelectorAll(':scope > div');
     const column2 = colDivs?.[1];
     let pTags = '';
-    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     if (column2) {
     pTags = column2.querySelectorAll('p');
     pTags.forEach((p) => {
@@ -986,6 +985,7 @@ export default function decorate(block) {
       const text = p.textContent.trim().toLowerCase();
       return expertFormIndicators.some((indicator) => text.includes(indicator));
     });
+    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     // const hasGatedFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'wsawgenedataform');
     if (hasExpertFormTag || formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform') {
       const columnsBlock = formWrapperBlock;
