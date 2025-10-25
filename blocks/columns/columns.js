@@ -994,12 +994,12 @@ export default function decorate(block) {
         const container = columns[0];
         const colDivs = container.querySelectorAll(':scope > div');
         const column2 = colDivs[1];
-        if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
-        const existingExpertForm = column2.querySelector('.gated-form');
-        if (existingExpertForm) {
-          existingExpertForm.remove();
-        }
-      }
+      //   if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
+      //   const existingExpertForm = column2.querySelector('.gated-form');
+      //   if (existingExpertForm) {
+      //     existingExpertForm.remove();
+      //   }
+      // }
         // Check if form already exists
         if (!column2.querySelector('.form') || !column2.querySelector('.gated-form')) {
           const expertFormDiv = document.createElement('div');
@@ -1014,7 +1014,9 @@ export default function decorate(block) {
           });
           column2.appendChild(expertFormDiv);
           // Pass form data to loadGatedForm
-          if (hasExpertFormTag || formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
+          if (formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
+            loadGatedForm(expertFormDiv);
+          } else {
             loadGatedForm(expertFormDiv);
           }
         }
