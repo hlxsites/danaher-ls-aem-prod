@@ -950,11 +950,17 @@ export default function decorate(block) {
    /** ********EDS FORM Starts****************** */
   // if (window.location.pathname.includes('/us/en/videos/') || window.location.pathname.includes('/us/en/expert')) {
     // Scope p-tags to only the form-wrapper block, not the entire document
-    const formWrapperBlock = document.querySelector('div[class*="form-wrapper"]');
-    if (!formWrapperBlock) return; // Exit if no form wrapper found
+    // const formWrapperBlock = document.querySelector('div[class*="form-wrapper"]');
+    const formWrapperBlock = block.closest('.form-wrapper');
+    if (formWrapperBlock) {
+    const columns = formWrapperBlock.querySelectorAll(':scope > div');
+    const container = columns?.[0];
+    const colDivs = container?.querySelectorAll(':scope > div');
+    const column2 = colDivs?.[1];
+    // if (!formWrapperBlock) return; // Exit if no form wrapper found
     const pTags = formWrapperBlock.querySelectorAll('p'); // Only p-tags within form wrapper
     const aTag = formWrapperBlock.querySelectorAll('p > a'); // Only anchors within form wrapper
-    const formData = {};
+    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     // Extract form data from anchor tags and hide p-tags containing form config
     if (aTag.length > 0) {
       aTag.forEach((anchor) => {
@@ -967,6 +973,7 @@ export default function decorate(block) {
     }
     // Process p-tags and hide form configuration and type indicators
     // Only within the form wrapper scope
+    if (column2) {
     pTags.forEach((p) => {
       const pText = p.textContent.trim();
       const hasAnchor = p.querySelector('a');
@@ -981,14 +988,21 @@ export default function decorate(block) {
       )) {
         p.style.display = 'none';
       }
+      else if (formId && !hasAnchor && (
+        formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform' || formId.toLowerCase().includes('form')
+        || formId.length < 50 // Assume short text might be form indicators
+      )) {
+        p.style.display = 'none';
+      }
     });
+  }
     const expertFormIndicators = ['wsawgenedataform', 'genedataform', 'gatedform', '', '', '', '', '', '', ''];
     const hasExpertFormTag = Array.from(pTags).some((p) => {
       const text = p.textContent.trim().toLowerCase();
       return expertFormIndicators.some((indicator) => text.includes(indicator));
     });
     // const hasGatedFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'wsawgenedataform');
-    if (hasExpertFormTag) {
+    if (hasExpertFormTag || formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform') {
       const columnsBlock = formWrapperBlock;
       if (columnsBlock) {
         const columns = columnsBlock.querySelectorAll(':scope > div');
@@ -996,34 +1010,23 @@ export default function decorate(block) {
         const colDivs = container.querySelectorAll(':scope > div');
         const column2 = colDivs[1];
         // Check if form already exists
-        if (!column2.querySelector('.gated-form')) {
+        if (!column2.querySelector('.form')) {
           const expertFormDiv = document.createElement('div');
-          expertFormDiv.className = 'gated-form block';
-          expertFormDiv.setAttribute('data-block-name', 'gated-form');
+          expertFormDiv.className = 'form block';
+          expertFormDiv.setAttribute('data-block-name', 'form');
           expertFormDiv.setAttribute('data-block-status', 'loaded');
           expertFormDiv.style.marginLeft = '-32px';
           expertFormDiv.style.marginTop = '-32px';
-          // Create hidden input elements with form data
-          // Object.keys(formData).forEach((key) => {
-          //   if (formData[key]) {
-          //     const hiddenInput = document.createElement('input');
-          //     hiddenInput.type = 'hidden';
-          //     hiddenInput.name = key;
-          //     hiddenInput.value = formData[key];
-          //     hiddenInput.dataset.formConfig = 'true';
-          //     expertFormDiv.appendChild(hiddenInput);
-          //   }
-          // });
-          // Find and clone configuration p-tags from column2 to the form div (already hidden)
           const column2PTags = column2.querySelectorAll('p[style*="display: none"]');
           column2PTags.forEach((p) => {
             expertFormDiv.appendChild(p.cloneNode(true));
           });
           column2.appendChild(expertFormDiv);
           // Pass form data to loadGatedForm
-          loadGatedForm(expertFormDiv, formData);
+          loadGatedForm(expertFormDiv);
         }
       }
     }
+  }
   /** ********EDS FORM Ends****************** */
 }
