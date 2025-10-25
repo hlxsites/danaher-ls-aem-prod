@@ -278,6 +278,7 @@ async function loadGatedForm(block) {
     const action = tags[4]?.textContent.trim() || document.querySelector('[data-aue-prop="action"]')?.textContent;
     const inquiryType = tags[5]?.textContent.trim() || document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
     const formType = tags[6]?.textContent.trim() || document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
+    const links = block.querySelectorAll('a');
     const pageTrackUrl = tags[7]?.textContent.trim() || links[0]?.href;
     const successUrl = tags[8]?.textContent.trim() || links[1]?.href;
     const errorUrl = tags[9]?.textContent.trim() || links[2]?.href;
