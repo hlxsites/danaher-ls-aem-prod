@@ -994,8 +994,8 @@ export default function decorate(block) {
         const container = columns[0];
         const colDivs = container.querySelectorAll(':scope > div');
         const column2 = colDivs[1];
-        if (hasExpertFormTag ||formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
-        const existingExpertForm = column2.querySelector('.form') || column2.querySelector('.gated-form');
+        if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
+        const existingExpertForm = column2.querySelector('.gated-form');
         if (existingExpertForm) {
           existingExpertForm.remove();
         }
