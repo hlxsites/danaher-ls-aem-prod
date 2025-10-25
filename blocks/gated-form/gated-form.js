@@ -271,16 +271,33 @@ async function loadGatedForm(block) {
     tags.forEach((tag) => {
     tag.style.display = 'none';
     });
-    const formId = tags[0]?.textContent.trim();
-    const formName = tags[1]?.textContent.trim();
-    const clientId = tags[2]?.textContent.trim();
-    const deExternalKey = tags[3]?.textContent.trim();
-    const action = tags[4]?.textContent.trim();
-    const inquiryType = tags[5]?.textContent.trim();
-    const formType = tags[6]?.textContent.trim();
-    const pageTrackUrl = tags[7]?.textContent.trim();
-    const successUrl = tags[8]?.textContent.trim();
-    const errorUrl = tags[9]?.textContent.trim();
+    const formId = tags[0]?.textContent.trim() || document.querySelector('[data-aue-prop="formId"]')?.textContent;
+    const formName = tags[1]?.textContent.trim() || document.querySelector('[data-aue-prop="formName"]')?.textContent;
+    const clientId = tags[2]?.textContent.trim() || document.querySelector('[data-aue-prop="clientID"]')?.textContent;
+    const deExternalKey = tags[3]?.textContent.trim() || document.querySelector('[data-aue-prop="deExternalKey"]')?.textContent;
+    const action = tags[4]?.textContent.trim() || document.querySelector('[data-aue-prop="action"]')?.textContent;
+    const inquiryType = tags[5]?.textContent.trim() || document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
+    const formType = tags[6]?.textContent.trim() || document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
+    const pageTrackUrl = tags[7]?.textContent.trim() || links[0]?.href;
+    const successUrl = tags[8]?.textContent.trim() || links[1]?.href;
+    const errorUrl = tags[9]?.textContent.trim() || links[2]?.href;
+
+    [
+    'formId',
+    'formName',
+    'clientID',
+    'deExternalKey',
+    'action',
+    'Inquiry_Type',
+    'Form_Type',
+    'Page_Track_URL',
+    'successURL',
+    'errorURL',
+  ].forEach((prop) => {
+    document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
+      el.style.display = 'none';
+    });
+  });
 
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },
