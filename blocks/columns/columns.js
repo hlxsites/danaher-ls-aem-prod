@@ -948,72 +948,75 @@ export default function decorate(block) {
   });
 
    /** ********EDS FORM Starts****************** */
-  // const formWrapperBlock = document.querySelector('div[class*="form-wrapper"]');
-  const formWrapperBlock = block.closest('.form-wrapper');
-  // Get column2 only
-  if (formWrapperBlock) {
+    const formWrapperBlock = block.closest('.form-wrapper');
+    if (formWrapperBlock) {
     const columns = formWrapperBlock.querySelectorAll(':scope > div');
     const container = columns?.[0];
     const colDivs = container?.querySelectorAll(':scope > div');
     const column2 = colDivs?.[1];
-
+    let pTags = '';
     if (column2) {
-      const pTags = column2.querySelectorAll('p'); // Only p-tags within column2
-      pTags.forEach((p) => {
-        const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-        const hasAnchor = p.querySelector('a');
-        // Hide p-tags that contain form configuration anchors
-        if (hasAnchor) {
-          p.style.display = 'none';
-        }
-        // Hide p-tags that are form type indicators
-        if (formId && !hasAnchor && (
-          formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform' || formId === 'TTAE' || formId.length < 50
-        )) {
-          p.style.display = 'none';
-        }
-      });
-    }
-
-    // Simplified logic for loading forms
+    pTags = column2.querySelectorAll('p');
+    pTags.forEach((p) => {
+      const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+      const pText = p.textContent.trim();
+      const hasAnchor = p.querySelector('a');
+      // Hide p-tags that contain form configuration anchors
+      if (hasAnchor) {
+        p.style.display = 'none';
+      }
+      // Hide p-tags that are form type indicators
+      if (pText && !hasAnchor && (
+        pText === 'wsawgenedataform' || pText === 'genedataform' || pText === 'gatedform' || pText.toLowerCase().includes('form')
+        || pText.length < 50 // Assume short text might be form indicators
+      )) {
+        p.style.display = 'none';
+      }
+      else if (formId && !hasAnchor && (
+        formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform' || formId.toLowerCase().includes('form')
+        || formId.length < 50 // Assume short text might be form indicators
+      )) {
+        p.style.display = 'none';
+      }
+    });
+  }
+    const expertFormIndicators = ['wsawgenedataform', 'genedataform', 'gatedform', '', '', '', '', '', '', ''];
+    const hasExpertFormTag = Array.from(pTags).some((p) => {
+      const text = p.textContent.trim().toLowerCase();
+      return expertFormIndicators.some((indicator) => text.includes(indicator));
+    });
     const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-    if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform' || formId === 'TTAE') {
-      // const columns = formWrapperBlock.querySelectorAll(':scope > div');
-      // const container = columns[0];
-      // const colDivs = container.querySelectorAll(':scope > div');
-      // const column2 = colDivs[1];
-      // Remove any existing expert form div
-      if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
-        const existingExpertForm = column2.querySelector('.form');
+    // const hasGatedFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'wsawgenedataform');
+    if (hasExpertFormTag || formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform') {
+      const columnsBlock = formWrapperBlock;
+      if (columnsBlock) {
+        const columns = columnsBlock.querySelectorAll(':scope > div');
+        const container = columns[0];
+        const colDivs = container.querySelectorAll(':scope > div');
+        const column2 = colDivs[1];
+        if (formId === 'gatedform' || formId === 'genedataform' || formId === 'wsawgenedataform') {
+        const existingExpertForm = column2.querySelector('.gated-form');
         if (existingExpertForm) {
           existingExpertForm.remove();
         }
       }
-      if (formId === 'TTAE') {
-        const existingGatedForm = column2.querySelector('.gated-form');
-        if (existingGatedForm) {
-          existingGatedForm.remove();
-        }
-      }
-      // Check if form already exists
-      if (!column2.querySelector('.form') || !column2.querySelector('.gated-form')) {
-        const expertFormDiv = document.createElement('div');
-        expertFormDiv.className = 'form block';
-        expertFormDiv.setAttribute('data-block-name', 'form');
-        expertFormDiv.setAttribute('data-block-status', 'loaded');
-        expertFormDiv.style.marginLeft = '-32px';
-        expertFormDiv.style.marginTop = '-32px';
-        // Find and clone configuration p-tags from column2 to the form div (already hidden)
-        const column2PTags = column2.querySelectorAll('p[style*="display: none"]');
-        column2PTags.forEach((p) => {
-          expertFormDiv.appendChild(p.cloneNode(true));
-        });
-        column2.appendChild(expertFormDiv);
-        // Load the correct form
-        if (formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
-          loadGatedForm(expertFormDiv);
-        } else if (formId === 'TTAE') {
-          loadSFDCForm(expertFormDiv);
+        // Check if form already exists
+        if (!column2.querySelector('.form') || !column2.querySelector('.gated-form')) {
+          const expertFormDiv = document.createElement('div');
+          expertFormDiv.className = 'form block';
+          expertFormDiv.setAttribute('data-block-name', 'form');
+          expertFormDiv.setAttribute('data-block-status', 'loaded');
+          expertFormDiv.style.marginLeft = '-32px';
+          expertFormDiv.style.marginTop = '-32px';
+          const column2PTags = column2.querySelectorAll('p[style*="display: none"]');
+          column2PTags.forEach((p) => {
+            expertFormDiv.appendChild(p.cloneNode(true));
+          });
+          column2.appendChild(expertFormDiv);
+          // Pass form data to loadGatedForm
+          if (hasExpertFormTag || formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
+            loadGatedForm(expertFormDiv);
+          }
         }
       }
     }
