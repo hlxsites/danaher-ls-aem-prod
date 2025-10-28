@@ -41,6 +41,12 @@
       "id": "page-jump-menu-item",
       "fields": [
         {
+          "component": "url",
+          "valueType": "string",
+          "name": "page-jump-menu-item_link",
+          "label": "Link"
+        },
+        {
           "component": "reference",
           "valueType": "string",
           "name": "page-jump-menu-item_image1",
