@@ -47,17 +47,20 @@ export function createCard(product, idx, firstCard = false) {
         index: idx + 1,
       },
       imageHelper(image, product.title, firstCard),
-      p(
-        {
-          class: 'px-6 py-1 pt-4 text-sm font-semibold break-words text-danaherlightblue-500',
-        },
-        product.brand,
-      ),
-      h4(
-        {
-          class: '!px-7 !text-lg !font-semibold !text-danahergray-900 !line-clamp-3 !break-words !h-14',
-        },
-        product.title,
+      div(
+        { class: 'brand-title-align flex flex-col gap-1 px-6 pt-4 pb-0' },
+        p(
+          {
+            class: 'brand text-danaherpurple-500 font-bold m-0',
+          },
+          product.brand,
+        ),
+        h4(
+          {
+            class: 'title !text-lg !font-semibold !text-danahergray-900 !line-clamp-3 !break-words !h-14 m-0',
+          },
+          product.title,
+        ),
       ),
       p(
         {
