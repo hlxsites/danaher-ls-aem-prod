@@ -1850,6 +1850,12 @@
         "label": "Link"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "page-jump-menu-item_span",
+        "label": "Link Title"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "page-jump-menu-item_image1",
