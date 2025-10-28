@@ -1857,14 +1857,14 @@
       {
         "component": "reference",
         "valueType": "string",
-        "name": "page-jump-menu-item_icon1",
-        "label": "Icon1"
+        "name": "page-jump-menu-item_image1",
+        "label": "Image1"
       },
       {
         "component": "reference",
         "valueType": "string",
-        "name": "page-jump-menu-item_icon2",
-        "label": "Icon2"
+        "name": "page-jump-menu-item_image2",
+        "label": "Image2"
       }
     ]
   },
