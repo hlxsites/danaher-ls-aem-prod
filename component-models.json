@@ -1846,20 +1846,19 @@
     "fields": [
       {
         "component": "aem-content",
-        "name": "link",
+        "name": "page-jump-menu-item_link",
         "label": "Link"
       },
       {
-        "component": "span",
-        "valueType": "string",
-        "name": "page-jump-menu-item_span",
+        "component": "text",
+        "name": "page-jump-menu-item_linkTitle",
         "label": "Link Title"
       },
       {
-        "component": "reference",
+        "component": "icon",
         "valueType": "string",
-        "name": "page-jump-menu-item_image1",
-        "label": "Image1"
+        "name": "page-jump-menu-item_span1",
+        "label": "Span1"
       },
       {
         "component": "text",
@@ -1868,10 +1867,10 @@
         "label": "Link Title"
       },
       {
-        "component": "reference",
+        "component": "icon",
         "valueType": "string",
-        "name": "page-jump-menu-item_image2",
-        "label": "Image2"
+        "name": "page-jump-menu-item_span2",
+        "label": "Span2"
       }
     ]
   },
