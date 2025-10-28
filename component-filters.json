@@ -86,7 +86,9 @@
       "pdp-resources",
       "pdp-specifications",
       "talk-to-an-expert-text",
-      "see-all"
+      "see-all",
+      "solutions-digital-products",
+      "page-jump-menu"
     ]
   },
   {
@@ -271,6 +273,12 @@
     ]
   },
   {
+    "id": "page-jump-menu",
+    "components": [
+      "page-jump-menu-item"
+    ]
+  },
+  {
     "id": "payment-methods",
     "components": [
       ""
@@ -341,6 +349,12 @@
   {
     "id": "social-media",
     "components": []
+  },
+  {
+    "id": "solutions-digital-products",
+    "components": [
+      ""
+    ]
   },
   {
     "id": "stats",

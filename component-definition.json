@@ -693,6 +693,37 @@
           }
         },
         {
+          "title": "Page-Jump-Menu",
+          "id": "page-jump-menu",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Page-Jump-Menu",
+                  "model": "page-jump-menu",
+                  "filter": "page-jump-menu"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Page-Jump-Menu-Item",
+          "id": "page-jump-menu-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Page-Jump-Menu-Item",
+                  "model": "page-jump-menu-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Page Tabs",
           "id": "page-tabs",
           "plugins": {
@@ -1183,6 +1214,21 @@
                 "template": {
                   "name": "Social-Media",
                   "model": "social-media"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Solutions-Digital-Products",
+          "id": "solutions-digital-products",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Solutions-Digital-Products",
+                  "model": "solutions-digital-products"
                 }
               }
             }
