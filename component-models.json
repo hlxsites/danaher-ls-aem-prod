@@ -1850,7 +1850,7 @@
         "label": "Link"
       },
       {
-        "component": "text",
+        "component": "span",
         "valueType": "string",
         "name": "page-jump-menu-item_span",
         "label": "Link Title"
