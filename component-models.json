@@ -1845,7 +1845,7 @@
     "id": "page-jump-menu-item",
     "fields": [
       {
-        "component": "url",
+        "component": "link",
         "valueType": "string",
         "name": "page-jump-menu-item_link",
         "label": "Link"
