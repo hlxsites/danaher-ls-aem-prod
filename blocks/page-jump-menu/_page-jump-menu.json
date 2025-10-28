@@ -41,10 +41,9 @@
       "id": "page-jump-menu-item",
       "fields": [
         {
-          "component": "link",
-          "valueType": "string",
-          "name": "page-jump-menu-item_link",
-          "label": "Link"
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
         },
         {
           "component": "reference",
