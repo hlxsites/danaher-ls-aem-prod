@@ -1838,6 +1838,27 @@
     ]
   },
   {
+    "id": "page-jump-menu",
+    "fields": []
+  },
+  {
+    "id": "page-jump-menu-item",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "page-jump-menu-item_link",
+        "label": "Link",
+        "description": "Link URL for the menu item"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "page-jump-menu-item_linkTitle",
+        "label": "Link Title"
+      }
+    ]
+  },
+  {
     "id": "page-tabs",
     "fields": []
   },
@@ -2506,6 +2527,24 @@
         "name": "articleType",
         "label": "Article Type",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "solutions-digital-products",
+    "fields": [
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "Solutions",
+            "value": "solutions"
+          }
+        ]
       }
     ]
   },
