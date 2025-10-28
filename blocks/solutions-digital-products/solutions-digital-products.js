@@ -24,7 +24,7 @@ const products = [
     image: 'https://danaherls.scene7.com/is/image/danaher/gd-screener-50-hero-2',
     brand: 'Genedata',
     description: '',
-    path: 'https://www.genedata.com/platform/screener.html',
+    path: 'https://www.genedata.com/platform/screener',
   },
   {
     title: 'Polar BioPharma Lifecycle Management (BPLM)',
@@ -37,14 +37,18 @@ const products = [
 
 export function createCard(product, idx, firstCard = false) {
   const image = product.image || 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble';
+  // Use product.path directly if it is an external URL, otherwise use makePublicUrl
+  const isExternal = /^https?:\/\//.test(product.path);
+  const href = isExternal ? product.path : makePublicUrl(product.path);
   return li({
     class: 'w-full flex flex-col col-span-1 relative mx-auto justify-center transform transition duration-500 border hover:scale-105 shadow-lg rounded-lg overflow-hidden bg-white max-w-xl',
   },
     a(
       {
-        href: makePublicUrl(product.path),
+        href,
         title: product.title,
         index: idx + 1,
+        ...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
       },
       imageHelper(image, product.title, firstCard),
       div(
