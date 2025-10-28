@@ -53,20 +53,14 @@
         {
           "component": "icon",
           "valueType": "string",
-          "name": "page-jump-menu-item_span1",
-          "label": "Span1"
-        },
-        {
-          "component": "text",
-          "valueType": "string",
-          "name": "page-jump-menu-item_title",
-          "label": "Link Title"
+          "name": "page-jump-menu-item_image1",
+          "label": "Image1"
         },
         {
           "component": "icon",
           "valueType": "string",
-          "name": "page-jump-menu-item_span2",
-          "label": "Span2"
+          "name": "page-jump-menu-item_image2",
+          "label": "Image2"
         }
       ]
     }
