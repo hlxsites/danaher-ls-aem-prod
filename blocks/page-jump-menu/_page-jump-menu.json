@@ -41,16 +41,22 @@
       "id": "page-jump-menu-item",
       "fields": [
         {
-          "component": "aem-content",
-          "name": "page-jump-menu-item_link",
-          "label": "Link",
-          "description": "Link URL for the menu item"
+          "component": "reference",
+          "valueType": "string",
+          "name": "page-jump-menu-item_image1",
+          "label": "Image1"
         },
         {
           "component": "text",
           "valueType": "string",
-          "name": "page-jump-menu-item_linkTitle",
+          "name": "page-jump-menu-item_title",
           "label": "Link Title"
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "page-jump-menu-item_image2",
+          "label": "Image2"
         }
       ]
     }
