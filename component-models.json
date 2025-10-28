@@ -1861,6 +1861,11 @@
         "label": "Image1"
       },
       {
+        "component": "text",
+        "name": "page-jump-menu-item_title",
+        "label": "Title"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "page-jump-menu-item_image2",
