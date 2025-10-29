@@ -10,9 +10,10 @@ export default async function decorate(block) {
     const anc = element.querySelector('a');
     const url = new URL(anc.href);
     const tabId = url.pathname.split('/').pop().replace('.html', '');
-    const tabName = element.querySelector('a').title;
-    const tabLink = element.querySelector('a').href;
-    const icon = element.querySelector('span').classList.value;
+    const tabName = anc.title;
+    const tabLink = anc.href;
+    const spanEl = element.querySelector('span');
+    const icon = spanEl ? spanEl.classList.value : '';
     return {
       name: tabName, id: tabId, link: tabLink, icon,
     };
