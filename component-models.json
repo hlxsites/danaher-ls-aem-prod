@@ -1847,25 +1847,25 @@
       {
         "component": "multiselect",
         "valueType": "string",
-        "name": "classes",
+        "name": "icon",
         "value": "",
         "label": "Block Options",
         "options": [
           {
             "name": "Bookmark",
-            "value": ":dam-Bookmark:"
+            "value": "dam-Bookmark"
           },
           {
             "name": "Refresh",
-            "value": ":dam-Refresh:"
+            "value": "dam-Refresh"
           },
           {
             "name": "Cube",
-            "value": ":dam-Cube:"
+            "value": "dam-Cube"
           },
           {
             "name": "Chat",
-            "value": ":dam-Chat:"
+            "value": "dam-Chat"
           }
         ]
       },
