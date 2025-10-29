@@ -54,20 +54,23 @@
           ]
         },
         {
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "classes",
+          "value": "",
+          "label": "Block Options",
+          "options": [
+            { "name": "Overview", "value": "Overview" },
+            { "name": "Process Steps", "value": "Process Steps" },
+            { "name": "Products", "value": "Products" },
+            { "name": "Talk to an Expert", "value": "Talk to an Expert" }
+          ]
+        },
+        {
         "component": "aem-content",
         "name": "link",
         "label": "Link"
-        },
-        {
-        "component": "text",
-        "name": "linkTitle",
-        "label": "Link Title"
-        },
-        {
-        "component": "text",
-        "name": "title",
-        "label": "Title"
-        }        
+        }
       ]
     }
   ],
