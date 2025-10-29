@@ -43,19 +43,19 @@
         {
           "component": "reference",
           "valueType": "string",
-          "name": "page-jump-menu-item_image",
+          "name": "image",
           "label": "Image"
         },
         {
-        "component": "text",
-        "name": "page-jump-menu-item_linkTitle",
-        "label": "Link Title"
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
         },
         {
-        "component": "aem-content",
-        "name": "page-jump-menu-item_link",
-        "label": "Link"
-        }
+        "component": "text",
+        "name": "linkTitle",
+        "label": "Link Title"
+        }        
       ]
     }
   ],
