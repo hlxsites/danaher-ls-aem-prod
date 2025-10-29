@@ -1845,10 +1845,29 @@
     "id": "page-jump-menu-item",
     "fields": [
       {
-        "component": "reference",
+        "component": "multiselect",
         "valueType": "string",
-        "name": "image",
-        "label": "Image"
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "Bookmark",
+            "value": "dam-Bookmark"
+          },
+          {
+            "name": "Refresh",
+            "value": "dam-Refresh"
+          },
+          {
+            "name": "Cube",
+            "value": "dam-Cube"
+          },
+          {
+            "name": "Chat",
+            "value": "dam-Chat"
+          }
+        ]
       },
       {
         "component": "aem-content",
@@ -1859,6 +1878,11 @@
         "component": "text",
         "name": "linkTitle",
         "label": "Link Title"
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title"
       }
     ]
   },
