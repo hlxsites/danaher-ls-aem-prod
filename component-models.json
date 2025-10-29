@@ -1873,6 +1873,11 @@
         "component": "aem-content",
         "name": "link",
         "label": "Link"
+      },
+      {
+        "component": "text",
+        "name": "linkTitle",
+        "label": "Link Title"
       }
     ]
   },
