@@ -47,23 +47,10 @@
           "value": "",
           "label": "Block Options",
           "options": [
-            { "name": "Bookmark", "value": "dam-Bookmark" },
-            { "name": "Refresh", "value": "dam-Refresh" },
-            { "name": "Cube", "value": "dam-Cube" },
-            { "name": "Chat", "value": "dam-Chat" }
-          ]
-        },
-        {
-          "component": "multiselect",
-          "valueType": "string",
-          "name": "classes",
-          "value": "",
-          "label": "Block Options",
-          "options": [
-            { "name": "Overview", "value": "Overview" },
-            { "name": "Process Steps", "value": "Process Steps" },
-            { "name": "Products", "value": "Products" },
-            { "name": "Talk to an Expert", "value": "Talk to an Expert" }
+            { "name": "Bookmark", "value": ":dam-Bookmark:" },
+            { "name": "Refresh", "value": ":dam-Refresh:" },
+            { "name": "Cube", "value": ":dam-Cube:" },
+            { "name": "Chat", "value": ":dam-Chat:" }
           ]
         },
         {
