@@ -1846,13 +1846,8 @@
     "fields": [
       {
         "component": "aem-content",
-        "name": "page-jump-menu-item_link",
+        "name": "page-jump-menu-item_href",
         "label": "Link"
-      },
-      {
-        "component": "text",
-        "name": "page-jump-menu-item_linkTitle",
-        "label": "Link Title"
       },
       {
         "component": "reference",
