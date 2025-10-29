@@ -41,9 +41,10 @@
       "id": "page-jump-menu-item",
       "fields": [
         {
-        "component": "aem-content",
-        "name": "page-jump-menu-item_link",
-        "label": "Link"
+          "component": "reference",
+          "valueType": "string",
+          "name": "page-jump-menu-item_image",
+          "label": "Image"
         },
         {
         "component": "text",
@@ -51,21 +52,9 @@
         "label": "Link Title"
         },
         {
-          "component": "reference",
-          "valueType": "string",
-          "name": "page-jump-menu-item_image1",
-          "label": "Image1"
-        },
-        {
-        "component": "text",
-        "name": "page-jump-menu-item_title",
-        "label": "Title"
-        },
-        {
-          "component": "reference",
-          "valueType": "string",
-          "name": "page-jump-menu-item_image2",
-          "label": "Image2"
+        "component": "aem-content",
+        "name": "page-jump-menu-item_link",
+        "label": "Link"
         }
       ]
     }
