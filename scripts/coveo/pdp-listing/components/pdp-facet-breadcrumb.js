@@ -40,6 +40,12 @@ export const renderFacetBreadcurm = () => {
         fieldName = 'Brand';
       } else if (facet.field === 'documenttype') {
         fieldName = 'Document Type';
+      } else if (facet.field === 'skumodification') {
+        fieldName = 'Modification';
+      } else if (facet.field === 'unitofmeasure') {
+        fieldName = 'Unit of Measure';
+      } else if (facet.field === 'skusizedetails') {
+        fieldName = 'Size';
       }
 
       const displayText = isCategoryFacet

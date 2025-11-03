@@ -91,8 +91,14 @@ async function loadPdpBlocks() {
         case 'citations':
           shouldAdd = authoredTabs.has('citations') || (response?.raw.citations === 'True');
           break;
-        case 'faqs':
-          shouldAdd = authoredTabs.has('faqs');
+        case 'faqs': {
+          shouldAdd = true;
+          const faqJson = response?.raw?.faqpreviewjson;
+          if (typeof faqJson === 'string' && faqJson.trim() !== '') {
+            const parsed = JSON.parse(faqJson);
+            shouldAdd = Array.isArray(parsed) && parsed.length > 0;
+          }
+        }
           break;
         case 'relatedproducts':
           shouldAdd = authoredTabs.has('relatedproducts');

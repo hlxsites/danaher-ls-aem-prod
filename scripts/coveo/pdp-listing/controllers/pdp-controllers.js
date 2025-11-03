@@ -39,6 +39,7 @@ export const pdpResultList = buildResultList(pdpEngine, {
       "availability",
       "minOrderQuantity",
       "packingUnit",
+      "skushowdetail",
     ],
   },
 });
@@ -62,6 +63,51 @@ export const brandFacetController = buildFacet(pdpEngine, {
     facetId: 'opco'
   },
 });
+
+//Modification filter
+export const modificationFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'skumodification',
+    facetId: 'skumodification'
+  },
+});
+
+//Specifications filter
+// export const specificationsFacetController = buildFacet(pdpEngine, {
+//   options: { 
+//     numberOfValues: 10,
+//     field: 'specifications',
+//     facetId: 'specifications'
+//   },
+// });
+
+//Unit of Measure filter
+export const unitOfMeasureFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'unitofmeasure',
+    facetId: 'unitofmeasure'
+  },
+});
+
+//Unit of Measure filter
+export const skuSizeDetailsFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'skusizedetails',
+    facetId: 'skusizedetails'
+  },
+});
+
+// //Specifications filter
+// export const specificationsjsonFacetController = buildFacet(pdpEngine, {
+//   options: { 
+//     numberOfValues: 10,
+//     field: 'specificationsjson',
+//     facetId: 'specificationsjson'
+//   },
+// });
 
 export const documentTypeFacetController = buildFacet(pdpEngine, {
   options: { 

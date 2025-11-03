@@ -3,7 +3,12 @@ import {
   productTypeFacetController,
   brandFacetController,
   documentTypeFacetController,
-  searchBoxController
+  searchBoxController,
+  modificationFacetController,
+  //specificationsFacetController,
+  unitOfMeasureFacetController,
+  skuSizeDetailsFacetController,
+  //specificationsjsonFacetController,
 } from "../controllers/pdp-controllers.js";
 import { createFiltersPanel } from "./pdp-side-panel.js";
 import { renderFacetBreadcurm } from "./pdp-facet-breadcrumb.js";
@@ -12,7 +17,7 @@ let persistentSearchText = "";
 
 export function renderCreateFacet() {
   const container = document.getElementById("filters-container");
-  container.innerHTML = "";
+  if (container) container.innerHTML = "";
   // === Main Filters Row ===
   const mainRow = document.createElement("div");
   mainRow.className = "flex flex-wrap md:flex-row items-start md:items-center gap-2 sm:gap-4 md:gap-6 bg-white";
@@ -184,6 +189,26 @@ export function renderCreateFacet() {
   if (brandFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(brandFacetController, "Brand"));
   }
+  //Modification filter
+  if (modificationFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(modificationFacetController, "Modification"));
+  }
+  //Specifications filter
+  // if (specificationsFacetController.state.values.length >= 1) {
+  //   mainRow.appendChild(createCustomDropdown(specificationsFacetController, "Specifications"));
+  // }
+  //Unit of Measure filter
+  if (unitOfMeasureFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(unitOfMeasureFacetController, "Unit of Measure"));
+  }
+  //Sku Size filter filter
+  if (skuSizeDetailsFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(skuSizeDetailsFacetController, "Sku Size Details"));
+  }
+  // //Specifications Json filter
+  // if (specificationsjsonFacetController.state.values.length >= 1) {
+  //   mainRow.appendChild(createCustomDropdown(specificationsjsonFacetController, "ModificationSJ"));
+  // }
   if (documentTypeFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(documentTypeFacetController, "Document Type"));
   }
@@ -232,5 +257,5 @@ export function renderCreateFacet() {
   });
 
   // Append both rows
-  container.appendChild(mainRow);
+  if (container) container.appendChild(mainRow);
 }

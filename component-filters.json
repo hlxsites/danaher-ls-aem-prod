@@ -243,6 +243,12 @@
     ]
   },
   {
+    "id": "og-image",
+    "components": [
+      ""
+    ]
+  },
+  {
     "id": "opco-banner",
     "components": [
       "opco-banner-item"

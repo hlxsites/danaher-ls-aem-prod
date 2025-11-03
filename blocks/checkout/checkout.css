@@ -140,6 +140,10 @@
   z-index: 9999
 }
 
+.checkout :is(.z-0) {
+  z-index: 0
+}
+
 .checkout :is(.m-0) {
   margin: 0px
 }
@@ -221,6 +225,10 @@
 
 .checkout :is(.mt-6) {
   margin-top: 1.5rem
+}
+
+.checkout :is(.ml-1) {
+  margin-left: 0.25rem
 }
 
 .checkout :is(.box-border) {
@@ -354,6 +362,23 @@
 
 .checkout :is(.max-h-\[97vh\]) {
   max-height: 97vh
+}
+
+.checkout :is(.max-h-0) {
+  max-height: 0px
+}
+
+.checkout :is(.max-h-screen) {
+  max-height: 100vh
+}
+
+.checkout :is(.max-h-\[500px\]) {
+  max-height: 500px
+}
+
+.checkout :is(.max-h-max) {
+  max-height: -moz-max-content;
+  max-height: max-content
 }
 
 .checkout :is(.\!w-full) {
@@ -531,6 +556,11 @@
 
 .checkout :is(.translate-x-full) {
   --tw-translate-x: 100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
+.checkout :is(.rotate-180) {
+  --tw-rotate: 180deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
@@ -784,6 +814,11 @@
   border-color: rgb(75 85 99 / var(--tw-border-opacity))
 }
 
+.checkout :is(.border-gray-100) {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity))
+}
+
 .checkout :is(.\!bg-danaherpurple-500) {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(117 35 255 / var(--tw-bg-opacity)) !important
@@ -837,6 +872,11 @@
 .checkout :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+.checkout :is(.bg-danaherpurple-25) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 239 255 / var(--tw-bg-opacity))
 }
 
 .checkout :is(.bg-opacity-50) {
@@ -1147,6 +1187,16 @@
   color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
+.checkout :is(.text-green-700) {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity))
+}
+
+.checkout :is(.text-red-700) {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity))
+}
+
 .checkout :is(.underline) {
   text-decoration-line: underline
 }
@@ -1161,6 +1211,14 @@
 
 .checkout :is(.opacity-50) {
   opacity: 0.5
+}
+
+.checkout :is(.opacity-100) {
+  opacity: 1
+}
+
+.checkout :is(.opacity-0) {
+  opacity: 0
 }
 
 .checkout :is(.shadow) {
@@ -1201,8 +1259,58 @@
   transition-duration: 150ms
 }
 
+.checkout :is(.transition) {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.checkout :is(.transition-all) {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.checkout :is(.transition-\[max-height\]) {
+  transition-property: max-height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.checkout :is(.transition-\[max-h\]) {
+  transition-property: max-h;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.checkout :is(.transition-\[\[height\]\]) {
+  transition-property: [height];
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.checkout :is(.transition-\[height\]) {
+  transition-property: height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
 .checkout :is(.duration-500) {
   transition-duration: 500ms
+}
+
+.checkout :is(.duration-300) {
+  transition-duration: 300ms
+}
+
+.checkout :is(.duration-100) {
+  transition-duration: 100ms
+}
+
+.checkout :is(.ease-in-out) {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
 }
 
 .hover\:bg-danaherpurple-50:hover {
@@ -1212,6 +1320,11 @@
 .checkout :is(.checked\:bg-danaherpurple-500:checked) {
   --tw-bg-opacity: 1;
   background-color: rgb(117 35 255 / var(--tw-bg-opacity))
+}
+
+.checkout :is(.hover\:rotate-180:hover) {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
 .checkout :is(.hover\:border-danaherpurple-500:hover) {
@@ -1247,6 +1360,11 @@
 .checkout :is(.focus\:ring-danaherpurple-500:focus) {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(117 35 255 / var(--tw-ring-opacity))
+}
+
+.checkout :is(.group:hover .group-hover\:rotate-180) {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
 .checkout :is(.peer:checked ~ .peer-checked\:block) {
@@ -1486,6 +1604,14 @@
 
 .checkout :is(.\[\&_svg\>use\]\:stroke-danaherpurple-500 svg>use) {
   stroke: #7523FF
+}
+
+.checkout :is(.\[\&_svg\>use\]\:stroke-green-700 svg>use) {
+  stroke: #15803d
+}
+
+.checkout :is(.\[\&_svg\>use\]\:stroke-red-700 svg>use) {
+  stroke: #b91c1c
 }
 
 .checkout :is(.\[\&_svg\>use\]\:hover\:stroke-danaherpurple-800:hover svg>use) {

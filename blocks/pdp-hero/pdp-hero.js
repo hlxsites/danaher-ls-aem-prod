@@ -25,122 +25,86 @@ function numberWithCommas(x) {
 
 // ::::: Dropdown implementation Starts:::::
 const keyAliases = { moidification: 'modification', Moidication: 'modification' };
-
 function normalizeKeys(obj) {
   return Object.keys(obj).reduce((acc, k) => {
     acc[keyAliases[k] || k] = obj[k];
     return acc;
   }, {});
 }
-
 function getDropdownKeys(data) {
   return Array.from(
     new Set(data.flatMap((obj) => Object.keys(normalizeKeys(obj)))),
-  ).filter((k) => k !== 'price');
+  ).filter((k) => k !== 'price' && k !== 'sku'); // exclude SKU and price
 }
-
-function getAllSkuOptions(data) {
-  return Array.from(new Set(data.map(normalizeKeys).map((obj) => obj.sku).filter(Boolean)));
-}
-
 function getOptions(data, key, filters) {
-  if (key === 'sku') {
-    return getAllSkuOptions(data);
-  }
-  const effectiveFilters = { ...filters };
-  if (filters.sku) effectiveFilters.sku = filters.sku;
   return Array.from(
     new Set(
       data
         .map(normalizeKeys)
-        .filter((obj) => Object.entries(effectiveFilters)
+        .filter((obj) => Object.entries(filters)
           .every(([fKey, fVal]) => !fVal || obj[fKey] === fVal))
         .map((obj) => obj[key])
         .filter(Boolean),
     ),
   );
 }
-
 function buildDropdown({
-  key, options, selectedValue, onChange, disabled,
+  key, options, selectedValue, onChange,
 }) {
+  if (!options.length) return null; // hide if no options
   let isOpen = false;
   const outer = div({ class: 'individual-dd' });
   const dropdownLabel = label(
     { class: 'mb-1 text-sm font-medium text-gray-700' },
-    `Select ${key.charAt(0).toUpperCase() + key.slice(1)}`,
+    `Select ${ key.charAt(0).toUpperCase() + key.slice(1) }`,
   );
   dropdownLabel.style.fontFamily = 'Inter';
   const display = div(
     {
-      class: `pdp-hero-dd${disabled ? ' opacity-50 pointer-events-none' : ''}`,
-      tabIndex: disabled ? -1 : 0,
+      class: 'pdp-hero-dd',
+      tabIndex: 0,
       role: 'button',
-      'aria-disabled': disabled ? 'true' : 'false',
     },
     selectedValue || `Select ${key}`,
     span({
-      class: 'icon icon-chevron-down w-5 h-5 [&_svg>use]:stroke-gray-500 group-hover:[&_svg>use]:stroke-gray-800 ml-1',
+      class:
+        'icon icon-chevron-down w-5 h-5 [&_svg>use]:stroke-gray-500 group-hover:[&_svg>use]:stroke-gray-800 ml-1',
     }),
   );
   decorateIcons(display);
-
   const list = div({
-    class: 'individual-dd-options absolute left-0 hidden px-3 py-2 cursor-pointer text-sm text-gray-700',
+    class: 'individual-dd-options absolute left-0 hidden mt-1 border bg-white shadow text-sm z-10 w-full',
   });
-
-  // const resetDiv = div(
-  //   {
-  //     class: 'px-4 py-2 hover:bg-danaherpurple-50 cursor-pointer text-gray-500 italic',
-  //   },
-  //   `Select ${key}`,
-  // );
-  // resetDiv.addEventListener('click', () => {
-  //   if (!disabled) {
-  //     onChange(key, '');
-  //     list.classList.add('hidden');
-  //     isOpen = false;
-  //     display.childNodes[0].textContent = `Select ${key}`;
-  //   }
-  // });
-  // list.appendChild(resetDiv);
-
   options.forEach((opt) => {
     const isSelected = opt === selectedValue;
     const optionDiv = div(
       {
         class: [
-          'px-4', 'py-2', 'hover:bg-danaherpurple-50', 'cursor-pointer',
+          'px-4', 'py-2', 'cursor-pointer hover:bg-danaherpurple-50',
           isSelected ? 'text-danaherpurple-500 font-semibold' : '',
         ].join(' '),
       },
       opt,
     );
     optionDiv.addEventListener('click', () => {
-      if (!disabled) {
-        onChange(key, opt);
-        list.classList.add('hidden');
-        isOpen = false;
-        display.childNodes[0].textContent = opt;
-      }
+      onChange(key, opt);
+      isOpen = false;
+      list.classList.add('hidden');
+      display.childNodes[0].textContent = opt;
     });
     list.appendChild(optionDiv);
   });
-
   function closeAllDropdowns(exceptList) {
     document.querySelectorAll('.individual-dd-options').forEach((dd) => {
       if (dd !== exceptList) dd.classList.add('hidden');
     });
   }
-
   function toggleDropdown(e) {
-    if (disabled) return;
     isOpen = !isOpen;
     closeAllDropdowns(list);
     list.classList.toggle('hidden', !isOpen);
     e.stopPropagation();
   }
-
   display.addEventListener('click', toggleDropdown);
   display.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') toggleDropdown(e);
@@ -156,104 +120,95 @@ function buildDropdown({
       list.classList.add('hidden');
     }
   });
-
-  outer.appendChild(dropdownLabel);
-  outer.appendChild(display);
-  outer.appendChild(list);
+  outer.append(dropdownLabel, display, list);
   return outer;
 }
-
 function getCurrentPrice(filtered, keys, selectedVals, dataNorm) {
-  // Only require a selection if that dropdown has options
-  const neededKeys = keys.filter((k) => {
-    if (k === 'sku') return true;
-    const filters = { ...selectedVals, [k]: '' };
-    const opts = getOptions(dataNorm, k, filters);
-    return opts.length > 0;
-  });
-  const allNeededSelected = neededKeys.every((k) => !!selectedVals[k]);
-  if (filtered.length === 1 && allNeededSelected) return filtered[0].price;
+  // If no selections made, show first record’s price
+  const selectedCount = Object.values(selectedVals).filter(Boolean).length;
+  if (selectedCount === 0 && dataNorm.length > 0) {
+    return dataNorm[0].price;
+  }
+  // If only one matching record
+  if (filtered.length === 1) return filtered[0].price;
   return 'Select options';
 }
-
 function printSelectedAndPrice(selected, finalPrice) {
   const priceEl = document.querySelector('.dd-price');
-  if (priceEl) {
-    const startsAtLabel = priceEl.querySelector('.starts-at-label');
-    if (startsAtLabel) startsAtLabel.style.display = 'none';
-    priceEl.childNodes.forEach((node) => {
-      if (
-        node.nodeType === Node.TEXT_NODE
-        && (
-          node.textContent.trim().startsWith('$')
-          || node.textContent.trim() === 'Select options for price'
-          || node.textContent.trim() === 'Select options'
-        )
-      ) {
-        if (finalPrice === 'Select options') {
-          priceEl.setAttribute(
-            'style',
-            'font-weight: 400 !important; line-height: 32px; font-size: 24px;',
-          );
-          // node.textContent = 'Select options for pricee';
-        } else {
-          node.textContent = (finalPrice !== null && finalPrice !== undefined && finalPrice.trim() !== '')
-            ? `$${numberWithCommas(finalPrice)}` : '';
-        }
+  if (!priceEl) return;
+  const startsAtLabel = priceEl.querySelector('.starts-at-label');
+  if (startsAtLabel) startsAtLabel.style.display = 'none';
+  priceEl.childNodes.forEach((node) => {
+    if (
+      node.nodeType === Node.TEXT_NODE
+      && (
+        node.textContent.trim().startsWith('$')
+        || node.textContent.trim() === 'Select options for price'
+        || node.textContent.trim() === 'Select options'
+      )
+    ) {
+      if (finalPrice === 'Select options') {
+        priceEl.setAttribute(
+          'style',
+          'font-weight: 400 !important; line-height: 32px; font-size: 24px;',
+        );
+        node.textContent = 'Select options for price';
+      } else {
+        node.textContent = `$${numberWithCommas(finalPrice)}`;
       }
-    });
-  }
-  // console.log('Selected:', selected, 'Price:', finalPrice);
+    }
+  });
 }
-
 export function dynamicDropdownInit({ data, containerId, priceLabelId }) {
   const dataNorm = data.map(normalizeKeys);
   const keys = getDropdownKeys(dataNorm);
   const selected = Object.fromEntries(keys.map((k) => [k, '']));
   const container = document.getElementById(containerId);
   const priceLabel = document.getElementById(priceLabelId);
-
+  // Pre-fill selections with first record’s values
+  const firstRecord = dataNorm[0];
+  if (firstRecord) {
+    keys.forEach((k) => {
+      if (firstRecord[k]) selected[k] = firstRecord[k];
+    });
+  }
   function onChange(changedKey, value) {
     selected[changedKey] = value;
-    if (changedKey === 'sku') {
-      keys.forEach((k) => { if (k !== 'sku') selected[k] = ''; });
-    }
     // eslint-disable-next-line no-use-before-define
     renderDropdown();
   }
-
   function renderDropdown() {
     container.innerHTML = '';
-    // If single row is left, set all values to what that row has and mark them selected
-    const filtered = dataNorm.filter((obj) => keys.every(
-      (k) => !selected[k] || obj[k] === selected[k],
-    ));
+    const filtered = dataNorm.filter(
+      (obj) => keys.every((k) => !selected[k] || obj[k] === selected[k]),
+    );
+    // Auto-select dropdowns for single matching record
     if (filtered.length === 1) {
       const row = filtered[0];
-      keys.forEach((k) => { if (row[k]) selected[k] = row[k]; });
+      keys.forEach((k) => {
+        if (row[k]) selected[k] = row[k];
+      });
     }
-
     keys.forEach((key) => {
       const filters = { ...selected, [key]: '' };
       const options = getOptions(dataNorm, key, filters);
-      const disabled = options.length === 0;
-      container.appendChild(buildDropdown({
-        key,
-        options,
-        selectedValue: selected[key],
-        onChange,
-        disabled,
-      }));
+      if (options.length > 0) {
+        const dropdown = buildDropdown({
+          key,
+          options,
+          selectedValue: selected[key],
+          onChange,
+        });
+        if (dropdown) container.appendChild(dropdown);
+      }
     });
-    // recompute after possibly new selections
-    const filteredNow = dataNorm.filter((obj) => keys.every(
-      (k) => !selected[k] || obj[k] === selected[k],
-    ));
+    const filteredNow = dataNorm.filter(
+      (obj) => keys.every((k) => !selected[k] || obj[k] === selected[k]),
+    );
     const finalPrice = getCurrentPrice(filteredNow, keys, selected, dataNorm);
     if (priceLabel) priceLabel.textContent = finalPrice;
     printSelectedAndPrice(selected, finalPrice);
   }
-
   renderDropdown();
 }
 
@@ -485,7 +440,7 @@ export default async function decorate(block) {
       },
 
       div({
-        class: 'uom-seperator-line w-12 h-0 hidden md:block flex-grow-0 mt-[26px] rotate-90 outline outline-1 outline-offset-[-0.50px] outline-gray-300',
+        class: 'uom-seperator-line hidden md:block w-12 h-0 hidden md:block flex-grow-0 mt-[26px] rotate-90 outline outline-1 outline-offset-[-0.50px] outline-gray-300',
       }),
       productInfo?.data?.packingUnit ? (
         div(
@@ -633,7 +588,7 @@ export default async function decorate(block) {
     class: 'self-stretch flex flex-col justify-start items-start gap-5',
   });
   priceInfoDiv.append(infoTab, shipInfo);
-  if (result?.raw?.objecttype === 'Product' || result?.raw?.objecttype === 'Bundle') {
+  if (result?.raw?.objecttype === 'Product' || result?.raw?.objecttype === 'Bundle' || result?.raw?.objecttype === 'Family') {
     defaultContent.append(priceInfoDiv);
   }
 
@@ -664,7 +619,7 @@ export default async function decorate(block) {
   } else {
     // Coveo
     infoTab.querySelector('.starts-at-price').style.display = 'none';
-    infoTab.querySelector('.uom-seperator-line').style.display = 'none';
+    //infoTab.querySelector('.uom-seperator-line').style.display = 'none';
     pricingQuoteButton.querySelector('.starts-at-price').style.display = 'none';
     pricingQuoteButton.querySelector('.pr-input').style.display = 'none';
     pricingQuoteButton.querySelector('.buy-btn').style.display = 'none';
@@ -683,25 +638,26 @@ export default async function decorate(block) {
     const showRFQ = availableOnline.length > 0;
     let skusizeDetailsLength = 0;
     if (result?.raw?.skusizedetails !== undefined
-      && result?.raw?.skusizedetails !== null && result?.raw?.skusizedetails?.trim()) {
+      && result?.raw?.skusizedetails !== null) {
       skusizeDetailsLength = JSON.parse(result?.raw?.skusizedetails)?.length;
     }
     const buyDetail = div(
       {
-        class: 'flex flex-col justify-start gap-4',
+        class: 'flex flex-col-reverse md:flex-row-reverse md:items-end justify-start gap-4',
       },
       div(
         { class: 'inline-flex justify-start items-center gap-3' },
         ...(result?.raw?.listpriceusd
           || (result?.raw?.familyskusizeflag !== undefined
             && result?.raw?.familyskusizeflag !== null && result?.raw?.familyskusizeflag?.includes('True|') && skusizeDetailsLength > 0) ? [
-            div(
-              {
-                class: 'buyDetail starts-at-price dd-price font-bold justify-start text-black text-2xl font-normal',
-              },
-              div({ class: 'starts-at-label text-black text-base font-bold' }, 'Starts at'),
-              `$${result?.raw?.listpriceusd ? numberWithCommas(result?.raw?.listpriceusd) : ''}`,
-            ),
+            // div(
+            //   {
+            //     class: 'buyDetail starts-at-price dd-price
+            // font-bold justify-start text-black text-2xl font-normal',
+            //   },
+            //   div({ class: 'starts-at-label text-black text-base font-bold' }, 'Starts at'),
+            //   `$${result?.raw?.listpriceusd ? numberWithCommas(result?.raw?.listpriceusd) : ''}`,
+            // ),
             (result.raw.listpriceusd && result?.raw?.externallink) ? a(
               {
                 class:
@@ -752,7 +708,8 @@ export default async function decorate(block) {
         //   //priceEl.childNodes[1].textContent = `${formatMoney(currncyFormat)}`;
         // }
         priceEl.style.display = 'block';
-        infoTab.querySelector('.uom-seperator-line').style.display = 'block';
+        infoTab.querySelector('.starts-at-label').classList.add('md:block', 'hidden');
+        //infoTab.querySelector('.uom-seperator-line').style.display = 'block';
       }
     }
 

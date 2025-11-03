@@ -171,7 +171,7 @@ export default async function decorate(block) {
 
   if (response?.raw?.familyskusizeflag !== undefined
     && response?.raw?.familyskusizeflag !== null
-    && response?.raw?.familyskusizeflag === 'True') {
+    && response?.raw?.familyskusizeflag === 'True|') {
     document.querySelector('.pdp-products-container')?.remove();
     const tabs = document.querySelectorAll('.p-tab');
     if (tabs?.length > 0) {
