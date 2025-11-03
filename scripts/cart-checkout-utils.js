@@ -63,6 +63,7 @@ import {
 import { initializeModules } from '../blocks/checkout/checkoutUtilities.js';
 // eslint-disable-next-line import/no-cycle
 import { getPaymentMethodType, getStripeElements, getStripeInstance } from '../blocks/checkout/paymentModule.js';
+import { getCookie } from './scripts.js';
 
 function deleteCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -684,7 +685,12 @@ export const submitOrder = async (basketId, paymentMethod) => {
     };
   }
 };
-
+/*
+get loggedin user data
+*/
+export function getLoggedinUserData() {
+  return getCookie(`${siteID}_${env}_user_data`);
+}
 /*
  get saved cards for payment
  */
@@ -696,7 +702,6 @@ export async function getSavedCards() {
   }
   try {
     const url = `${baseURL}/baskets/current/eligible-payment-methods?include=paymentInstruments`;
-
     const defaultHeaders = new Headers();
     defaultHeaders.append('Content-Type', 'Application/json');
     defaultHeaders.append(
@@ -1050,17 +1055,17 @@ export const getShippingMethods = async () => {
 /*
  get payment  methods
  */
-export const getPaymentMethods = async () => {
+export const getPaymentMethods = async (user, isDashboard) => {
   const authenticationToken = await getAuthenticationToken();
   if (authenticationToken?.status === 'error') {
     return { status: 'error', data: 'Unauthorized access.' };
   }
   try {
+    const url = isDashboard ? `${baseURL}/customers/${user}/eligible-payment-methods` : `${baseURL}/baskets/current/eligible-payment-methods?include=paymentInstruments`;
     const fetchPaymentMethods = JSON.parse(sessionStorage.getItem('paymentMethods'));
     if (fetchPaymentMethods?.status === 'success') {
       return fetchPaymentMethods;
     }
-    const url = `${baseURL}/baskets/current/eligible-payment-methods?include=paymentInstruments`;
     const defaultHeaders = new Headers();
     defaultHeaders.append('Content-Type', 'Application/json');
     defaultHeaders.append(
@@ -3269,7 +3274,7 @@ get price type if its net or gross
                       ?.companyName2
                       ? ''
                       : 'hidden'
-                      }`,
+                    }`,
                   },
                   getUseAddressesResponse?.data?.invoiceToAddress?.companyName2
                   ?? '',
