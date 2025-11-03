@@ -12,7 +12,7 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 // eslint-disable-next-line import/no-cycle
 import {
   checkoutSkeleton,
-  getBasketDetails, getPaymentMethods, validateBasket,
+  getBasketDetails, getPaymentMethods, validateBasket, getLoggedinUserData,
 } from '../../scripts/cart-checkout-utils.js';
 import {
   loadStripe,
@@ -339,7 +339,9 @@ export const paymentModule = async (isValidated) => {
     let invoiceWrapper = div({ class: 'hidden' });
 
     // get available payment methods
-    const allPaymentMethods = await getPaymentMethods();
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
+    const allPaymentMethods = await getPaymentMethods(getLoggedinUserData()?.userData?.email, isValidated);
     if (allPaymentMethods?.status !== 'success') throw new Error('No Payment methods Available.');
 
     const invoiceNumber = buildInputElement(
@@ -450,6 +452,7 @@ export const paymentModule = async (isValidated) => {
           stripeCardsWrapper.append(stripeCardsContainer);
           paymentMethodsWrapper?.append(stripeCardsWrapper);
           // get saved stripe cards
+          // eslint-disable-next-line max-len
           getSavedStripeCardsList = await getSavedCards();
           if (getSavedStripeCardsList?.status !== 'success') throw new Error('No Saved Cards Found.');
 

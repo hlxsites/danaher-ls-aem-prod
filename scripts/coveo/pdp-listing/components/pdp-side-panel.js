@@ -5,6 +5,11 @@ import {
   documentTypeFacetController,
   facetBreadcrumb,
   querySummary,
+  modificationFacetController,
+  //specificationsFacetController,
+  //specificationsjsonFacetController,
+  unitOfMeasureFacetController,
+  skuSizeDetailsFacetController,
 } from '../controllers/pdp-controllers.js';
 
 // === Util: Create element with shorthand ===
@@ -49,6 +54,47 @@ function getFacetDataFromControllers() {
       state: brandFacetController.state,
       deselectAll : () => brandFacetController.deselectAll()
     },
+    //Modification
+    {
+      title: 'Modification',
+      items: format(modificationFacetController.state.values),
+      toggleSelect: (value) => modificationFacetController.toggleSelect(value),
+      state: modificationFacetController.state,
+      deselectAll : () => modificationFacetController.deselectAll()
+    },
+    //Specifications
+    // {
+    //   title: 'Specifications',
+    //   items: format(specificationsFacetController.state.values),
+    //   toggleSelect: (value) => specificationsFacetController.toggleSelect(value),
+    //   state: specificationsFacetController.state,
+    //   deselectAll : () => specificationsFacetController.deselectAll()
+    // },
+    //Unit of Measure
+    {
+      title: 'Unit of Measure',
+      items: format(unitOfMeasureFacetController.state.values),
+      toggleSelect: (value) => unitOfMeasureFacetController.toggleSelect(value),
+      state: unitOfMeasureFacetController.state,
+      deselectAll : () => unitOfMeasureFacetController.deselectAll()
+    },
+    //Unit of Measure
+    {
+      title: 'Sku Size Details',
+      items: format(skuSizeDetailsFacetController.state.values),
+      toggleSelect: (value) => skuSizeDetailsFacetController.toggleSelect(value),
+      state: skuSizeDetailsFacetController.state,
+      deselectAll : () => skuSizeDetailsFacetController.deselectAll()
+    },
+
+    // //Specifications json
+    // {
+    //   title: 'Spec Json',
+    //   items: format(specificationsjsonFacetController.state.values),
+    //   toggleSelect: (value) => specificationsjsonFacetController.toggleSelect(value),
+    //   state: specificationsjsonFacetController.state,
+    //   deselectAll : () => specificationsjsonFacetController.deselectAll()
+    // },
     {
       title: 'Document Type',
       items: format(documentTypeFacetController.state.values),

@@ -102,7 +102,7 @@ export async function buildProductTile(result, getCommerceBase, domHelpers, view
       return div({ class: 'w-full h-40 overflow-hidden cursor-pointer' }, imageElement);
     };
 
-    const imageElement = createImageWithFallback(item?.raw?.images?.[1], item?.title);
+    const imageElement = createImageWithFallback(result?.raw?.images?.[0]?.includes('.eps') ? (result?.raw?.images?.[1] || '/content/dam/danaher/products/fallbackImage.jpeg') : (result?.raw?.images?.[0] || '/content/dam/danaher/products/fallbackImage.jpeg'), item?.title);
 
     const titleElement = div(
       { class: 'p-3' },
@@ -203,7 +203,7 @@ export async function buildProductTile(result, getCommerceBase, domHelpers, view
     } else {
       pricingAndActions = div(
         {
-          class: 'self-stretch px-4 py-3 bg-gray-50 inline-flex flex-col justify-center items-center mt-auto',
+          class: `self-stretch px-4 py-3 bg-gray-50 inline-flex flex-col justify-center items-center ${showCTA ? 'mt-auto' : ''}`,
         },
         div(
           {
@@ -297,7 +297,7 @@ export async function buildProductTile(result, getCommerceBase, domHelpers, view
             target: result.clickUri.includes(window.DanaherConfig.host) ? '_self' : '_blank',
           },
           img({
-            src: result?.raw?.images?.[1] || '/content/dam/danaher/products/fallbackImage.jpeg',
+            src: result?.raw?.images?.[0]?.includes('.eps') ? (result?.raw?.images?.[1] || '/content/dam/danaher/products/fallbackImage.jpeg') : (result?.raw?.images?.[0] || '/content/dam/danaher/products/fallbackImage.jpeg'),
             alt: result?.title || '',
             loading: 'lazy',
             width: '100px',

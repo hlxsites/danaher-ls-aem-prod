@@ -62,7 +62,7 @@ export default async function decorate(block) {
   paragraphs.forEach((p) => {
     p.style.fontSize = '16px';
     p.style.lineHeight = '22px';
-    p.style.fontWeight = '200';
+   // p.style.fontWeight = '200';
   });
 
   block.querySelectorAll('[id^="overviewdesc_"]').forEach((container) => {
@@ -75,10 +75,10 @@ export default async function decorate(block) {
     if (imgDiv) imgDiv.className = '';
     if (text) text.className = '';
 
-    if (img && text) {
+    if (img && text.length > 0) {
       const position = imgDiv.getAttribute('data-position')?.toLowerCase() || 'right';
 
-      container.className = 'grid md:grid-cols-2 py-6 w-full gap-12';
+      container.className = 'grid md:grid-cols-2 py-3 w-full gap-12';
       const textWrapper = div({ class: 'w-full text-left' });
       text.forEach((p) => {
         p.className = 'w-full text-left';
@@ -89,18 +89,18 @@ export default async function decorate(block) {
         imgDiv.className = 'order-1 flex items-center justify-start';
         textWrapper.className += ' order-2';
       } else {
-        imgDiv.className = 'order-2 flex items-center justify-end';
+        imgDiv.className = 'order-2 flex items-start lg:max-h-[499px]';
         textWrapper.className += ' order-1';
       }
       container.replaceChildren(imgDiv, textWrapper);
-    } else if (text) {
-      container.className = 'flex justify-center items-center w-full';
+    } else if (text.length > 0) {
+      //container.className = 'flex justify-center items-center w-full';
       text.forEach((p) => {
         p.className = 'text-left w-full';
       });
     } else if (img) {
       container.className = 'flex justify-center items-center w-full';
-      imgDiv.className = '';
+      imgDiv.className = 'my-3';
     }
   });
 

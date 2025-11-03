@@ -36,52 +36,56 @@ export default function tabsOrder() {
     ],
     abcam: [
       {
-        tabName: 'overview',
+        tabName: 'products',
         order: 1,
       },
       {
-        tabName: 'specifications',
+        tabName: 'overview',
         order: 2,
       },
       {
-        tabName: 'keyfacts',
+        tabName: 'specifications',
         order: 3,
       },
       {
-        tabName: 'targetdata',
+        tabName: 'keyfacts',
         order: 4,
       },
       {
-        tabName: 'reactivitydata',
+        tabName: 'targetdata',
         order: 5,
       },
       {
-        tabName: 'storageinformation',
+        tabName: 'reactivitydata',
         order: 6,
       },
       {
-        tabName: 'notes',
+        tabName: 'storageinformation',
         order: 7,
       },
       {
-        tabName: 'productprotocols',
+        tabName: 'notes',
         order: 8,
       },
       {
-        tabName: 'images',
+        tabName: 'productprotocols',
         order: 9,
       },
       {
-        tabName: 'publications',
+        tabName: 'images',
         order: 10,
       },
       {
-        tabName: 'faqs',
+        tabName: 'publications',
         order: 11,
       },
       {
-        tabName: 'relatedproducts',
+        tabName: 'faqs',
         order: 12,
+      },
+      {
+        tabName: 'relatedproducts',
+        order: 13,
       },
     ],
     'molecular devices': [

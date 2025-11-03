@@ -185,16 +185,26 @@ export default async function decorate(block) {
   const fullTabConfig = {
     overview: { label: 'Description', available: !!response?.raw?.richlongdescription?.trim() || ('overview' in authoredTabMap) },
     specifications: { label: 'Specifications', available: (!!response?.raw?.attributejson?.trim() && JSON.parse(response.raw.attributejson).length > 0) || ('specifications' in authoredTabMap) },
-    products: { label: 'Products', available: response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0 },
+    products: { label: 'Products', available: response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0 && !(response?.raw?.familyskusizeflag?.includes('True|') || false) },
     resources: { label: 'Resources', available: !!response?.raw?.numresources > 0 },
     parts: { label: 'Product Parts List', available: (!!response?.raw?.bundlepreviewjson?.trim() && JSON.parse(response?.raw?.bundlepreviewjson).length > 0) || ('parts' in authoredTabMap) },
     citations: { label: 'Citations', available: !!response?.raw?.citations?.trim() || ('citations' in authoredTabMap) },
+    faqs: {
+      label: 'FAQs',
+      available: (() => {
+        try {
+          const arr = JSON.parse(response?.raw?.faqpreviewjson || '[]');
+          return (Array.isArray(arr) && arr.length > 0) || ('faqs' in authoredTabMap);
+        } catch {
+          return 'faqs' in authoredTabMap;
+        }
+      })() || false,
+    },
   };
 
   // -------------- Generate tabsList in JSON order --------------
   const opco = response?.raw?.opco?.toLowerCase() || 'sciex';
   const opcoTabs = tabsOrder()[opco] || tabsOrder().sciex;
-
   opcoTabs.forEach(({ tabName }) => {
     const config = fullTabConfig[tabName];
     if (config?.available) {

@@ -360,7 +360,7 @@
   }
 
   .appear mobilemenu {
-    @apply block h-14 md:hidden;
+    @apply block h-12 md:hidden bg-gray-50 mt-1;
   }
 
   .appear mobilemenu > div.mobile-jump-menu {
@@ -1108,7 +1108,7 @@
   }
 
   .pdp-hero-dd {
-    @apply border px-4 py-2 h-12 font-[400] !font-[Inter] text-[14px] leading-5 bg-white cursor-pointer flex items-center justify-between select-none relative w-48;
+    @apply border px-[13px] py-[9px] h-[55px] font-[400] !font-[Inter] text-[14px] leading-5 bg-white cursor-pointer flex items-center justify-between select-none relative w-[163px];
   }
 }
 
