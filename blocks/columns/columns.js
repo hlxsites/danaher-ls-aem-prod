@@ -955,10 +955,11 @@ export default function decorate(block) {
     const colDivs = container?.querySelectorAll(':scope > div');
     const column2 = colDivs?.[1];
     let pTags = '';
+    // Query formId once to avoid redundant DOM queries
+    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     if (column2) {
     pTags = column2.querySelectorAll('p');
     pTags.forEach((p) => {
-      const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
       const pText = p.textContent.trim();
       const hasAnchor = p.querySelector('a');
       // Hide p-tags that contain form configuration anchors
@@ -967,27 +968,28 @@ export default function decorate(block) {
       }
       // Hide p-tags that are form type indicators
       if (pText && !hasAnchor && (
-        pText === 'wsawgenedataform' || pText === 'genedataform' || pText === 'gatedform' || pText.toLowerCase().includes('form')
+        pText === 'wsawgenedataform' || pText === 'genedataform' || pText === 'gatedform' || pText === 'labinquiry' || pText.toLowerCase().includes('form')
         || pText.length < 50 // Assume short text might be form indicators
       )) {
         p.style.display = 'none';
       }
       else if (formId && !hasAnchor && (
-        formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform' || formId.toLowerCase().includes('form')
+        formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform' || formId === 'labinquiry' || formId.toLowerCase().includes('form')
         || formId.length < 50 // Assume short text might be form indicators
       )) {
         p.style.display = 'none';
       }
     });
   }
-    const expertFormIndicators = ['wsawgenedataform', 'genedataform', 'gatedform', '', '', '', '', '', '', ''];
+    // Valid form types in lowercase for case-insensitive comparison
+    const validFormTypes = ['wsawgenedataform', 'genedataform', 'gatedform', 'labinquiry'];
     const hasExpertFormTag = Array.from(pTags).some((p) => {
       const text = p.textContent.trim().toLowerCase();
-      return expertFormIndicators.some((indicator) => text.includes(indicator));
+      return validFormTypes.some((indicator) => text === indicator);
     });
-    const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-    // const hasGatedFormTag = Array.from(pTags).some((p) => p.textContent.trim() === 'wsawgenedataform');
-    if (hasExpertFormTag || formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'gatedform') {
+    // Only load form when formId is valid and matches expected form types
+    const isValidFormId = formId && validFormTypes.includes(formId.toLowerCase());
+    if (hasExpertFormTag || isValidFormId) {
       const columnsBlock = formWrapperBlock;
       if (columnsBlock) {
         const columns = columnsBlock.querySelectorAll(':scope > div');
@@ -1014,7 +1016,7 @@ export default function decorate(block) {
           });
           column2.appendChild(expertFormDiv);
           // Pass form data to loadGatedForm
-          if (formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform') {
+          if (formId === 'gatedform' || formId === 'wsawgenedataform' || formId === 'genedataform' || formId === 'labinquiry') {
             loadGatedForm(expertFormDiv);
           } else {
             loadGatedForm(expertFormDiv);
