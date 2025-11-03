@@ -278,7 +278,7 @@ async function loadGatedForm(block) {
       }
       // Hide p-tags that are form type indicators
       if (pText && !hasAnchor && (
-        pText === 'wsawgenedataform' || pText === 'genedataform' || pText === 'gatedform' || pText.toLowerCase().includes('form')
+        pText === 'wsawgenedataform' || pText === 'genedataform' || pText === 'gatedform' || pText === 'labinquiry' || pText.toLowerCase().includes('form')
         || pText.length < 50 // Assume short text might be form indicators
       )) {
         tag.style.display = 'none';
@@ -307,7 +307,7 @@ async function loadGatedForm(block) {
     errorUrl = tags[9]?.textContent.trim();
 
     const gatedformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-    if (gatedformId === 'wsawgenedataform' || gatedformId === 'genedataform' || gatedformId === 'gatedform') {
+    if (gatedformId === 'wsawgenedataform' || gatedformId === 'genedataform' || gatedformId === 'gatedform' || gatedformId === 'labinquiry') {
     formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
     clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
@@ -396,6 +396,58 @@ async function loadGatedForm(block) {
       ),
     ),
   );
+  if (formId === 'labinquiry') {
+      const additionField = div(
+        { class: 'container mx-auto space-y-4' },
+        buildSelectElement('Country', 'Country', 'checkbox', 'Country', 'Country', countries),
+        buildInputElement('Postal_Code', 'ZIP/Postal Code', 'text', 'Postal_Code', 'postal-code', true, 'Postal_Code'),
+        buildInputElement('Department', 'Department', 'text', 'Department', 'Department', false, 'Department'),
+        /* Areas of Interest  */
+        div(
+          { class: 'space-y-2 col-span-1 md:col-span-2' },
+          label(
+            {
+              for: 'Areas_of_Interest',
+              class: 'font-normal !text-semibold !text-sm leading-4',
+            },
+            'Areas of Interest',
+          ),
+          buildCheckboxElement('Areas_of_Interest', 'Analytical & Assay Reagents', 'checkbox', 'Areas_of_Interest', 'Analytical & Assay Reagents', false),
+          buildCheckboxElement('Areas_of_Interest', 'Automation & Lab Workflow Solutions', 'checkbox', 'Areas_of_Interest', 'Automation & Lab Workflow Solutions', false),
+          buildCheckboxElement('Areas_of_Interest', 'Cellular Analysis & Imaging', 'checkbox', 'Areas_of_Interest', 'Cellular Analysis & Imaging', false),
+          buildCheckboxElement('Areas_of_Interest', 'Genomics & Gene Editing', 'checkbox', 'Areas_of_Interest', 'Genomics & Gene Editing', false),
+          buildCheckboxElement('Areas_of_Interest', 'High-Throughput & Screening Systems', 'checkbox', 'Areas_of_Interest', 'High-Throughput & Screening Systems', false),
+          buildCheckboxElement('Areas_of_Interest', 'Molecular & Protein Analysis', 'checkbox', 'Areas_of_Interest', 'Molecular & Protein Analysis', false),
+          buildCheckboxElement('Areas_of_Interest', 'Proteins, Antibodies & Cell Culture', 'checkbox', 'Areas_of_Interest', 'Proteins, Antibodies & Cell Culture', false),
+          buildCheckboxElement('Areas_of_Interest', 'Separation, Purification & Sample Processing', 'checkbox', 'Areas_of_Interest', 'Separation, Purification & Sample Processing', false),
+        ),
+        /* OpCo Interest  */
+        div(
+          { class: 'space-y-2 col-span-1 md:col-span-2' },
+          label(
+            {
+              for: 'OpCoInterest',
+              class: 'font-normal !text-semibold !text-sm leading-4',
+            },
+            'Interested in hearing from one of our brands? Select all that apply.',
+          ),
+          buildCheckboxElement('OpCo_Interest', 'Abcam', 'checkbox', 'OpCo_Interest', 'Abcam', false),
+          buildCheckboxElement('OpCo_Interest', 'Aldevron', 'checkbox', 'OpCo_Interest', 'Aldevron', false),
+          buildCheckboxElement('OpCo_Interest', 'Beckman Coulter Life Sciences', 'checkbox', 'OpCo_Interest', 'Beckman Coulter Life Sciences', false),
+          buildCheckboxElement('OpCo_Interest', 'Cytiva', 'checkbox', 'OpCo_Interest', 'Cytiva', false),
+          buildCheckboxElement('OpCo_Interest', 'Genedata', 'checkbox', 'OpCo_Interest', 'Genedata', false),
+          buildCheckboxElement('OpCo_Interest', 'IDBS', 'checkbox', 'OpCo_Interest', 'IDBS', false),
+          buildCheckboxElement('OpCo_Interest', 'IDT', 'checkbox', 'OpCo_Interest', 'IDT', false),
+          buildCheckboxElement('OpCo_Interest', 'Leica Biosystems', 'checkbox', 'OpCo_Interest', 'Leica Biosystems', false),
+          buildCheckboxElement('OpCo_Interest', 'Leica Microsystems', 'checkbox', 'OpCo_Interest', 'Leica Microsystems', false),
+          buildCheckboxElement('OpCo_Interest', 'Molecular Devices', 'checkbox', 'OpCo_Interest', 'Molecular Devices', false),
+          buildCheckboxElement('OpCo_Interest', 'Phenomenex', 'checkbox', 'OpCo_Interest', 'Phenomenex', false),
+          buildCheckboxElement('OpCo_Interest', 'SCIEX', 'checkbox', 'OpCo_Interest', 'SCIEX', false),
+        ),
+        buildInputElement('OpCo_Comments', 'Do you have a specific product or promotion in mind?', 'text', 'OpCo_Comments', 'primary-product-interest', false, 'OpCo_Comments'),
+      );
+      formEl.querySelector('.add-lab-inquiry')?.append(additionField);
+    }
   if (formId === 'gatedform') {
     const gatedFormFields = div(
       { class: 'container mx-auto space-y-4' },
@@ -545,6 +597,14 @@ async function loadGatedForm(block) {
   block.innerHTML = '';
   block.append(formEl);
   loadUTMParams();
+
+  document.querySelector('#labinquiry')?.addEventListener('submit', (event) => {
+    if (formValidate()) {
+      getInquiry('labinquiry');
+    } else {
+      event.preventDefault();
+    }
+  });
 
   document.querySelector('#gatedform')?.addEventListener('submit', (event) => {
     if (formValidate()) {
