@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-cycle
 import { getCommerceBase } from './commerce.js';
-
 import {
   div,
   label,
@@ -43,6 +42,7 @@ import {
   scrollViewToTop,
 } from './common-utils.js';
 // base url for the intershop api calls
+// eslint-disable-next-line import/no-cycle
 import {
   updateCartItemQuantity,
   updateBasketDetails,
@@ -63,6 +63,10 @@ import {
 import { initializeModules } from '../blocks/checkout/checkoutUtilities.js';
 // eslint-disable-next-line import/no-cycle
 import { getPaymentMethodType, getStripeElements, getStripeInstance } from '../blocks/checkout/paymentModule.js';
+
+function deleteCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
 
 const { getAuthenticationToken } = await import('./token-utils.js');
 
@@ -842,7 +846,7 @@ export const setUseAddress = async (id, type, action = '') => {
       }
       localStorage.setItem('useAddress', JSON.stringify(updatedUseObject));
     }
-    const url = `${baseURL}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument`;
+    const url = `${baseURL}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument,rebateMessages`;
     const data = {};
     if (type === 'shipping') {
       Object.assign(data, { commonShipToAddress: id });
@@ -901,7 +905,7 @@ export async function getBasketDetails(userType = null, lastBasketId = null, sou
     'Authentication-Token': authenticationToken.access_token,
     Accept: 'application/vnd.intershop.basket.v1+json',
   });
-  const url = `${baseurl}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument`;
+  const url = `${baseurl}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument,rebateMessages`;
   try {
     if (lastBasketId && userType === 'customer') {
       const mergeBasketUrl = `${baseURL}/baskets/current/merges`;
@@ -916,7 +920,6 @@ export async function getBasketDetails(userType = null, lastBasketId = null, sou
 
       if (response?.status === 'success') {
         const basketResponse = await getApiData(url, defaultHeader);
-
         if (basketResponse && basketResponse.status === 'success') {
           localStorage.setItem('basketData', JSON.stringify(basketResponse));
           return basketResponse;
@@ -1030,7 +1033,6 @@ export const getShippingMethods = async () => {
         'application/vnd.intershop.basket.v1+json',
       );
       const response = await getApiData(url, defaultHeaders);
-
       if (response.status === 'success') {
         localStorage.setItem(
           'shippingMethods',
@@ -1357,7 +1359,6 @@ export const getPromotionDetails = async (promotionId) => {
           `${baseURL}/promotions/${promotionId}`,
           defaultHeaders,
         );
-
         if (getDiscountDetails?.status === 'success') {
           localStorage.setItem(
             'discountDetails',
@@ -1520,13 +1521,13 @@ export const taxExemptModal = async (taxExemptUploadedFile = '') => {
           class: 'text-red-500 text-md font-500 hidden',
           id: 'taxExemptModalErrorContainer',
         },
-        'Error Uploading File. Only JPG, .PNG, .PDF, .DOC and .DOCX are allowed.',
+        'Error Uploading File. Only JPG, .PNG, .PDF, .DOC and .DOCX are allowed. Max Size: 10MB.',
       ),
       p(
         {
           class: 'text-extralight text-center',
         },
-        'Please upload the tax exempt certificate for our team to validate Formats: .JPG, .PNG, .PDF, .DOC and .DOCX',
+        'Please upload the tax exempt certificate for our team to validate Formats: .JPG, .PNG, .PDF, .DOC and .DOCX. Size limit: 10MB',
       ),
     ),
 
@@ -1610,6 +1611,8 @@ export const taxExemptModal = async (taxExemptUploadedFile = '') => {
       f.preventDefault();
       const file = f.target.files[0];
       if (file) {
+        // Allowed SIZE
+        const maxFileSizeInBytes = 10 * 1024 * 1024; // 10MB
         // Allowed formats
         const allowedTaxExemptFileFormats = [
           'jpg',
@@ -1624,7 +1627,8 @@ export const taxExemptModal = async (taxExemptUploadedFile = '') => {
         const uploadedFileType = uploadedFileName.split('.')[1].toLowerCase();
         const base64File = await readFileAsBase64(file);
 
-        if (allowedTaxExemptFileFormats.includes(uploadedFileType)) {
+        // eslint-disable-next-line max-len
+        if (allowedTaxExemptFileFormats.includes(uploadedFileType) && file.size <= maxFileSizeInBytes) {
           showPreLoader();
           if (checkoutSummaryTax) {
             const response = await uploadTaxDocument(uploadedFileName, base64File);
@@ -3265,7 +3269,7 @@ get price type if its net or gross
                       ?.companyName2
                       ? ''
                       : 'hidden'
-                    }`,
+                      }`,
                   },
                   getUseAddressesResponse?.data?.invoiceToAddress?.companyName2
                   ?? '',
@@ -3449,6 +3453,53 @@ export async function updateCheckoutSummary() {
   }
 }
 
+/*
+ get personalization
+ */
+export async function getPersonalization() {
+  const authenticationToken = await getAuthenticationToken();
+
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  try {
+    const url = `${baseURL}/personalization`;
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await getApiData(url, defaultHeaders);
+    return response.status === 'success' ? response.data : { status: 'error', data: 'Not Found.' };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+}
+/*
+ get promotion details
+ */
+export async function getPromotionData(spgid) {
+  const authenticationToken = await getAuthenticationToken();
+  const personalizationId = await getPersonalization();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  try {
+    const url = `${baseURL}/promotions/${spgid};spgid=${personalizationId?.pgid}`;
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await getApiData(url, defaultHeaders);
+    return response.status === 'success' ? response.data : { status: 'error', data: 'Not Found.' };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+}
+
 // load module on navigation.
 export async function loadingModule() {
   const checkoutModulesWrapper = document.querySelector('#checkoutModulesWrapper');
@@ -3512,9 +3563,9 @@ export const cartItemsContainer = (cartItemValue) => {
       }
     } else {
       const item = {
-        lineItemId: cartItemValue.lineItemId,
+        lineItemId: cartItemValue?.lineItemId,
         value,
-        manufacturer: cartItemValue.manufacturer,
+        manufacturer: cartItemValue?.manufacturer,
         type,
       };
       const response = await updateCartItemQuantity(item);
@@ -3544,28 +3595,28 @@ export const cartItemsContainer = (cartItemValue) => {
       class: 'sm:w-max sm:h-[3.5rem]',
     },
     span({
-      id: `delteItem-${cartItemValue.sku}`,
+      id: `delteItem-${cartItemValue?.sku}`,
       class: 'icon icon-icons8-delete cart-delete',
     }),
   );
   deleteButton.addEventListener('click', () => {
-    const inputValue = document.getElementById(cartItemValue.lineItemId);
+    const inputValue = document.getElementById(cartItemValue?.lineItemId);
     modifyCart('delete-item', inputValue, '');
   });
   const inputBox = input({
     class:
       'w-[3.5rem] h-10 pl-4 bg-white font-medium text-black border-solid border-2 inline-flex justify-center items-center',
     type: 'number',
-    min: cartItemValue.minOrderQuantity,
+    min: cartItemValue?.minOrderQuantity,
     max:
-      cartItemValue.maxOrderQuantity === 0 ? 99 : cartItemValue.maxOrderQuantity,
+      cartItemValue?.maxOrderQuantity === 0 ? 99 : cartItemValue?.maxOrderQuantity,
     name: 'item-quantity',
-    value: cartItemValue.itemQuantity,
+    value: cartItemValue?.itemQuantity,
   });
   inputBox.addEventListener('change', (event) => {
     const eventParent = event.target.parentElement.parentElement.parentElement;
 
-    const selectedDiv = document.getElementById(cartItemValue.lineItemId); // or any div reference
+    const selectedDiv = document.getElementById(cartItemValue?.lineItemId); // or any div reference
     const inputItem = selectedDiv.querySelector('input');
     const productItem = inputItem.parentElement.parentElement;
 
@@ -3587,7 +3638,7 @@ export const cartItemsContainer = (cartItemValue) => {
   });
   const totalItemValue = cartItemValue.itemQuantity * cartItemValue.salePrice.value;
   const unitPriceDiv = () => {
-    if (cartItemValue.listPrice.value !== cartItemValue.salePrice.value) {
+    if (cartItemValue?.listPrice.value !== cartItemValue?.salePrice?.value) {
       return div(
         {
           class: 'md:w-[120px] lg:w-[150px] justify-start text-black text-base font-semibold',
@@ -3597,14 +3648,14 @@ export const cartItemsContainer = (cartItemValue) => {
             class:
               'md:w-[150px] justify-start text-gray-500 text-base font-semibold item line-through',
           },
-          `$${formattedAmount(cartItemValue.listPrice.value)}`,
+          `$${formattedAmount(cartItemValue?.listPrice?.value)}`,
         ),
         div(
           {
             class:
               'unit-price md:w-48 justify-start text-black text-base',
           },
-          `$${formattedAmount(cartItemValue.salePrice.value)}`,
+          `$${formattedAmount(cartItemValue?.salePrice?.value)}`,
         ),
       );
     }
@@ -3618,16 +3669,15 @@ export const cartItemsContainer = (cartItemValue) => {
           class:
             'unit-price w-full justify-start text-black text-base',
         },
-        `$${formattedAmount(cartItemValue.salePrice.value)}`,
+        `$${formattedAmount(cartItemValue?.salePrice?.value)}`,
       ),
     );
   };
-
   const itemsscontainer = div(
     {
       class:
         'cart-item-container w-full py-3 cart-item-wrapper  border-t border-gray-300 inline-flex lg:flex-row flex-col justify-start items-center gap-4',
-      id: cartItemValue.lineItemId,
+      id: cartItemValue?.lineItemId,
     },
     div(
       {
@@ -3635,7 +3685,7 @@ export const cartItemsContainer = (cartItemValue) => {
       },
       div(
         {
-          class: 'cart-item-image w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300',
+          class: 'cart-item-image w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300 max-h-max',
         },
         div(
           {
@@ -3643,7 +3693,7 @@ export const cartItemsContainer = (cartItemValue) => {
           },
           img({
             class: 'w-full h-auto',
-            src: cartItemValue.images ? cartItemValue.images[0].effectiveUrl : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
+            src: cartItemValue?.images?.length > 0 ? cartItemValue?.images[0]?.effectiveUrl : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
           }),
         ),
       ),
@@ -3656,14 +3706,14 @@ export const cartItemsContainer = (cartItemValue) => {
           {
             class: 'w-full justify-start items-center text-black text-base font-semibold',
           },
-          cartItemValue.productName,
+          cartItemValue?.name,
         ),
         div(
           {
             class:
               'w-full justify-start items-center text-gray-500 text-sm font-normal ',
           },
-          cartItemValue.sku,
+          cartItemValue?.sku,
         ),
 
       ),
