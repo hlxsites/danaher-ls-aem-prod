@@ -845,7 +845,7 @@ function buildNavBlock(headerBlock) {
 function buildFlyoutMenus(headerBlock) {
   const allFlyout = headerBlock.querySelectorAll('.menu-flyout');
   const closeFlyout = button(
-    { class: 'flex ml-auto mx-2 p-1 rounded hover:bg-gray-200/30' },
+    { class: 'flex ml-auto mx-2 p-1 rounded hover:bg-gray-200/30 bg-white' },
     span({
       class:
         'icon icon-x w-6 h-6 [&_svg>use]:stroke-2 [&_svg>use]:stroke-gray-500/70',
@@ -854,7 +854,7 @@ function buildFlyoutMenus(headerBlock) {
   closeFlyout.addEventListener('click', hideFlyoutMenu);
 
   const backFlyout = button(
-    { id: 'back-flyout', class: 'flex items-center gap-x-1 group' },
+    { id: 'back-flyout', class: 'flex items-center gap-x-1 group bg-white' },
     span({
       class:
         'icon icon-arrow-left [&_svg>use]:stroke-danaherpurple-500 w-4 h-4 transition-transform group-hover:translate-x-0.5',
