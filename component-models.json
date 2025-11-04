@@ -51,8 +51,8 @@
           {
             "component": "reference",
             "valueType": "string",
-            "name": "image",
-            "label": "Image",
+            "name": "metaimage",
+            "label": "Meta Image",
             "multi": false
           },
           {
