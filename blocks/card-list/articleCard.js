@@ -29,7 +29,6 @@ export default function createCard(article, firstCard = false) {
         linkText = 'Read Article →';
     }
   }
-
   const cardWrapper = a(
     {
       class: 'group h-full ',
@@ -38,7 +37,7 @@ export default function createCard(article, firstCard = false) {
       title: article.title,
     },
     imageHelper(
-      article.image ?? '/content/dam/danaher/system/icons/preview-image.png',
+      article?.metaImage || article.image || '/content/dam/danaher/system/icons/preview-image.png',
       article.title,
       firstCard,
     ),
