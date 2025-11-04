@@ -33,6 +33,9 @@ indices:
       solutions:
         select: head > meta[name="solutions"]
         value: attribute(el, "content")
+      metaImage:
+        select: head > meta[name="metaimage"]
+        value: attribute(el, "content")  
       readingTime:
         select: head > meta[name="readingtime"]
         value: attribute(el, "content")
