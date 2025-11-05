@@ -15,7 +15,7 @@ export default function createCard(article, firstCard = false) {
 
   // Determine link text based on template and article path
   let linkText = '';
-  if (article.path && article.path.includes('/us/en/videos-eds/')) {
+  if (article.path && article.path.includes('/us/en/videos/')) {
     linkText = 'Watch →';
   } else {
     switch (template) {

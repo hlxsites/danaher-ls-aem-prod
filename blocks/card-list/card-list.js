@@ -199,10 +199,10 @@ export default async function decorate(block) {
   let filteredArticles = articles;
   // Check if we're on a videos hub page and filter to show only direct children
   const videosEdsPathMatch = (
-    window.location.pathname === '/us/en/videos-eds' ||
-    window.location.pathname === '/us/en/videos-eds/' ||
-    window.location.pathname === '/us/en/videos-eds.html' ||
-    window.location.pathname.startsWith('/us/en/videos-eds/')
+    window.location.pathname === '/us/en/videos' ||
+    window.location.pathname === '/us/en/videos/' ||
+    window.location.pathname === '/us/en/videos.html' ||
+    window.location.pathname.startsWith('/us/en/videos/')
   );
   if (videosEdsPathMatch) {
     filteredArticles = articles.filter((article) => {
@@ -210,12 +210,12 @@ export default async function decorate(block) {
         // Remove leading/trailing slashes and split by '/'
         const cleanPath = article.path.replace(/^\/+|\/+$/g, '');
         const pathSegments = cleanPath.split('/');
-        // Only include direct children: /us/en/videos-eds/{page} (no sub-pages)
+        // Only include direct children: /us/en/videos/{page} (no sub-pages)
         if (
           pathSegments.length === 4 &&
           pathSegments[0] === 'us' &&
           pathSegments[1] === 'en' &&
-          pathSegments[2] === 'videos-eds' &&
+          pathSegments[2] === 'videos' &&
           pathSegments[3] !== ''
         ) {
           return true;
