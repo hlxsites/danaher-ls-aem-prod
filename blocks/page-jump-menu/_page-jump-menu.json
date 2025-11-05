@@ -49,6 +49,8 @@
           "options": [
             { "name": "Bookmark", "value": ":dam-Bookmark:" },
             { "name": "Refresh", "value": ":dam-Refresh:" },
+            { "name": "Gift", "value": ":dam-Gift:" },
+            { "name": "DocumentText", "value": ":dam-Documenttext:" },
             { "name": "Cube", "value": ":dam-Cube:" },
             { "name": "Chat", "value": ":dam-Chat:" }
           ]
