@@ -843,6 +843,10 @@
   },
   {
     "id": "carousel",
+    "fields": []
+  },
+  {
+    "id": "carousel-item",
     "fields": [
       {
         "component": "text",
