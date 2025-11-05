@@ -1889,6 +1889,14 @@
             "value": ":dam-Refresh:"
           },
           {
+            "name": "Gift",
+            "value": ":dam-Gift:"
+          },
+          {
+            "name": "DocumentText",
+            "value": ":dam-Documenttext:"
+          },
+          {
             "name": "Cube",
             "value": ":dam-Cube:"
           },
