@@ -9,7 +9,23 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Takeway",
-                  "model": "takeway"
+                  "model": "takeway",
+                  "filter": "takeway"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Takeway-Item",
+          "id": "takeway-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/item",
+                "template": {
+                  "name": "Takeway-Item",
+                  "model": "takeway-item"
                 }
               }
             }
@@ -17,18 +33,23 @@
         }
     ],
     "models": [ 
-    {
+     {
       "id": "takeway",
+      "fields": [
+      ]
+    }, 
+    {
+      "id": "takeway-item",
       "fields": [
         {
           "component": "text",
-          "name": "takeway_title1",
-          "label": "Title1"
+          "name": "item_title",
+          "label": "Title"
         },
         {
           "component": "select",
-          "name": "takeway_title1Type",
-          "label": "Title Type1",
+          "name": "item_titleType",
+          "label": "Title Type",
           "options": [
             {
               "name": "h1",
@@ -59,60 +80,17 @@
         {
           "component": "richtext",
           "valueType": "string",
-          "name": "takeway_description1",
+          "name": "item_description",
           "value": "",
-          "label": "Description1"
-        },
-        {
-          "component": "text",
-          "name": "takeway_title2",
-          "label": "Title2"
-        },
-        {
-          "component": "select",
-          "name": "takeway_title2Type",
-          "label": "Title Type2",
-          "options": [
-            {
-              "name": "h1",
-              "value": "h1"
-            },
-            {
-              "name": "h2",
-              "value": "h2"
-            },
-            {
-              "name": "h3",
-              "value": "h3"
-            },
-            {
-              "name": "h4",
-              "value": "h4"
-            },
-            {
-              "name": "h5",
-              "value": "h5"
-            },
-            {
-              "name": "h6",
-              "value": "h6"
-            }
-          ]
-        },
-        {
-          "component": "richtext",
-          "valueType": "string",
-          "name": "takeway_description2",
-          "value": "",
-          "label": "Description2"
-        }
+          "label": "Description"
+        }        
       ]
     }
   ],
     "filters": [
       {
         "id": "takeway",
-        "components": [" "]
+        "components": ["takeway-item"]
       }
     ]
   }

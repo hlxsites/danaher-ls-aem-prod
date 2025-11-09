@@ -383,7 +383,7 @@
   {
     "id": "takeway",
     "components": [
-      " "
+      "takeway-item"
     ]
   },
   {

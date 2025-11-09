@@ -73,67 +73,90 @@
               "value": "h6"
             }
           ]
-        }
-            ]
         },
         {
-            "id": "accordion-item",
-            "fields": [
-                {
-                    "component": "text",
-                    "valueType": "string",
-                    "name": "item_title",
-                    "value": "",
-                    "label": "Title"
-                  },
-                  {
-          "component": "select",
-          "name": "item_titleType",
-          "label": "Accordion Item Title Type",
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "classes",
+          "value": "",
+          "label": "image option",
           "options": [
-            {
-              "name": "h1",
-              "value": "h1"
-            },
-            {
-              "name": "h2",
-              "value": "h2"
-            },
-            {
-              "name": "h3",
-              "value": "h3"
-            },
-            {
-              "name": "h4",
-              "value": "h4"
-            },
-            {
-              "name": "h5",
-              "value": "h5"
-            },
-            {
-              "name": "h6",
-              "value": "h6"
-            }
+            { "name": "Image", "value": "image" }        
+          ]
+        }
           ]
         },
-                  {
-                    "component": "richtext",
-                    "valueType": "string",
-                    "name": "item_description",
-                    "value": "",
-                    "label": "Description"
-                  }
+        {
+        "id": "accordion-item",
+        "fields": [
+          {
+            "component": "reference",
+            "valueType": "string",
+            "name": "image",
+            "label": "Image",
+            "multi": false
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "imageAlt",
+            "value": "",
+            "label": "Image Alt Text"
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "title",
+            "value": "",
+            "label": "Title"
+          },
+          {
+            "component": "select",
+            "name": "titleType",
+            "label": "Title Type",
+              "options": [
+              {
+                "name": "h1",
+                "value": "h1"
+              },
+              {
+                "name": "h2",
+                "value": "h2"
+              },
+              {
+                "name": "h3",
+                "value": "h3"
+              },
+              {
+                "name": "h4",
+                "value": "h4"
+              },
+              {
+                "name": "h5",
+                "value": "h5"
+              },
+              {
+                "name": "h6",
+                "value": "h6"
+              }
             ]
+          },
+          {
+            "component": "richtext",
+            "valueType": "string",
+            "name": "description",
+            "value": "",
+            "label": "Description"
+          }
+          ]
         }
-    ],
+      ],
     "filters": [
         {
             "id": "accordion",
             "components": [
               "accordion-item"
             ]
-          }
+        }
     ]
   }
-  
