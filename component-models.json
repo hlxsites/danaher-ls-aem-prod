@@ -327,19 +327,6 @@
             "value": "h6"
           }
         ]
-      },
-      {
-        "component": "multiselect",
-        "valueType": "string",
-        "name": "classes",
-        "value": "",
-        "label": "image option",
-        "options": [
-          {
-            "name": "Image",
-            "value": "image"
-          }
-        ]
       }
     ]
   },
@@ -347,30 +334,16 @@
     "id": "accordion-item",
     "fields": [
       {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
         "component": "text",
         "valueType": "string",
-        "name": "imageAlt",
-        "value": "",
-        "label": "Image Alt Text"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
+        "name": "item_title",
         "value": "",
         "label": "Title"
       },
       {
         "component": "select",
-        "name": "titleType",
-        "label": "Title Type",
+        "name": "item_titleType",
+        "label": "Accordion Item Title Type",
         "options": [
           {
             "name": "h1",
@@ -401,7 +374,7 @@
       {
         "component": "richtext",
         "valueType": "string",
-        "name": "description",
+        "name": "item_description",
         "value": "",
         "label": "Description"
       }
