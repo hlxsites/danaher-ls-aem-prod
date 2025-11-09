@@ -21,7 +21,6 @@ export default async function decorate(block) {
     block.classList.add('has-image');
     image.classList.add(...'main-image w-64 h-64 rounded-full'.split(' '));
   }
-  if (window.location.pathname.includes('/us/en/blog/') || window.location.pathname.includes('/us/en/news/')) {
     const authorTextDiv = block?.firstElementChild?.nextElementSibling?.nextElementSibling;
     block.innerHTML = '';
     const finalimageDiv = div({ class: 'hidden lg:block lg:flex-shrink-0' });
@@ -52,14 +51,4 @@ export default async function decorate(block) {
     divEl.append(finalimageDiv);
     divEl.append(finaldivOfDivEl);
     block.append(divEl);
-  } else {
-    const divElem = block.querySelector('.testimonial > div');
-    const footerElem = div(
-      { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
-      divElem?.querySelectorAll('div')[image ? 2 : 1] ? imagecopy || '' : '',
-      div({ class: 'flex flex-col' }, divElem?.querySelectorAll('div')[image ? 2 : 1] ? divElem?.querySelectorAll('div')[image ? 2 : 1] : '', divElem?.querySelectorAll('div')[image ? 3 : 2] ? divElem?.querySelectorAll('div')[image ? 3 : 2] : ''),
-    );
-    divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(footerElem);
-    divElem?.querySelectorAll('div')[image ? 1 : 0]?.append(buildQuote);
-  }
 }
