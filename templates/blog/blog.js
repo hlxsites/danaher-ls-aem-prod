@@ -82,7 +82,7 @@ export default async function buildAutoBlocks() {
       buildBlock('related-articles', { elems: [] }),
     );
     section.after(additionalContentSection);    
-    buildArticleSchema();
+    // buildArticleSchema();
     section.parentElement.prepend(section);
   } else {
     section.removeChild(blogH1);
