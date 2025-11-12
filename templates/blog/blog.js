@@ -35,7 +35,7 @@ export default async function buildAutoBlocks() {
     return true;
   });
 
-  if (window.location.pathname.includes('/us/en/news/') || window.location.pathname.includes('/us/en/videos-eds/')) {
+  if (window.location.pathname.includes('/us/en/news/')) {
     if (blogHeroP2) {
       section.removeChild(blogHeroP1);
       section.removeChild(blogHeroP2);
@@ -50,41 +50,41 @@ export default async function buildAutoBlocks() {
       buildBlock('related-articles', { elems: [] }),
     );
     buildArticleSchema();
-  } 
-  else if (window.location.pathname.includes('/us/en/library/')) {
-    // if (blogH1 instanceof Node) section.removeChild(blogH1);
-    // let columnElements = '';
-    // let blogHeroImage;
-    // if (blogHeroP2) {
-    //   blogHeroImage = blogHeroP2.querySelector(':scope > picture, :scope > img');
-    //   if (blogHeroP1 instanceof Node) section.removeChild(blogHeroP1);
-    //   if (blogHeroP2 instanceof Node) section.removeChild(blogHeroP2);
-    //   const divEl = div();
-    //   divEl.append(blogH1, blogHeroP1);
-    //   // moveImageInstrumentation(blogHeroImage);
-    //   columnElements = [[divEl, blogHeroImage]];
-    // } else if (blogHeroP1) {
-    //   blogHeroImage = blogHeroP1.querySelector(':scope > picture, :scope > img');
-    //   // moveImageInstrumentation(blogHeroImage);
-    //   if (blogHeroP1 instanceof Node) section.removeChild(blogHeroP1);
-    //   columnElements = [[blogHeroImage, blogH1]];
-    // }
+  } else if (window.location.pathname.includes('/us/en/library/')) {
+    let columnElements = '';
+    let blogHeroImage;
+    if (blogHeroP2) {
+      blogHeroImage = blogHeroP2.querySelector(':scope > picture, :scope > img');
+      section.removeChild(blogHeroP1);
+      section.removeChild(blogHeroP2);
+      const divEl = div();
+      divEl.append(blogH1, blogHeroP1);
+      // moveImageInstrumentation(blogHeroImage);
+      columnElements = [[divEl, blogHeroImage]];
+    } else if (blogHeroP1) {
+      blogHeroImage = blogHeroP1.querySelector(':scope > picture, :scope > img');
+      // moveImageInstrumentation(blogHeroImage);
+      section.removeChild(blogHeroP1);
+      columnElements = [[blogHeroImage, blogH1]];
+    }
 
-    // // section.prepend(
-    // //   // buildBlock('social-media', { elems: [] }),
-    // //   // buildBlock('columns', columnElements),
-    // //   // buildBlock('article-info', { elems: [] }),
-    // // );
-    
+    // section.prepend(
+    //   buildBlock('social-media', { elems: [] }),
+    //   buildBlock('columns', columnElements),
+    //   buildBlock('article-info', { elems: [] }),
+    // );
+
     const additionalContentSection = document.createElement('div');
     additionalContentSection.append(
       buildBlock('tags-list', { elems: [] }),
       buildBlock('related-articles', { elems: [] }),
     );
-    // section.after(additionalContentSection);    
+    // section.after(additionalContentSection);
+
     buildArticleSchema();
-    // section.parentElement.prepend(section);
-  } else {
+    section.parentElement.prepend(section);
+  }
+  else {
     section.removeChild(blogH1);
     let columnElements = '';
     let blogHeroImage;
