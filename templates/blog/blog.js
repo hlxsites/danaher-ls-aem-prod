@@ -79,7 +79,7 @@ export default async function buildAutoBlocks() {
       buildBlock('tags-list', { elems: [] }),
       buildBlock('related-articles', { elems: [] }),
     );
-    // section.after(additionalContentSection);
+    section.after(additionalContentSection);
 
     buildArticleSchema();
     section.parentElement.prepend(section);
