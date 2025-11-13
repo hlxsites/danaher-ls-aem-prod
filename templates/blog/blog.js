@@ -67,7 +67,7 @@ export default async function buildAutoBlocks() {
       section.removeChild(blogHeroP1);
       columnElements = [[blogHeroImage, blogH1]];
     }
-    section.parentElement.append(section);
+    
     const additionalContentSection = document.createElement('div');
     additionalContentSection.append(
       buildBlock('tags-list', { elems: [] }),
@@ -76,7 +76,9 @@ export default async function buildAutoBlocks() {
     // section.after(additionalContentSection);
 
     buildArticleSchema();
-    section.parentElement.prepend(section);
+    section.parentElement.append(section);
+    // section.parentElement.prepend(section);
+    // section.parentElement.append(section);
   }
   else {
     section.removeChild(blogH1);
