@@ -295,6 +295,96 @@
     ]
   },
   {
+    "id": "accordion-image",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "super_title",
+        "value": "",
+        "label": "Super Title"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "image_alt",
+        "value": "",
+        "label": "Image Alt Text"
+      }
+    ]
+  },
+  {
+    "id": "accordion-image-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "item_title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "item_description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "accordion-with-image",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "super_title",
+        "value": "",
+        "label": "Super Title"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "image_alt",
+        "value": "",
+        "label": "Image Alt Text"
+      }
+    ]
+  },
+  {
+    "id": "accordion-with-image-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "item_title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "item_description",
+        "value": "",
+        "label": "Description"
+      }
+    ]
+  },
+  {
     "id": "accordion",
     "fields": [
       {
@@ -2466,6 +2556,18 @@
         "name": "productid",
         "value": "",
         "label": "Category Title(comma separated)"
+      }
+    ]
+  },
+  {
+    "id": "see-all",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "you_may_interest",
+        "label": "You May Be Interested In",
+        "value": ""
       }
     ]
   },

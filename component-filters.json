@@ -98,6 +98,18 @@
     ]
   },
   {
+    "id": "accordion-image",
+    "components": [
+      "accordion-image-item"
+    ]
+  },
+  {
+    "id": "accordion-with-image",
+    "components": [
+      "accordion-with-image-item"
+    ]
+  },
+  {
     "id": "accordion",
     "components": [
       "accordion-item"
@@ -333,6 +345,10 @@
     "components": [
       ""
     ]
+  },
+  {
+    "id": "see-all",
+    "components": []
   },
   {
     "id": "top-selling",

@@ -1,0 +1,251 @@
+/* Accordion Image Styles */
+
+.accordion-with-image-wrapper {
+  width: 100%;
+}
+
+.accordion-with-image {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Container */
+.accordion-with-image .dhls-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .accordion-with-image .dhls-container {
+    padding: 0;
+  }
+}
+
+/* Layout */
+.accordion-with-image .flex {
+  display: flex;
+}
+
+.accordion-with-image .flex-col {
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .accordion-with-image .lg\:flex-row {
+    flex-direction: row;
+  }
+}
+
+.accordion-with-image .gap-x-8 {
+  column-gap: 2rem;
+}
+
+.accordion-with-image .w-full {
+  width: 100%;
+}
+
+.accordion-with-image .max-w-7xl {
+  max-width: 80rem;
+}
+
+.accordion-with-image .mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Left Container - Image and Title */
+.accordion-with-image .lg\:w-\[400px\] {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .accordion-with-image .lg\:w-\[400px\] {
+    width: 400px;
+    flex-shrink: 0;
+  }
+}
+
+.accordion-with-image .mb-8 {
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .accordion-with-image .lg\:mb-0 {
+    margin-bottom: 0;
+  }
+}
+
+/* Title Styles */
+.accordion-with-image h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+  line-height: 1.2;
+}
+
+/* Image Styles */
+.accordion-with-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  display: block;
+}
+
+/* Right Container - Accordion */
+.accordion-with-image .lg\:w-\[840px\] {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .accordion-with-image .lg\:w-\[840px\] {
+    width: 840px;
+    flex: 1;
+  }
+}
+
+/* Accordion Item */
+.accordion-with-image .accordion-item {
+  position: relative;
+  padding: 1.5rem 0;
+  border-top: 1px solid #d1d5db;
+}
+
+.accordion-with-image .accordion-item:first-child {
+  border-top: none;
+}
+
+/* Checkbox (hidden) */
+.accordion-with-image input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Label/Header */
+.accordion-with-image label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.accordion-with-image h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  margin: 0;
+  margin-right: 3rem;
+}
+
+/* Icons */
+.accordion-with-image .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  right: 0;
+  fill: currentColor;
+  color: #6b7280;
+  transition: all 0.3s ease-in-out;
+}
+
+.accordion-with-image .chevron-up {
+  opacity: 1;
+}
+
+.accordion-with-image .chevron-down {
+  opacity: 0;
+}
+
+/* When checkbox is checked */
+.accordion-with-image input[type="checkbox"]:checked ~ label .chevron-up {
+  opacity: 0;
+}
+
+.accordion-with-image input[type="checkbox"]:checked ~ label .chevron-down {
+  opacity: 1;
+}
+
+/* Panel/Content */
+.accordion-with-image .accordion-answer {
+  font-size: 1rem;
+  line-height: 1.75rem;
+  overflow: hidden;
+  font-weight: 300;
+}
+
+/* Panel animation */
+.accordion-with-image [aria-expanded] {
+  display: grid;
+  font-size: 0.875rem;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.accordion-with-image input[type="checkbox"]:checked ~ [aria-expanded] {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* Links inside accordion */
+.accordion-with-image .accordion-answer a {
+  color: #7c3aed;
+  text-decoration: underline;
+  text-decoration-color: #000;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.accordion-with-image .accordion-answer a:hover {
+  text-decoration-color: #7c3aed;
+  background-color: rgba(124, 58, 237, 0.1);
+}
+
+/* Strong/Bold text */
+.accordion-with-image .accordion-answer strong {
+  font-weight: 700;
+}
+
+/* Lists */
+.accordion-with-image .accordion-answer ul {
+  list-style-type: disc;
+  padding-left: 2.5rem;
+  margin: 0.5rem 0;
+}
+
+.accordion-with-image .accordion-answer li {
+  margin: 0.5rem 0;
+}
+
+/* Paragraphs */
+.accordion-with-image .accordion-answer p {
+  margin: 0.75rem 0;
+}
+
+.accordion-with-image .accordion-answer p:first-child {
+  margin-top: 0;
+}
+
+.accordion-with-image .accordion-answer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Icon SVG styling */
+.accordion-with-image .icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.accordion-with-image .icon svg use {
+  stroke: #6b7280;
+}
