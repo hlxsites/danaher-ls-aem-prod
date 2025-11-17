@@ -1535,7 +1535,7 @@ header {
   }
 }
 
-.library main .recent-articles-container {
+/* .library main .recent-articles-container {
   display: none;
   flex-shrink: 0;
 }
@@ -1558,7 +1558,7 @@ header {
     display: block;
     width: 23rem;
   }
-}
+} */
 
 .appear div.timeline > div:not(:last-child) {
   .columns.features-card-left > div > div.t-line > .card::after {
@@ -3800,6 +3800,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   top: 83px;
 }
 
+.bottom-\[20px\] {
+  bottom: 20px;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -4040,6 +4044,14 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   height: 100vh;
 }
 
+.\!h-6 {
+  height: 1.5rem !important;
+}
+
+.h-\[80px\] {
+  height: 80px;
+}
+
 .max-h-48 {
   max-height: 12rem;
 }
@@ -4161,6 +4173,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   width: 100vw;
 }
 
+.w-\[80px\] {
+  width: 80px;
+}
+
 .\!max-w-7xl {
   max-width: 80rem !important;
 }
@@ -4193,6 +4209,14 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   max-width: 36rem;
 }
 
+.max-w-\[608px\] {
+  max-width: 608px;
+}
+
+.max-w-\[80px\] {
+  max-width: 80px;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -4208,6 +4232,11 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
 
 .translate-x-full {
   --tw-translate-x: 100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.rotate-180 {
+  --tw-rotate: 180deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -4285,6 +4314,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   align-items: flex-start;
 }
 
+.items-end {
+  align-items: flex-end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -4333,6 +4366,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   gap: 2.25rem;
 }
 
+.gap-1 {
+  gap: 0.25rem;
+}
+
 .gap-x-6 {
   -moz-column-gap: 1.5rem;
        column-gap: 1.5rem;
@@ -4368,6 +4405,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+
+.self-end {
+  align-self: flex-end;
 }
 
 .self-stretch {
@@ -4493,6 +4534,16 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   border-color: rgb(239 68 68 / var(--tw-border-opacity));
 }
 
+.border-red-700 {
+  --tw-border-opacity: 1;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity));
+}
+
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
@@ -4604,6 +4655,10 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.p-\[10px\] {
+  padding: 10px;
 }
 
 .px-1 {
@@ -4731,6 +4786,14 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.\!pb-\[7px\] {
+  padding-bottom: 7px !important;
+}
+
+.\!pt-\[7px\] {
+  padding-top: 7px !important;
 }
 
 .text-left {
@@ -4927,6 +4990,11 @@ main div.section.no-padding-top.columns-container.call-to-action-container {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -5076,7 +5144,6 @@ main .section.top-border {
   padding-right: 13px;
   padding-top: 9px;
   padding-bottom: 9px;
-  font-family: Inter !important;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.25rem;
@@ -5202,6 +5269,11 @@ main .section.top-border {
 .hover\:bg-danaherpurple-800:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(64 0 165 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-danaherpurple-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(117 35 255 / var(--tw-bg-opacity));
 }
 
 .hover\:text-danaherblue-500:hover {

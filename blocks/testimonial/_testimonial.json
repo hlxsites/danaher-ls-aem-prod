@@ -28,10 +28,10 @@
           "referenceType": "image"
         },
         {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAlt",
-        "label": "Alt"
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Alt"
         },
         {
           "component": "richtext",
@@ -44,9 +44,15 @@
           "valueType": "string",
           "name": "author",
           "label": "Testimonial Author"
+        },
+        {
+          "component": "boolean",
+          "name": "quoteIcon",
+          "label": "Show Quote Icon",
+          "value": true
         }
       ]
     }
   ],
-  "filters": [  ]
+  "filters": []
 }

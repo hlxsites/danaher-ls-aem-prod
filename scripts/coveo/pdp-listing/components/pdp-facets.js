@@ -1,13 +1,16 @@
 /* eslint-disable */
 import {
   productTypeFacetController,
-  brandFacetController,
+  // brandFacetController,
   documentTypeFacetController,
   searchBoxController,
   modificationFacetController,
+  separationModesFacetController,
+  phaseFacetController,
   //specificationsFacetController,
   unitOfMeasureFacetController,
   skuSizeDetailsFacetController,
+  unitSizeFacetController,
   //specificationsjsonFacetController,
 } from "../controllers/pdp-controllers.js";
 import { createFiltersPanel } from "./pdp-side-panel.js";
@@ -48,6 +51,7 @@ export function renderCreateFacet() {
   function createCustomDropdown(controller, placeholderText) {
     const dropdownContainer = document.createElement("div");
     dropdownContainer.className = "relative inline-block";
+    if (placeholderText === 'Brand') dropdownContainer?.classList?.add('hidden');
 
     // Button
     const button = document.createElement("button");
@@ -139,14 +143,23 @@ export function renderCreateFacet() {
         const { values } = controller.state;
         if (values && values.length > 0) {
           values.forEach((item) => {
+            const optionCheckbox = document.createElement("div");
+            optionCheckbox.className = "w-4 h-4 bg-white rounded border border-danahergray-300 checked:border-danaherpurple-500 focus:ring-2 focus:ring-danaherpurple-300";
             const option = document.createElement("li");
             option.textContent = item.label || item.value;
             option.className =
-              "px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700";
+              "flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700";
 
             if (item.state === "selected") {
-              labelSpan.textContent = item.label || item.value;
+              //labelSpan.textContent = item.label || item.value;
               option.classList.add("font-semibold", "text-indigo-600");
+              optionCheckbox.classList.add("hidden");
+              const selectedCheckboxParent = document.createElement("div");
+              const arrow = document.createElement("span");
+              arrow.innerHTML = `<img src="/icons/check-purple-square.svg" alt="arrow icon" width="16" height="16" />`;
+              selectedCheckboxParent.appendChild(arrow);
+              selectedCheckboxParent.className = "flex items-center gap-2";
+              option.prepend(selectedCheckboxParent);
             }
 
             option.addEventListener("click", () => {
@@ -155,6 +168,7 @@ export function renderCreateFacet() {
               // chevron.querySelector('svg').classList.remove('rotate-180');
               setTimeout(rebuildMenu, 100);
             });
+            option.prepend(optionCheckbox);
             menu.appendChild(option);
           });
         }
@@ -186,31 +200,36 @@ export function renderCreateFacet() {
   if (productTypeFacetController.state.valuesAsTrees.length >= 1) {
     mainRow.appendChild(createCustomDropdown(productTypeFacetController, "Product Type"));
   }
-  if (brandFacetController.state.values.length >= 1) {
-    mainRow.appendChild(createCustomDropdown(brandFacetController, "Brand"));
-  }
+  // if (brandFacetController.state.values.length >= 1) {
+  //   mainRow.appendChild(createCustomDropdown(brandFacetController, "Brand"));
+  // }
   //Modification filter
   if (modificationFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(modificationFacetController, "Modification"));
   }
-  //Specifications filter
-  // if (specificationsFacetController.state.values.length >= 1) {
-  //   mainRow.appendChild(createCustomDropdown(specificationsFacetController, "Specifications"));
-  // }
   //Unit of Measure filter
   if (unitOfMeasureFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(unitOfMeasureFacetController, "Unit of Measure"));
   }
-  //Sku Size filter filter
+  //Sku Size filter
   if (skuSizeDetailsFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(skuSizeDetailsFacetController, "Sku Size Details"));
   }
-  // //Specifications Json filter
-  // if (specificationsjsonFacetController.state.values.length >= 1) {
-  //   mainRow.appendChild(createCustomDropdown(specificationsjsonFacetController, "ModificationSJ"));
-  // }
+  //Unit Size filter 
+  if (unitSizeFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(unitSizeFacetController, "Unit Size"));
+  }
+  //Document Type filter
   if (documentTypeFacetController.state.values.length >= 1) {
     mainRow.appendChild(createCustomDropdown(documentTypeFacetController, "Document Type"));
+  }
+    //Specifications filter
+  if (separationModesFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(separationModesFacetController, "Separation Modes"));
+  }
+    // //Specifications Json filter
+  if (phaseFacetController.state.values.length >= 1) {
+    mainRow.appendChild(createCustomDropdown(phaseFacetController, "Phase"));
   }
 
   // === Search Box ===

@@ -42,7 +42,7 @@ export default async function decorate(block) {
       const absImg = image?.startsWith('http') ? image : `${baseUrl}${image}`;
       return a(
         {
-          href: clickUri,
+          href: clickUri && clickUri.endsWith('.html') ? clickUri : `${clickUri || ''}.html`,
           target: clickUri?.includes('http') ? '_blank' : '_self',
           class:
             'border cursor-pointer transform transition duration-500 hover:scale-105  border-gray-300 overflow-hidden gap-3 hover:shadow-md  bg-white flex flex-col',
@@ -65,7 +65,7 @@ export default async function decorate(block) {
         ),
         a(
           {
-            href: clickUri,
+            href: clickUri && clickUri.endsWith('.html') ? clickUri : `${clickUri || ''}.html`,
             target: clickUri?.includes('http') ? '_blank' : '_self',
             rel: 'noopener noreferrer',
             class:

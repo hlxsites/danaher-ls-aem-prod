@@ -349,9 +349,9 @@
     @apply !py-10 sm:!py-8 md:!px-5 empty:hidden;
   }
 
-  .library main .recent-articles-container {
+  /* .library main .recent-articles-container {
     @apply hidden lg:block lg:w-recent-articles bg-danaherpurple-25 space-y-4 !py-28 shrink-0;
-  }
+  } */
 
   .appear div.timeline > div:not(:last-child) {
     .t-line::after {
@@ -1108,7 +1108,7 @@
   }
 
   .pdp-hero-dd {
-    @apply border px-[13px] py-[9px] h-[55px] font-[400] !font-[Inter] text-[14px] leading-5 bg-white cursor-pointer flex items-center justify-between select-none relative w-[163px];
+    @apply border px-[13px] py-[9px] h-[55px] font-[400] text-[14px] leading-5 bg-white cursor-pointer flex items-center justify-between select-none relative w-[163px];
   }
 }
 
