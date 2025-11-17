@@ -124,6 +124,13 @@
               "name": "viewport",
               "label": "View Port",
               "value": ""
+            },
+            {
+              "component": "text",
+              "valueType": "string",
+              "name": "pageorder",
+              "label": "Page Order",
+              "value": ""
             }
           ]
         }
