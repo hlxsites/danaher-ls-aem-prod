@@ -5,7 +5,8 @@ import {
   decorateIcons,
   decorateSections,
   loadBlock,
-  loadBlocks,
+  loadScript,
+  loadSections,
 } from './lib-franklin.js';
 import { decorateRichtext } from './editor-support-rte.js';
 import { decorateMain } from './scripts.js';
@@ -23,6 +24,10 @@ async function applyChanges(event) {
   const { content } = updates[0];
   if (!content) return false;
 
+  // load dompurify
+  await loadScript(`${window.hlx.codeBasePath}/scripts/dompurify.min.js`);
+
+  // const sanitizedContent = window.DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
   const parsedUpdate = new DOMParser().parseFromString(content, 'text/html');
   const element = document.querySelector(`[data-aue-resource="${resource}"]`);
 
@@ -31,10 +36,10 @@ async function applyChanges(event) {
       const newMain = parsedUpdate.querySelector(`[data-aue-resource="${resource}"]`);
       newMain.style.display = 'none';
       element.insertAdjacentElement('afterend', newMain);
+      element.remove();
       decorateMain(newMain);
       decorateRichtext(newMain);
-      await loadBlocks(newMain);
-      element.remove();
+      await loadSections(newMain);
       newMain.style.display = null;
       // eslint-disable-next-line no-use-before-define
       attachEventListners(newMain);
@@ -48,12 +53,12 @@ async function applyChanges(event) {
       if (newBlock) {
         newBlock.style.display = 'none';
         block.insertAdjacentElement('afterend', newBlock);
+        block.remove();
         decorateButtons(newBlock);
         decorateIcons(newBlock);
         decorateBlock(newBlock);
         decorateRichtext(newBlock);
         await loadBlock(newBlock);
-        block.remove();
         newBlock.style.display = null;
         return true;
       }
@@ -66,13 +71,13 @@ async function applyChanges(event) {
           const [newSection] = newElements;
           newSection.style.display = 'none';
           element.insertAdjacentElement('afterend', newSection);
+          element.remove();
           decorateButtons(newSection);
           decorateIcons(newSection);
           decorateRichtext(newSection);
           decorateSections(parentElement);
           decorateBlocks(parentElement);
-          await loadBlocks(parentElement);
-          element.remove();
+          await loadSections(parentElement);
           newSection.style.display = null;
         } else {
           element.replaceWith(...newElements);
@@ -95,6 +100,7 @@ function attachEventListners(main) {
     'aue:content-add',
     'aue:content-move',
     'aue:content-remove',
+    'aue:content-copy',
   ].forEach((eventType) => main?.addEventListener(eventType, async (event) => {
     event.stopPropagation();
     const applied = await applyChanges(event);
@@ -103,3 +109,11 @@ function attachEventListners(main) {
 }
 
 attachEventListners(document.querySelector('main'));
+
+// decorate rich text
+// this has to happen after decorateMain(), and everythime decorateBlocks() is called
+decorateRichtext();
+// in cases where the block decoration is not done in one synchronous iteration we need to listen
+// for new richtext-instrumented elements. this happens for example when using experimentation.
+const observer = new MutationObserver(() => decorateRichtext());
+observer.observe(document, { attributeFilter: ['data-richtext-prop'], subtree: true });

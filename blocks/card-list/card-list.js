@@ -223,6 +223,11 @@ export default async function decorate(block) {
       }
       return false;
     });
+    filteredArticles.sort((a, b) => {
+      const orderA = Number(a.pageorder) || Number.MAX_SAFE_INTEGER;
+      const orderB = Number(b.pageorder) || Number.MAX_SAFE_INTEGER;
+      return orderA - orderB;
+    });
   }
   const activeTagFilter = block.classList.contains('url-filtered') ? getSelectionFromUrl() : '';
   if (activeTagFilter) {
@@ -246,7 +251,7 @@ export default async function decorate(block) {
   } else {
     if (articleType === 'library') {
       filteredArticles.sort((card1, card2) => card1.title.localeCompare(card2.title));
-    } else {
+    } else if (!videosEdsPathMatch) {
       filteredArticles.sort((card1, card2) => card2.publishDate - card1.publishDate);
     }
 

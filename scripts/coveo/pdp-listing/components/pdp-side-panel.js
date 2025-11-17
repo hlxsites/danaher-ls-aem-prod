@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {
   productTypeFacetController,
-  brandFacetController,
+  //brandFacetController,
   documentTypeFacetController,
   facetBreadcrumb,
   querySummary,
@@ -10,6 +10,7 @@ import {
   //specificationsjsonFacetController,
   unitOfMeasureFacetController,
   skuSizeDetailsFacetController,
+  unitSizeFacetController,
 } from '../controllers/pdp-controllers.js';
 
 // === Util: Create element with shorthand ===
@@ -47,13 +48,14 @@ function getFacetDataFromControllers() {
       state: productTypeFacetController.state,
       deselectAll : () => productTypeFacetController.deselectAll()
     },
-    {
-      title: 'Brand',
-      items: format(brandFacetController.state.values),
-      toggleSelect: (value) => brandFacetController.toggleSelect(value),
-      state: brandFacetController.state,
-      deselectAll : () => brandFacetController.deselectAll()
-    },
+    // {
+    //   title: 'Brand',
+    //   items: format(brandFacetController.state.values),
+    //   toggleSelect: (value) => brandFacetController.toggleSelect(value),
+    //   state: brandFacetController.state,
+    //   deselectAll : () => brandFacetController.deselectAll()
+    // },
+    
     //Modification
     {
       title: 'Modification',
@@ -62,14 +64,7 @@ function getFacetDataFromControllers() {
       state: modificationFacetController.state,
       deselectAll : () => modificationFacetController.deselectAll()
     },
-    //Specifications
-    // {
-    //   title: 'Specifications',
-    //   items: format(specificationsFacetController.state.values),
-    //   toggleSelect: (value) => specificationsFacetController.toggleSelect(value),
-    //   state: specificationsFacetController.state,
-    //   deselectAll : () => specificationsFacetController.deselectAll()
-    // },
+
     //Unit of Measure
     {
       title: 'Unit of Measure',
@@ -78,6 +73,7 @@ function getFacetDataFromControllers() {
       state: unitOfMeasureFacetController.state,
       deselectAll : () => unitOfMeasureFacetController.deselectAll()
     },
+
     //Unit of Measure
     {
       title: 'Sku Size Details',
@@ -87,6 +83,32 @@ function getFacetDataFromControllers() {
       deselectAll : () => skuSizeDetailsFacetController.deselectAll()
     },
 
+    //Unit Size
+    {
+      title: 'Unit Size',
+      items: format(unitSizeFacetController.state.values),
+      toggleSelect: (value) => unitSizeFacetController.toggleSelect(value),
+      state: unitSizeFacetController.state,
+      deselectAll : () => unitSizeFacetController.deselectAll()
+    },
+
+    //Document Type
+    {
+      title: 'Document Type',
+      items: format(documentTypeFacetController.state.values),
+      toggleSelect: (value) => documentTypeFacetController.toggleSelect(value),
+      state: documentTypeFacetController.state,
+      deselectAll : () => documentTypeFacetController.deselectAll()
+    },
+    //Specifications
+    // {
+    //   title: 'Specifications',
+    //   items: format(specificationsFacetController.state.values),
+    //   toggleSelect: (value) => specificationsFacetController.toggleSelect(value),
+    //   state: specificationsFacetController.state,
+    //   deselectAll : () => specificationsFacetController.deselectAll()
+    // },
+
     // //Specifications json
     // {
     //   title: 'Spec Json',
@@ -95,13 +117,6 @@ function getFacetDataFromControllers() {
     //   state: specificationsjsonFacetController.state,
     //   deselectAll : () => specificationsjsonFacetController.deselectAll()
     // },
-    {
-      title: 'Document Type',
-      items: format(documentTypeFacetController.state.values),
-      toggleSelect: (value) => documentTypeFacetController.toggleSelect(value),
-      state: documentTypeFacetController.state,
-      deselectAll : () => documentTypeFacetController.deselectAll()
-    },
   ];
 }
 

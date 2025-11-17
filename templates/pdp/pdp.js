@@ -2,13 +2,13 @@ import { buildBlock } from '../../scripts/lib-franklin.js';
 import { div } from '../../scripts/dom-builder.js';
 import tabsOrder from '../../scripts/tabs-order.js';
 import { getProductResponse } from '../../scripts/commerce.js';
-import { buildProductSchema } from '../../scripts/schema.js';
+import { buildFAQSchema, buildImageSchemaObject, buildProductSchema } from '../../scripts/schema.js';
 
 async function loadPdpBlocks() {
   const response = JSON.parse(localStorage.getItem('eds-product-details'));
 
   // Determine opco, e.g. from response
-  const opco = response[0]?.raw?.opco?.toLowerCase() || 'sciex';
+  const opco = response?.raw?.opco?.toLowerCase() || 'sciex';
   const tabOrderArr = tabsOrder()[opco] || [];
   const tabsList = new Set();
 
@@ -123,6 +123,8 @@ export default async function buildAutoBlocks() {
   const response = await getProductResponse();
   if (response === undefined || response.length === 0) return;
   buildProductSchema(response);
+  buildImageSchemaObject(response);
+  buildFAQSchema(response);
   localStorage.setItem('eds-product-details', JSON.stringify(response[0]));
   loadPdpBlocks();
   // designPdp();

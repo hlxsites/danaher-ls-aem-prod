@@ -308,3 +308,78 @@ export function buildBreadcrumbSchema() {
     setJsonLd(schema, 'breadcrumb');
   }
 }
+
+export function buildImageSchemaObject(response) {
+  let name = '';
+  let description = '';
+  let imageUrl = '';
+  try {
+    if (!response || response[0] === null || response[0].raw === null) {
+      imageUrl = document.querySelector('img')?.src || '';
+    } else if (response.length > 0 && response[0].raw) {
+      name = response[0].raw.metatitle || '';
+      description = response[0].raw.metadescription || '';
+      const images = response?.[0]?.raw?.images || [];
+      const nonPdfImage = images.find((img) => typeof img === 'string' && !img.toLowerCase().endsWith('.pdf'));
+      const imgElement = nonPdfImage || document.querySelector('img')?.src;
+      imageUrl = typeof imgElement === 'string' ? imgElement : (imgElement || '');
+    }
+
+    if (imageUrl !== '' && imageUrl !== null && imageUrl !== undefined) {
+      const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'ImageObject',
+        name,
+        description,
+        url: imageUrl,
+        width: '1000',
+        height: '442',
+        contentUrl: imageUrl,
+        thumbnail: {
+          '@type': 'ImageObject',
+          url: `${imageUrl}?$danaher-mobile$`,
+          width: '400',
+          height: '177',
+        },
+      };
+      setJsonLd(schema, 'imageSchema');
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error creating ImageObject schema:', error);
+  }
+}
+
+// Build FAQ Schema
+export function buildFAQSchema(response) {
+  const faqJson = response?.[0]?.raw?.faqpreviewjson;
+  let faqsResponse = [];
+
+  if (typeof faqJson === 'string' && faqJson.trim() !== '') {
+    try {
+      faqsResponse = JSON.parse(faqJson);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error parsing FAQ JSON:', err);
+    }
+  }
+  let faqSchema = null;
+
+  if (Array.isArray(faqsResponse) && faqsResponse.length > 0) {
+    faqSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqsResponse.map((faq) => ({
+        '@type': 'Question',
+        name: faq.Question || '',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.Answer || '',
+        },
+      })),
+    };
+  }
+  if (faqSchema) {
+    setJsonLd(faqSchema, 'faqs');
+  }
+}

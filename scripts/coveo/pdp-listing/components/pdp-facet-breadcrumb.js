@@ -36,9 +36,11 @@ export const renderFacetBreadcurm = () => {
 
       if (facet.field === 'categoriesname') {
         fieldName = 'Product Type';
-      } else if (facet.field === 'opco') {
-        fieldName = 'Brand';
-      } else if (facet.field === 'documenttype') {
+      } 
+      // else if (facet.field === 'opco') {
+      //   fieldName = 'Brand';
+      // } 
+      else if (facet.field === 'documenttype') {
         fieldName = 'Document Type';
       } else if (facet.field === 'skumodification') {
         fieldName = 'Modification';
@@ -46,6 +48,12 @@ export const renderFacetBreadcurm = () => {
         fieldName = 'Unit of Measure';
       } else if (facet.field === 'skusizedetails') {
         fieldName = 'Size';
+      } else if (facet.field === 'unitsize') {
+        fieldName = 'Size of Unit';
+      }  else if (facet.field === 'separationmodes') {
+        fieldName = 'Seperation Modes';
+      } else if (facet.field === 'phase') {
+        fieldName = 'Phase';
       }
 
       const displayText = isCategoryFacet

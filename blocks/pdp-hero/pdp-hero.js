@@ -56,9 +56,9 @@ function buildDropdown({
   const outer = div({ class: 'individual-dd' });
   const dropdownLabel = label(
     { class: 'mb-1 text-sm font-medium text-gray-700' },
-    `Select ${ key.charAt(0).toUpperCase() + key.slice(1) }`,
+    `Select ${key.charAt(0).toUpperCase() + key.slice(1)}`,
   );
-  dropdownLabel.style.fontFamily = 'Inter';
+  // dropdownLabel.style.fontFamily = 'Inter';
   const display = div(
     {
       class: 'pdp-hero-dd',
@@ -619,7 +619,7 @@ export default async function decorate(block) {
   } else {
     // Coveo
     infoTab.querySelector('.starts-at-price').style.display = 'none';
-    //infoTab.querySelector('.uom-seperator-line').style.display = 'none';
+    // infoTab.querySelector('.uom-seperator-line').style.display = 'none';
     pricingQuoteButton.querySelector('.starts-at-price').style.display = 'none';
     pricingQuoteButton.querySelector('.pr-input').style.display = 'none';
     pricingQuoteButton.querySelector('.buy-btn').style.display = 'none';
@@ -709,7 +709,7 @@ export default async function decorate(block) {
         // }
         priceEl.style.display = 'block';
         infoTab.querySelector('.starts-at-label').classList.add('md:block', 'hidden');
-        //infoTab.querySelector('.uom-seperator-line').style.display = 'block';
+        // infoTab.querySelector('.uom-seperator-line').style.display = 'block';
       }
     }
 

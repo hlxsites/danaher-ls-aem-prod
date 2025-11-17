@@ -56,13 +56,13 @@ export const productTypeFacetController = buildCategoryFacet(pdpEngine, {
   },
 });
 
-export const brandFacetController = buildFacet(pdpEngine, {
-  options: { 
-    numberOfValues: 10,
-    field: 'opco',
-    facetId: 'opco'
-  },
-});
+// export const brandFacetController = buildFacet(pdpEngine, {
+//   options: { 
+//     numberOfValues: 10,
+//     field: 'opco',
+//     facetId: 'opco'
+//   },
+// });
 
 //Modification filter
 export const modificationFacetController = buildFacet(pdpEngine, {
@@ -72,15 +72,6 @@ export const modificationFacetController = buildFacet(pdpEngine, {
     facetId: 'skumodification'
   },
 });
-
-//Specifications filter
-// export const specificationsFacetController = buildFacet(pdpEngine, {
-//   options: { 
-//     numberOfValues: 10,
-//     field: 'specifications',
-//     facetId: 'specifications'
-//   },
-// });
 
 //Unit of Measure filter
 export const unitOfMeasureFacetController = buildFacet(pdpEngine, {
@@ -100,14 +91,32 @@ export const skuSizeDetailsFacetController = buildFacet(pdpEngine, {
   },
 });
 
+//Unit of Measure filter
+export const unitSizeFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'unitsize',
+    facetId: 'unitsize'
+  },
+});
+
 // //Specifications filter
-// export const specificationsjsonFacetController = buildFacet(pdpEngine, {
-//   options: { 
-//     numberOfValues: 10,
-//     field: 'specificationsjson',
-//     facetId: 'specificationsjson'
-//   },
-// });
+export const separationModesFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'separationmodes',
+    facetId: 'separationmodes'
+  },
+});
+
+//Specifications filter
+export const phaseFacetController = buildFacet(pdpEngine, {
+  options: { 
+    numberOfValues: 10,
+    field: 'phase',
+    facetId: 'phase'
+  },
+});
 
 export const documentTypeFacetController = buildFacet(pdpEngine, {
   options: { 

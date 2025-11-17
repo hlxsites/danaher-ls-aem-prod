@@ -20,7 +20,7 @@ export default async function decorate(block) {
 
   let selectedContentType = 'All'; // Track the currently selected content type
   let selectedSortType = 'Newest'; // Track the currently selected sort type
-
+  let globalTotalcounter = 0;
   resourceResultList.subscribe(() => {
     window.nextResults = () => {
       if (resourcePager.state.hasNextPage) {
@@ -563,9 +563,10 @@ export default async function decorate(block) {
     paginationContainer = div({
       class: 'pagination-container w-full',
     });
-    if ((resourceEngine?.state?.search?.response?.totalCount ?? 0) === 0) {
+    const count = resourceResultList.state.results.length;
+    globalTotalcounter += 1;
+    if (globalTotalcounter === 3 && count === 0) {
       const tabs = document.querySelectorAll('.p-tab');
-
       if (tabs.length > 0) {
         tabs.forEach((tab) => {
           const label = tab?.textContent?.trim?.() || '';
@@ -574,7 +575,6 @@ export default async function decorate(block) {
           }
         });
       }
-
       if (block instanceof HTMLElement) {
         block.classList.add('hidden');
       }

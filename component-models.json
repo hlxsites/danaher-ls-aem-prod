@@ -2784,6 +2784,12 @@
         "valueType": "string",
         "name": "author",
         "label": "Testimonial Author"
+      },
+      {
+        "component": "boolean",
+        "name": "quoteIcon",
+        "label": "Show Quote Icon",
+        "value": true
       }
     ]
   },

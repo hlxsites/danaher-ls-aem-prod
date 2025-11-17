@@ -11,6 +11,7 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 export default function renderGridCard(item) {
   const imageUrl = item.image;
 
+  const fallbackImagePath = '/content/dam/danaher/products/fallbackImage.jpeg';
   const card = a(
     {
       href: item?.url,
@@ -20,7 +21,7 @@ export default function renderGridCard(item) {
     },
     img({
       loading: 'lazy',
-      src: imageUrl,
+      src: (imageUrl && !imageUrl.toLowerCase().includes('.pdf')) ? imageUrl : fallbackImagePath,
       alt: item?.title?.replace(/<[^>]*>/g, '') || '',
       class: 'w-full h-[164px] object-contain',
     }),
