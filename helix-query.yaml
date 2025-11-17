@@ -5,7 +5,6 @@ indices:
       - /us/en/blog/**
       - /us/en/news/**
       - /us/en/videos/**
-      - /us/en/videos-eds/**
       - /us/en/new-lab/promotions/**
       - /us/en/library/**
       - /us/en/application/**
@@ -48,6 +47,9 @@ indices:
       brand:
         select: head > meta[name="brand"]
         value: attribute(el, "content")
+      pageorder:
+        select: head > meta[name="pageorder"]
+        value: attribute(el, "content")  
   products:
     include:
       - /us/en/products/**
