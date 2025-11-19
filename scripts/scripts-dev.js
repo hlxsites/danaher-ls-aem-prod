@@ -617,7 +617,11 @@ export function decorateMain(main) {
  */
 async function decorateTemplates(main) {
   try {
-    const template = toClassName(getMetadata('template'));
+    let template = toClassName(getMetadata('template'));
+    if(template === 'library') {
+    document.body.classList.remove('library');
+    template='blog';
+    }
     const templates = Object.keys(TEMPLATE_LIST);
     if (templates.includes(template)) {
       const templateObj = TEMPLATE_LIST[template];
@@ -1092,6 +1096,9 @@ function getDLPage() {
   } else if (path.includes('/us/en/library')) {
     page.level = 'other';
     page.type = 'library';
+  } else if(path.includes("/us/en/videos")) {
+    page.level="top";
+    page.type="videos"
   } else if (path.includes('/us/en/about-us')) {
     page.level = 'top';
     page.type = 'about-us';
