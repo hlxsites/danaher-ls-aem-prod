@@ -8,6 +8,7 @@ import {
 } from './common-utils.js';
 import { setAuthenticationToken } from './token-utils.js';
 import { getBasketDetails } from './cart-checkout-utils.js';
+import { getIdToken, logout } from './auth.js';
 
 const siteID = window.DanaherConfig?.siteID;
 const hostName = window.location.hostname;
@@ -114,8 +115,16 @@ export async function userLogin(type, data = {}, source = '') {
   if (!source) showPreLoader();
   let loginData = {};
   const getCurrentBasketData = JSON.parse(localStorage.getItem('basketData'));
-  sessionStorage.clear();
-  localStorage.clear();
+  localStorage.removeItem(`${siteID}_${env}_currentBasketId`);
+  localStorage.removeItem('productDetailObject');
+  localStorage.removeItem('basketData');
+  localStorage.removeItem('orderSubmitDetails');
+  localStorage.removeItem('cartItemsDetails');
+  localStorage.removeItem('useAddress');
+  localStorage.removeItem('shippingMethods');
+  localStorage.removeItem('discountDetails');
+  localStorage.removeItem('submittedOrderData');
+  localStorage.removeItem('alsoBoughtCachedProducts');
 
   let lastBasketId = '';
   if (getCurrentBasketData?.status === 'success' && !getCurrentBasketData?.data?.data?.customer) {
@@ -149,13 +158,24 @@ export async function userLogin(type, data = {}, source = '') {
       urlencoded.append('password', loginData.password);
     }
     try {
+      let userInfoData = {};
+      const auth0Token = await getIdToken();
+      if (auth0Token) {
+        const userLoggedInData = await getUserData(
+          auth0Token,
+        );
+        if (userLoggedInData.status === 'success') {
+          userInfoData = userLoggedInData.data;
+        }
+        setAuthenticationToken({ access_token: auth0Token }, userInfoData, type);
+        return;
+      }
       const userLoggedIn = await postApiData(
         `${baseURL}/token`,
         urlencoded,
         headers,
       );
       if (userLoggedIn?.status === 'success') {
-        let userInfoData = {};
         if (type !== 'guest') {
           const userLoggedInData = await getUserData(
             userLoggedIn?.data?.access_token,
@@ -232,7 +252,7 @@ export function sessionPreLoader() {
 function deleteCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
-export function userLogOut() {
+export async function userLogOut() {
   deleteCookie(`eb_${siteID}_${env}_apiToken`);
   deleteCookie(`${siteID}_${env}_user_data`);
   deleteCookie(`${siteID}_${env}_user_type`);
@@ -240,5 +260,15 @@ export function userLogOut() {
   deleteCookie('last_name');
   deleteCookie('rationalized_id');
   sessionStorage.clear();
-  localStorage.clear();
+  localStorage.removeItem(`${siteID}_${env}_currentBasketId`);
+  localStorage.removeItem('productDetailObject');
+  localStorage.removeItem('basketData');
+  localStorage.removeItem('orderSubmitDetails');
+  localStorage.removeItem('cartItemsDetails');
+  localStorage.removeItem('useAddress');
+  localStorage.removeItem('shippingMethods');
+  localStorage.removeItem('discountDetails');
+  localStorage.removeItem('submittedOrderData');
+  localStorage.removeItem('alsoBoughtCachedProducts');
+  await logout();
 }

@@ -40,6 +40,7 @@ import {
   createModal,
   showNotification,
   scrollViewToTop,
+  productFallbackImage,
 } from './common-utils.js';
 // base url for the intershop api calls
 // eslint-disable-next-line import/no-cycle
@@ -64,10 +65,6 @@ import { initializeModules } from '../blocks/checkout/checkoutUtilities.js';
 // eslint-disable-next-line import/no-cycle
 import { getPaymentMethodType, getStripeElements, getStripeInstance } from '../blocks/checkout/paymentModule.js';
 import { getCookie } from './scripts.js';
-
-function deleteCookie(name) {
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-}
 
 const { getAuthenticationToken } = await import('./token-utils.js');
 
@@ -1233,6 +1230,63 @@ export async function addressList(type) {
   }
   return [];
 }
+
+/*
+generate country and state slect fields
+*/
+export const defaultCountryStateSelectBox = (
+  lable,
+  field,
+  inputName,
+  required,
+  dtName,
+  itemsList,
+  selected = '',
+  classes = '',
+) => {
+  const dataRequired = required ? span({ class: 'text-red-500' }, '*') : '';
+  let selectOptions = [];
+  if (itemsList.length > 0) {
+    selectOptions = itemsList?.map((item) => {
+      const value = item.isoCode;
+      const options = selected === value
+        ? option({ value, selected }, item.name)
+        : option({ value }, item.name);
+      return options;
+    });
+  }
+  selectOptions.unshift(
+    option({ value: '', selected: true, disabled: true }, 'Select an option'),
+  );
+
+  return div(
+    { class: ` ${classes} space-y-2 field-wrapper  mt-4 w-full` },
+    label(
+      {
+        for: lable,
+        class: 'font-normal text-sm leading-4',
+      },
+      field,
+      dataRequired,
+    ),
+    select(
+      {
+        id: inputName,
+        'aria-label': dtName,
+        name: inputName,
+        'data-required': required,
+        class:
+          'input-focus text-base w-full block px-2 py-4  border border-solid border-gray-600',
+      },
+      ...selectOptions,
+    ),
+    span({
+      id: 'msg',
+      'data-name': dtName,
+      class: 'mt-1 text-sm font-normal leading-4 text-red-500',
+    }),
+  );
+};
 
 /*
 generate country and state slect fields
@@ -2624,6 +2678,55 @@ get counrty field and attach change event listener to populate states based on c
 }
 
 /*
+Apply Promo Code
+*/
+export const applyPromoCode = async (promocode) => {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  try {
+    const url = `${baseURL}/baskets/current/promotioncodes`;
+    const code = JSON.stringify({ code: promocode });
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await postApiData(url, code, defaultHeaders);
+    console.log(response);
+
+    return response.status === 'success' ? response.data : { status: 'error', data: response?.data };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+};
+
+/*
+Delete Promo Code
+*/
+export const deletePromoCode = async (promocode) => {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  try {
+    const url = `${baseURL}/baskets/current/promotioncodes/${promocode}`;
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await deleteApiData(url, defaultHeaders);
+    return response.status === 'success' ? response.data : { status: 'error', data: 'Not Found.' };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+};
+
+/*
  generates the checkout summary module.......
  */
 export async function checkoutSummary(orderId = '') {
@@ -2732,6 +2835,7 @@ get price type if its net or gross
       discountPrice: discountPrice ? `${currencyCode}${discountPrice}` : '',
       discountLabel,
       totalLineItems: checkoutSummaryData?.lineItems?.length ?? '0',
+      promotionCodes: checkoutSummaryData?.promotionCodes ?? '',
     };
   } else {
     checkoutSummaryKeys = {
@@ -2760,6 +2864,7 @@ get price type if its net or gross
       discountPrice: discountPrice ? `${currencyCode}${discountPrice}` : '',
       discountLabel,
       totalLineItems: checkoutSummaryData?.lineItems?.length ?? '0',
+      promotionCodes: checkoutSummaryData?.promotionCodes ?? '',
     };
   }
   const itemTotalValue = Number(checkoutSummaryKeys.itemTotal.replace('$', ''));
@@ -2988,6 +3093,68 @@ get price type if its net or gross
         ),
       ),
       /*
+ Promo Code
+   */
+      div(
+        {
+          class: 'checkoutpromo-code flex flex-col w-full border-t pt-6 border-gray-200 gap-6 border-solid ',
+          id: 'checkout-promo-code',
+        },
+        div(
+          {
+            class: 'flex items-center w-full justify-between cursor-pointer',
+            id: 'promocode-header',
+          },
+          span(
+            {
+              class: 'text-danaherpurple-500 font-dhlsMedium',
+            },
+            'I have a promo code',
+          ),
+          span(
+            {
+              class: 'icon icon-chevron-up [&_svg>use]:stroke-danaherpurple-500 transition cursor-pointer rotate-180',
+            },
+          ),
+        ),
+        div(
+          {
+            class: 'w-full flex justify-between  gap-4 items-end hidden',
+            id: 'promocode-fields',
+          },
+          buildInputElement(
+            'promocode',
+            'Enter Promocode',
+            'text',
+            'promocode',
+            false,
+            false,
+            'promocode',
+            '',
+            '',
+          ),
+          button(
+            {
+              class: 'text-xl !pt-[7px] !pb-[7px] border-danaherpurple-500 border-solid btn btn-lg font-medium bg-white btn-outline-primary hover:bg-danaherpurple-500 rounded-full px-4',
+              id: 'apply-promocode',
+            },
+            'Apply',
+          ),
+        ),
+        div(
+          {
+            class: `w-full flex flex-col gap-3  ${checkoutSummaryKeys?.promotionCodes?.length > 0 ? '' : 'hidden'}`,
+            id: 'applied-promocodes',
+          },
+          p(
+            {
+              class: 'text-black text-base font-semibold ',
+            },
+            'Applied Promocodes',
+          ),
+        ),
+      ),
+      /*
  total
    */
       div(
@@ -3055,49 +3222,138 @@ get price type if its net or gross
       ),
     ),
   );
+  summaryModule?.querySelector('#checkout-promo-code')?.querySelector('#promocode-header')?.addEventListener('click', () => {
+    summaryModule?.querySelector('#checkout-promo-code')?.querySelector('#promocode-fields')?.classList?.toggle('hidden');
+  });
+  summaryModule?.querySelector('#apply-promocode')?.addEventListener('click', async () => {
+    const promocodeField = summaryModule?.querySelector('#checkout-promo-code')?.querySelector('input');
+    if (promocodeField?.value === '') {
+      showNotification('The promotion code could not be added. The promotion code is empty.', 'error');
+      promocodeField?.classList?.add('border-red-700');
+      promocodeField?.classList?.add('border-2');
+      promocodeField?.insertAdjacentElement('beforebegin', p({ class: 'text-red-700 w-full', id: 'promocode-error-msg' }, 'The promotion code is empty.'));
+      setTimeout(() => {
+        if (promocodeField?.classList?.contains('border-red-700')) promocodeField?.classList?.remove('border-red-700');
+        if (promocodeField?.classList?.contains('border-2')) promocodeField?.classList?.remove('border-2');
+        summaryModule?.querySelector('#promocode-error-msg')?.remove();
+      }, 2000);
+      return false;
+    }
+    showPreLoader();
+    const applyingPromoCode = await applyPromoCode(promocodeField?.value);
+    removePreLoader();
+    if (applyingPromoCode?.status === 'error') {
+      showNotification('The promotion code could not be added. The promotion code could not be found.', 'error');
+      promocodeField?.classList?.add('border-red-700');
+      promocodeField?.classList?.add('border-2');
+      promocodeField?.insertAdjacentElement('beforebegin', p({ class: 'text-red-700 w-full', id: 'promocode-error-msg' }, 'The promotion code could not be found.'));
+      setTimeout(() => {
+        if (promocodeField?.classList?.contains('border-red-700')) promocodeField?.classList?.remove('border-red-700');
+        if (promocodeField?.classList?.contains('border-2')) promocodeField?.classList?.remove('border-2');
+        summaryModule?.querySelector('#promocode-error-msg')?.remove();
+      }, 2000);
+      return false;
+    }
+    showNotification('Promocode Applied Successfully.', 'success');
+    await updateBasketDetails();
+    // eslint-disable-next-line no-use-before-define
+    await updateCheckoutSummary();
+  });
 
+  // render applied promocodes
+  if (checkoutSummaryKeys?.promotionCodes?.length > 0) {
+    checkoutSummaryKeys?.promotionCodes?.forEach((pc) => {
+      const promocodeitem = div(
+        {
+          class: 'flex w-full justify-between',
+        },
+        div(
+          {
+            class: 'text-base text-danaherpurple-500 font-dhlsMedium',
+          },
+          pc,
+        ),
+        span(
+          {
+            id: pc,
+            class: 'delete-promocode icon icon-close cursor-pointer w-6 fill-current [&_svg>use]:stroke-danaherpurple-500 [&_svg>use]:hover:stroke-danaherpurple-800',
+          },
+        ),
+      );
+      decorateIcons(promocodeitem);
+      setTimeout(() => {
+        if (promocodeitem?.querySelector('svg')) {
+          promocodeitem?.querySelector('svg')?.classList?.add('w-6', '!h-6', '[&_svg>use]:stroke-danaherpurple-500');
+        }
+      }, 100);
+      summaryModule?.querySelector('#applied-promocodes')?.append(promocodeitem);
+    });
+    summaryModule?.querySelector('#applied-promocodes')?.addEventListener('click', async (e) => {
+      const deleteTarget = e.target;
+      if (deleteTarget?.closest('span')?.classList?.contains('delete-promocode')) {
+        showPreLoader();
+        const deleteResponse = await deletePromoCode(deleteTarget?.closest('span')?.id);
+        if (deleteResponse?.status === 'error') {
+          showNotification('Unable to process request. Pleasde try again.', 'error');
+          removePreLoader();
+          return false;
+        }
+        await updateBasketDetails();
+        // eslint-disable-next-line no-use-before-define
+        await updateCheckoutSummary();
+        showNotification('promocode removed successfully.', 'success');
+        removePreLoader();
+      }
+    });
+  }
   summaryModule
     ?.querySelectorAll('.field-wrapper')
     ?.forEach((inp) => {
       const inputElement = inp?.querySelector('input');
-      if (inputElement) {
-        inputElement.className = '';
-        inputElement.classList.add('!mt-0', 'absolute', 'left-0');
-      }
-      inp?.classList.add(
-        'flex',
-        'flex-row-reverse',
-        'items-center',
-        'gap-2',
-      );
-      const termsCondition = p(
-        {
-          class: '',
-        },
-        span(
-          {
-            class: 'text-base text-black font-normal',
-          },
-          window.EbuyConfig.termsConditions.text,
-        ),
-        a(
-          {
-            href: window.EbuyConfig.termsConditions.url || '#',
-            class: 'text-danaherpurple-500 cursor-pointer font-semibold text-base hover:text-danaherpurple-800',
-          },
-          ` ${window.EbuyConfig.termsConditions.urlText}`,
-        ),
-      );
       const inpuLabel = inp?.querySelector('label');
-      if (inpuLabel?.classList.contains('font-normal')) {
-        inpuLabel?.classList.remove('font-normal');
+      if (inputElement?.name === 'termsAndConditionsAccepted') {
+        if (inputElement) {
+          inputElement.className = '';
+          inputElement.classList.add('!mt-0', 'absolute', 'left-0');
+        }
+        inp?.classList.add(
+          'flex',
+          'flex-row-reverse',
+          'items-center',
+          'gap-2',
+        );
+        const termsCondition = p(
+          {
+            class: '',
+          },
+          span(
+            {
+              class: 'text-base text-black font-normal',
+            },
+            window.EbuyConfig.termsConditions.text,
+          ),
+          a(
+            {
+              href: window.EbuyConfig.termsConditions.url || '#',
+              class: 'text-danaherpurple-500 cursor-pointer font-semibold text-base hover:text-danaherpurple-800',
+            },
+            ` ${window.EbuyConfig.termsConditions.urlText}`,
+          ),
+        );
+        if (inpuLabel?.classList.contains('font-normal')) {
+          inpuLabel?.classList.remove('font-normal');
+        }
+        if (inpuLabel?.classList.contains('text-sm')) {
+          inpuLabel?.classList.remove('text-sm');
+        }
+        inpuLabel?.classList.add('text-base', 'font-semibold', 'ml-[-30px]', '!pl-10', 'z-10', 'relative');
+        inpuLabel.textContent = '';
+        inpuLabel.append(termsCondition);
       }
-      if (inpuLabel?.classList.contains('text-sm')) {
-        inpuLabel?.classList.remove('text-sm');
+
+      if (inputElement?.name === 'promocode') {
+        inpuLabel.className = 'text-base text-black';
       }
-      inpuLabel?.classList.add('text-base', 'font-semibold', 'ml-[-30px]', '!pl-10', 'z-10', 'relative');
-      inpuLabel.textContent = '';
-      inpuLabel.append(termsCondition);
     });
   /*
 
@@ -3274,7 +3530,7 @@ get price type if its net or gross
                       ?.companyName2
                       ? ''
                       : 'hidden'
-                    }`,
+                      }`,
                   },
                   getUseAddressesResponse?.data?.invoiceToAddress?.companyName2
                   ?? '',
@@ -3528,7 +3784,177 @@ export async function loadingModule() {
   });
 }
 
-export const cartItemsContainer = (cartItemValue) => {
+async function getBundleProducts(sku) {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  try {
+    const url = `${baseURL}/products/${sku}/bundles`;
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await getApiData(url, defaultHeaders);
+    return response.status === 'success' ? response.data : { status: 'error', data: 'Not Found.' };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+}
+async function getMultipleProducts(productsArray) {
+  const authenticationToken = await getAuthenticationToken();
+  if (authenticationToken?.status === 'error') {
+    return { status: 'error', data: 'Unauthorized access.' };
+  }
+  const personalizationId = await getPersonalization();
+  try {
+    const url = `${baseURL}/productlist;spgid=${personalizationId?.pgid}`;
+    const products = JSON.stringify({ skus: productsArray });
+    const defaultHeaders = new Headers();
+    defaultHeaders.append('Content-Type', 'Application/json');
+    defaultHeaders.append(
+      'authentication-token',
+      authenticationToken.access_token,
+    );
+    const response = await postApiData(url, products, defaultHeaders);
+    return response.status === 'success' ? response.data : { status: 'error', data: 'Not Found.' };
+  } catch (error) {
+    return { status: 'error', data: error.message };
+  }
+}
+async function showProductDetails(id, sku, isBundle) {
+  const detailsWrapper = div(
+    {
+      id: `show-products-${id}`,
+      class: `flex cursor-pointer bottom-[20px] w-full pb-6 items-center gap-4 flex-col justify-end ${isBundle ? '' : 'hidden'}`,
+    },
+    div(
+      {
+        class: 'flex items-center w-full justify-end',
+      },
+      span(
+        {
+          class: 'text-danaherpurple-500 font-dhlsMedium',
+        },
+        'Show Product Details',
+      ),
+      span(
+        {
+          class: 'icon icon-chevron-up [&_svg>use]:stroke-danaherpurple-500 transition cursor-pointer rotate-180',
+        },
+      ),
+    ),
+  );
+  detailsWrapper?.addEventListener('click', async () => {
+    if (isBundle) {
+      detailsWrapper?.classList?.add('pointer-events-none');
+      if (detailsWrapper?.querySelector('.parts-list')) {
+        detailsWrapper?.querySelector('.parts-list')?.classList?.toggle('hidden');
+        if (detailsWrapper?.classList?.contains('pointer-events-none')) detailsWrapper?.classList?.remove('pointer-events-none');
+        return false;
+      }
+      detailsWrapper?.querySelector('.parts-list')?.remove();
+      detailsWrapper?.append(checkoutSkeleton());
+      const bundleProducts = await getBundleProducts(sku);
+      if (bundleProducts?.elements?.length > 0) {
+        const partsArray = [];
+        const partsDetailsObject = {};
+        bundleProducts?.elements?.forEach(async (par) => {
+          const uri = par?.uri;
+          const partId = uri.split('/').pop();
+          // Find the attribute with name "quantity" and value.type "Quantity"
+          const quantityAttr = par?.attributes.find((attr) => attr.name === 'quantity' && attr.type === 'ResourceAttribute' && attr.value?.type === 'Quantity');
+
+          // Get the value if it exists
+          const quantityValue = quantityAttr?.value?.value;
+          partsDetailsObject[partId] = quantityValue;
+          partsArray?.push(partId);
+        });
+
+        const partsDetails = await getMultipleProducts(partsArray);
+        detailsWrapper?.querySelector('#checkoutSkeleton')?.remove();
+        if (partsDetails?.elements?.length > 0) {
+          const partsList = div(
+            {
+              class: 'parts-list flex flex-col bg-gray-100 p-6 gap-4 max-w-[608px] w-full self-end',
+            },
+            div(
+              {
+                class: 'flex justify-between w-full',
+              },
+              p(
+                {
+                  class: 'font-semibold text-base',
+                },
+                'Product',
+              ),
+              p(
+                {
+                  class: 'font-semibold text-base',
+                },
+                'QTY',
+              ),
+            ),
+          );
+          partsDetails?.elements?.forEach((partDetails) => {
+            const part = div(
+              {
+                class: 'flex gap-4 bg-white p-4 items-center',
+              },
+              img(
+                {
+                  class: 'w-[80px] h-[80px] p-[10px] border border-gray-300',
+                  src: partDetails?.images?.[0]?.effectiveUrl || productFallbackImage,
+                },
+              ),
+              div(
+                {
+                  class: 'flex gap-2 w-full justify-between items-center',
+                },
+                div(
+                  {
+                    class: 'flex flex-col gap-1',
+                  },
+                  p(
+                    {
+                      class: 'text-base font-semibold',
+                    },
+                    partDetails?.name,
+                  ),
+                  p(
+                    {
+                      class: 'text-base text-gray-500 font-semibold',
+                    },
+                    partDetails?.sku,
+                  ),
+                ),
+                p(
+                  {
+                    class: 'text-base font-semibold',
+                  },
+                  partsDetailsObject[partDetails?.sku],
+                ),
+              ),
+            );
+            if (partsList && part) {
+              partsList?.append(part);
+            }
+          });
+          if (detailsWrapper?.classList?.contains('pointer-events-none')) {
+            detailsWrapper?.classList?.remove('pointer-events-none');
+          }
+          detailsWrapper?.append(partsList);
+        }
+      }
+    }
+  });
+  decorateIcons(detailsWrapper);
+  return detailsWrapper;
+}
+
+export const cartItemsContainer = async (cartItemValue) => {
   const formattedAmount = (orderTotal) => parseFloat(orderTotal).toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -3678,73 +4104,84 @@ export const cartItemsContainer = (cartItemValue) => {
       ),
     );
   };
+
+  // eslint-disable-next-line max-len
+  const showProducts = await showProductDetails(cartItemValue?.lineItemId, cartItemValue?.sku, cartItemValue?.productBundle);
   const itemsscontainer = div(
     {
-      class:
-        'cart-item-container w-full py-3 cart-item-wrapper  border-t border-gray-300 inline-flex lg:flex-row flex-col justify-start items-center gap-4',
-      id: cartItemValue?.lineItemId,
+      id: `item-${cartItemValue?.lineItemId}-wrapper`,
+      class: 'flec flex-col w-full relative',
     },
     div(
       {
-        class: 'py-3 inline-flex gap-4 ',
+        class:
+          'cart-item-container w-full py-3 cart-item-wrapper relative  border-t border-gray-300 inline-flex lg:flex-row flex-col justify-start items-center gap-4',
+        id: cartItemValue?.lineItemId,
       },
       div(
         {
-          class: 'cart-item-image w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300 max-h-max',
+          class: 'py-3 inline-flex gap-4 ',
         },
         div(
           {
-            class: 'justify-start text-black text-base font-semibold truncate m-[5px]',
+            class: 'cart-item-image w-28 p-2 flex justify-start items-center gap-3 border border-solid border-gray-300 max-h-max',
           },
-          img({
-            class: 'w-full h-auto',
-            src: cartItemValue?.images?.length > 0 ? cartItemValue?.images[0]?.effectiveUrl : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
-          }),
+          div(
+            {
+              class: 'justify-start text-black text-base font-semibold truncate m-[5px]',
+            },
+            img({
+              class: 'w-full h-auto',
+              src: cartItemValue?.images?.length > 0 ? cartItemValue?.images[0]?.effectiveUrl : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
+            }),
+          ),
+        ),
+        div(
+          {
+            class: 'cart-item-title md:w-32 xl:w-[14rem] lg:w-34 flex flex-col justify-center items-center text-black text-base font-semibold',
+            // id: `product-Quantity-${opcoBe[0]}`,
+          },
+          div(
+            {
+              class: 'w-full justify-start items-center text-black text-base font-semibold',
+            },
+            cartItemValue?.name,
+          ),
+          div(
+            {
+              class:
+                'w-full justify-start items-center text-gray-500 text-sm font-normal ',
+            },
+            cartItemValue?.sku,
+          ),
+
         ),
       ),
       div(
         {
-          class: 'cart-item-title md:w-32 xl:w-[14rem] lg:w-34 flex flex-col justify-center items-center text-black text-base font-semibold',
-          // id: `product-Quantity-${opcoBe[0]}`,
+          class: 'md:pl-[0px] pl-[13px] gap-4 w-full flex justify-between md:justify-start items-center',
         },
         div(
           {
-            class: 'w-full justify-start items-center text-black text-base font-semibold',
+            class: 'cart-item-input md:w-14 lg:w-18 xl:w-16 justify-start text-black text-base font-semibold',
           },
-          cartItemValue?.name,
-        ),
-        div(
-          {
-            class:
-              'w-full justify-start items-center text-gray-500 text-sm font-normal ',
-          },
-          cartItemValue?.sku,
+          inputBox,
         ),
 
+        unitPriceDiv(),
+        div(
+          {
+            class: 'total-price md:w-[40%] xl:pl-8 justify-end text-black text-base font-semibold sm:m-[0px] m-[7px]',
+            // id: 'total-price',
+          },
+          `$${formattedAmount(totalItemValue)}`,
+        ),
+        deleteButton,
       ),
-    ),
-    div(
-      {
-        class: 'md:pl-[0px] pl-[13px] gap-4 w-full flex justify-between md:justify-start items-center',
-      },
-      div(
-        {
-          class: 'cart-item-input md:w-14 lg:w-18 xl:w-16 justify-start text-black text-base font-semibold',
-        },
-        inputBox,
-      ),
-
-      unitPriceDiv(),
-      div(
-        {
-          class: 'total-price md:w-[40%] xl:pl-8 justify-end text-black text-base font-semibold sm:m-[0px] m-[7px]',
-          // id: 'total-price',
-        },
-        `$${formattedAmount(totalItemValue)}`,
-      ),
-      deleteButton,
     ),
   );
-  decorateIcons(itemsscontainer);
+  if (showProducts) {
+    itemsscontainer?.append(showProducts);
+  }
   return itemsscontainer;
 };

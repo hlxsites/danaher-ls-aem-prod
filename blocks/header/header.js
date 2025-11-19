@@ -14,13 +14,14 @@ import { getBasketDetails } from '../../scripts/cart-checkout-utils.js';
 // eslint-disable-next-line import/no-cycle
 import {
   getAuthorization,
-  isLoggedInUser,
   makeCoveoApiRequest,
   getCommerceBase,
 } from '../../scripts/commerce.js';
 import { getCookie } from '../../scripts/scripts.js';
 // eslint-disable-next-line import/no-cycle
 import { includeProdEdsPaths, includeStageEdsPaths } from '../../scripts/delayed.js';
+
+import { login, getUser } from '../../scripts/auth.js';
 
 const baseURL = getCommerceBase();
 
@@ -90,13 +91,6 @@ function shortName(user) {
     return `${user.fname[0].toUpperCase()}${user.lname[0].toUpperCase()}`;
   }
   return '';
-}
-
-function getUser() {
-  if (isLoggedInUser()) {
-    return { fname: getCookie('first_name'), lname: getCookie('last_name') };
-  }
-  return undefined;
 }
 
 function formatSuggestionString(highlightedText, inputText) {
@@ -527,19 +521,19 @@ function buildLogosBlock(headerBlock) {
   const logoHtmlBlock = headerBlock.children[0];
   logoHtmlBlock.className = `${minimalistheader ? '!hidden' : 'hidden'}  bg-danahergray-150 lg:block`;
   const logoUl = logoHtmlBlock.querySelector('ul');
-  logoUl.className = 'h-14 flex justify-center';
+  logoUl.className = 'flex justify-center h-14';
   const logoLis = logoUl.querySelectorAll(':scope > li');
   logoLis.forEach((logoLi) => {
-    logoLi.className = 'group md:mx-5 mx-10';
+    logoLi.className = 'mx-10 group md:mx-5';
     const logoLink = logoLi.querySelector(':scope > a');
     const logoPicture = logoLi.querySelector(':scope > picture');
     const logoImg = logoPicture.querySelector('img');
-    logoImg.className = 'h-7 w-auto px-4';
+    logoImg.className = 'w-auto px-4 h-7';
     const logoTitle = logoLink.textContent;
     logoImg.setAttribute('alt', logoTitle);
     logoImg.setAttribute('style', 'filter: brightness(0) invert(1);');
     logoLink.textContent = '';
-    logoLink.className = 'h-full flex items-center group-hover:bg-danahergray-200';
+    logoLink.className = 'flex items-center h-full group-hover:bg-danahergray-200';
     logoLink.append(logoPicture);
     logoLi.innerHTML = '';
     logoLi.append(logoLink);
@@ -617,7 +611,7 @@ function buildLoggedInUserBlock(loginLink, user) {
     );
     loginSpan = span(
       { class: 'pl-1 text-xs font-semibold text-black' },
-      user?.fname,
+      user?.name,
     );
     loginLink.setAttribute('aria-label', 'My Account');
     loginLink.textContent = '';
@@ -667,8 +661,8 @@ async function buildSearchBlock(headerBlock) {
   logoPictureBlock.setAttribute('alt', logoLinkBlock.textContent);
   if (window.location.pathname === '/') logoLinkBlock.href = 'https://danaher.com/?utm_source=dhls_website&utm_medium=referral&utm_content=header';
   const logoImg = logoPictureBlock.querySelector('img');
-  logoImg.className = 'brand-logo max-w-full w-14 md:w-20 lg:w-44 h-full object-contain';
-  logoLinkBlock.className = 'ml-2 mb-2';
+  logoImg.className = 'object-contain h-full max-w-full brand-logo w-14 md:w-20 lg:w-44';
+  logoLinkBlock.className = 'mb-2 ml-2';
   logoLinkBlock.innerHTML = '';
   logoLinkBlock.append(logoPictureBlock);
 
@@ -699,15 +693,13 @@ async function buildSearchBlock(headerBlock) {
   });
   const searchLinks = searchHtmlBlock.querySelectorAll(':scope > ul > li > a');
   const loginLink = searchLinks[0];
-
-  const user = getUser();
-
+  const user = await getUser();
   if (user) buildLoggedInUserBlock(loginLink, user);
   else buildLoginBlock(loginLink);
 
   // quote
   const quoteLink = searchLinks[1];
-  quoteLink.className = 'quote text-black hover:text-black relative lg:inline-flex text-xs font-semibold';
+  quoteLink.className = 'relative text-xs font-semibold text-black quote hover:text-black lg:inline-flex';
   const quoteIcon = quoteLink.querySelector('span');
   quoteIcon.className = '';
   quoteIcon.innerHTML = `
@@ -1038,6 +1030,12 @@ function loadBreadcrumbCSS(href) {
     document.head.appendChild(link);
   }
 }
+
+function handleSignInClick(e) {
+  e.preventDefault();
+  login();
+}
+
 /*
    function to load required css ends
  * decorates the header, mainly the nav
@@ -1106,6 +1104,10 @@ export default async function decorate(block) {
   document
     .querySelector('div.search-icon')
     ?.addEventListener('click', toggleSearchBoxMobile);
+
+  document
+    .querySelector('[href="/us/en/login.html"]')
+    ?.addEventListener('click', handleSignInClick);
 
   return block;
 }

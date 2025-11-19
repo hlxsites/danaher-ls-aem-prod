@@ -125,7 +125,7 @@ if (document.readyState === "loading") {
  */
 export const includeProdEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'expert-eds', 'expert-eds.html', 'new-lab', 'new-lab.html', 'solutions/digital/products', 'solutions/digital/products.html', 'products/brands', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', '/products.html'];
 
-export const includeStageEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'expert', 'expert.html', 'new-lab/excedr', 'new-lab/excedr.html', 'we-see-a-way', 'we-see-a-way.html', 'landing/home-eds', 'landing/home-eds.html', 'about-us', 'about-us.html', 'products/brands', 'products.html', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'e-buy', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.dashboardPage?.url, window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.addressPageUrl, window.EbuyConfig?.myAddressPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderDetailsPageUrl, window.EbuyConfig?.paymentMethodsPageUrl, window.EbuyConfig?.myProfilePageUrl, window.EbuyConfig?.requestedQuoteDetailsPageUrl, window.EbuyConfig?.requestedQuotesPageUrl];
+export const includeStageEdsPaths = ['news', 'news.html', 'blog.html', 'blog', 'videos', 'videos.html', 'library', 'library.html', 'new-lab/excedr', 'new-lab/excedr.html', 'we-see-a-way', 'we-see-a-way.html', 'landing/home-eds', 'landing/home-eds.html', 'about-us', 'about-us.html', 'products/brands', 'products.html', 'products/2d-3d-cell-culture-systems', 'products/antibodies', 'e-buy', 'products/capillary-electrophoresis-systems', 'products/cell-lines-lysates', 'products/extraction-kits', 'products/liquid-handlers', 'products/assay-kits', 'products/biochemicals', 'products/cell-counters-analyzers', 'products/cellular-imaging-systems', 'products/high-performance-liquid-chromatography-systems', 'products/high-throughput-cellular-screening-systems', 'products/mass-spectrometers', 'products/microarray-scanners', 'products/microbioreactors', 'products/microplate-readers', 'products/microscopes', 'products/particle-counters-and-analyzers', 'products/patch-clamp-systems', 'products/proteins-peptides', 'products/sample-preparation-detection', 'products/software-platforms', 'products/centrifuges', 'products/clone-screening-systems', 'products/flow-cytometers', 'products/chromatography-columns', window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.dashboardPage?.url, window.EbuyConfig?.cartPageUrl, window.EbuyConfig?.addressPageUrl, window.EbuyConfig?.myAddressPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderStatusPageUrl, window.EbuyConfig?.orderDetailsPageUrl, window.EbuyConfig?.paymentMethodsPageUrl, window.EbuyConfig?.myProfilePageUrl, window.EbuyConfig?.requestedQuoteDetailsPageUrl, window.EbuyConfig?.requestedQuotesPageUrl];
 
 
 if (getMetadata('template') === 'pdp') {
@@ -162,6 +162,31 @@ function loadGTM() {
   document.head.prepend(scriptTag);
 }
 // google tag manager -end
+
+// New relic Script -start
+function loadrelicScript() {
+  const scriptTag = document.createElement('script');
+  scriptTag.type = 'text/javascript';
+  scriptTag.src =
+    window.location.host === 'lifesciences.danaher.com'
+      ? '/scripts/new-relic.js'
+      : '/scripts/new-relic-stage.js';
+
+  scriptTag.onload = function () {
+    if (window.newrelic && typeof window.newrelic.addPageAction === 'function') {
+      window.newrelic.addPageAction('pageView', {
+        url: window.location.href,
+        title: document.title,
+        source: 'aem-eds',
+      });
+    } else {
+      console.warn('New Relic not available or addPageAction not defined.');
+    }
+  };
+
+  document.head.prepend(scriptTag);
+}
+// New relic Script - end
 
 // Adobe Target - start
 
@@ -280,9 +305,17 @@ function sendCoveoEventProduct() {
 //   }
 // }
 export async function getAuthToken() {
+  const tokenData = await getAuthenticationToken();
+  const hostName = window.location.hostname;
+  const siteID = window.DanaherConfig?.siteID;
+  const env = hostName.includes('local') ? 'local' : hostName.includes('dev') ? 'dev' : hostName.includes('stage') ? 'stage' : 'prod';
+  if (tokenData?.access_token){
+    const token = tokenData.access_token;
+    sessionStorage.setItem(`${siteID}_${env}_apiToken`, JSON.stringify({access_token: token, expiry_time: tokenData.expiry_time}));
+    return;
+  }
   if (!refresh) {
     refresh = true;
-    const siteID = window.DanaherConfig?.siteID;
     const formData = 'grant_type=anonymous&scope=openid+profile&client_id=';
     const authRequest = await fetch(`/content/danaher/services/auth/token?id=${siteID}`, {
       method: 'POST',
@@ -290,8 +323,6 @@ export async function getAuthToken() {
       body: formData,
     });
     if (authRequest.ok) {
-      const hostName = window.location.hostname;
-      const env = hostName.includes('local') ? 'local' : hostName.includes('dev') ? 'dev' : hostName.includes('stage') ? 'stage' : 'prod';
       const data = await authRequest.json();
       sessionStorage.setItem(`${siteID}_${env}_apiToken`, JSON.stringify(data));
       sessionStorage.setItem(`${siteID}_${env}_refresh-token`, data.refresh_token);
@@ -347,6 +378,7 @@ if (
 
 if (!window.location.hostname.includes('localhost')) {
   loadGTM();
+  loadrelicScript();
   //loadAT();
 
   if (isOTEnabled()) {
