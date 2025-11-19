@@ -18,7 +18,16 @@
           }
     ],
     "models": [
+      {
+        "id": "auth-callback",
+          "fields": [   ]
+        }
     ],
-    "filters": []
+    "filters": [
+      {
+            "id": "auth-callback",
+            "components": [   ]
+          }
+    ]
   }
    
