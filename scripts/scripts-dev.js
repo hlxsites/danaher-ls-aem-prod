@@ -619,8 +619,8 @@ async function decorateTemplates(main) {
   try {
     let template = toClassName(getMetadata('template'));
     if (template === 'library') {
-    document.body.classList.remove('library');
-    template='blog';
+      document.body.classList.remove('library');
+      template = 'blog';
     }
     const templates = Object.keys(TEMPLATE_LIST);
     if (templates.includes(template)) {
