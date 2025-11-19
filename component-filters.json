@@ -88,7 +88,8 @@
       "talk-to-an-expert-text",
       "see-all",
       "solutions-digital-products",
-      "page-jump-menu"
+      "page-jump-menu",
+      "auth-callback"
     ]
   },
   {
@@ -118,6 +119,10 @@
     "components": [
       ""
     ]
+  },
+  {
+    "id": "auth-callback",
+    "components": []
   },
   {
     "id": "banner",

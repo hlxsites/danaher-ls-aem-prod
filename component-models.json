@@ -457,6 +457,10 @@
     ]
   },
   {
+    "id": "auth-callback",
+    "fields": []
+  },
+  {
     "id": "banner",
     "fields": [
       {
