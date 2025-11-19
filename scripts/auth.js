@@ -25,7 +25,7 @@ export async function initAuth0() {
   await loadAuth0Script();
 
   auth0Client = await window.auth0.createAuth0Client({
-    domain: 'stage.login.lifesciences.danaher.com',
+    domain: 'login.lifesciences.danaher.com',
     clientId: window.DanaherConfig.auth0ClientID ? window.DanaherConfig.auth0ClientID : 'C7NLtBkXWSiqk6t15cRv2FI6vEBfGy7K',
     authorizationParams: {
       redirect_uri: `${window.location.origin}/us/en/e-buy/callback`,
