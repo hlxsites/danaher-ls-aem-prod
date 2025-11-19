@@ -127,7 +127,7 @@ export function imageHelper(imageUrl, imageAlt, eager = false) {
     });
   }
   const cardImage = createOptimizedPicture(imageUrl, imageAlt, eager, [{ width: '500' }]);
-  cardImage.querySelector('img').className = 'mb-2 h-48 w-full object-cover';
+  cardImage.querySelector('img').className = 'object-cover w-full h-48 mb-2';
   return cardImage;
 }
 
@@ -449,7 +449,7 @@ function decorateTwoColumnSection(main) {
         if (currentDiv?.classList.contains('col-right')) {
           newSection.appendChild(currentDiv);
         }
-        childClone.className = 'text-3xl leading-6 pt-6 pb-4 my-0';
+        childClone.className = 'pt-6 pb-4 my-0 text-3xl leading-6';
         newSection.appendChild(
           div(
             { class: 'col-left lg:w-1/3 xl:w-1/3 pr-11' },
@@ -1096,6 +1096,9 @@ function getDLPage() {
   } else if (path.includes('/us/en/library')) {
     page.level = 'other';
     page.type = 'library';
+  } else if (path.includes("/us/en/videos")) {
+    page.level="top";
+    page.type="videos"
   } else if (path.includes('/us/en/about-us')) {
     page.level = 'top';
     page.type = 'about-us';
@@ -1140,6 +1143,7 @@ if (window.location.host === 'lifesciences.danaher.com' || useProd === 'true') {
     quoteSubmitPath: '/us/en/submit-quote.html',
     intershopDomain: 'https://shop.lifesciences.danaher.com',
     intershopPath: '/INTERSHOP/rest/WFS/DANAHERLS-LSIG-Site/-',
+    auth0ClientID: '9jtRkK2594wUckvvY6pQjmaBsoEDh3z5',
     searchOrg: 'danaherproductionrfl96bkr',
     searchKey: 'xxf2f10385-5a54-4a18-bb48-fd8025d6b5d2',
     workflowProductKey: 'xx3d1b8da5-d1e9-4989-bbed-264a248a9e22',
@@ -1171,6 +1175,7 @@ if (window.location.host === 'lifesciences.danaher.com' || useProd === 'true') {
     quoteSubmitPath: '/us/en/submit-quote.html',
     intershopDomain: 'https://stage.shop.lifesciences.danaher.com',
     intershopPath: '/INTERSHOP/rest/WFS/DANAHERLS-LSIG-Site/-',
+    auth0ClientID: 'C7NLtBkXWSiqk6t15cRv2FI6vEBfGy7K',
     searchOrg: 'danahernonproduction1892f3fhz',
     searchKey: 'xx2a2e7271-78c3-4e3b-bac3-2fcbab75323b',
     workflowProductKey: 'xx26ffc727-cc72-4bbd-98e3-34052f296382',

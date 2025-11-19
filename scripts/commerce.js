@@ -11,6 +11,8 @@ import {
 
 import { getApiData } from './api-utils.js';
 
+import { getAuthenticationToken } from './token-utils.js';
+
 const GRID_ITEMS_PER_PAGE = 21;
 const LIST_ITEMS_PER_PAGE = 7;
 
@@ -82,7 +84,7 @@ export function getAuthorization() {
     parsedToken
     && parsedToken?.expiry_time > new Date().getTime() / 1000
   ) {
-    authHeader.append('authentication-token', parsedToken.token);
+    authHeader.append('authentication-token', parsedToken?.access_token || parsedToken?.token);
   } else if (getCookie(`${siteID}_${env}_apiToken`)) {
     const apiToken = getCookie(`${siteID}_${env}_apiToken`);
     authHeader.append('authentication-token', apiToken);
@@ -145,6 +147,40 @@ export async function makeCoveoAnalyticsApiRequest(
 ) {
   // eslint-disable-next-line no-return-await
   return await makeCoveoRequest(path, accessParam, payload, true);
+}
+
+// Get Auth0 user Profile details
+export async function getAuth0UserProfile() {
+  try {
+    const baseURL = getCommerceBase();
+    const devURL = baseURL.replace('stage', 'dev');
+    const token = await getAuthenticationToken();
+    const accessToken = token ? token.access_token : '';
+    const base64Url = accessToken.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const auth0Id = base64 ? JSON.parse(atob(base64)).sub : '';
+    const defaultHeader = new Headers({
+      Authorization: `Bearer ${accessToken}`,
+      Accept: 'application/json',
+    });
+    const url = `${devURL}/auth0profile?id=${auth0Id}`;
+    const response = await getApiData(
+      url,
+      defaultHeader,
+    );
+    if (response) {
+      if (response.status === 'success') {
+        const userProfileResponse = response.data;
+        return {
+          data: userProfileResponse,
+          status: 'success',
+        };
+      }
+    }
+  } catch (error) {
+    // eslint-disable-next-line
+    console.log("error", error);
+  }
 }
 
 // get product detailss

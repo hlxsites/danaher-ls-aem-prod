@@ -1,0 +1,73 @@
+let auth0Client = null;
+
+/**
+ * Dynamically load the Auth0 SDK script from CDN (only when needed).
+ */
+async function loadAuth0Script() {
+  if (window.auth0) return; // already loaded
+
+  await new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js';
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+/**
+ * Initialize Auth0 client, only once.
+ */
+export async function initAuth0() {
+  if (auth0Client) return auth0Client;
+
+  await loadAuth0Script();
+
+  auth0Client = await window.auth0.createAuth0Client({
+    domain: 'stage.login.lifesciences.danaher.com',
+    clientId: window.DanaherConfig.auth0ClientID ? window.DanaherConfig.auth0ClientID : 'C7NLtBkXWSiqk6t15cRv2FI6vEBfGy7K',
+    authorizationParams: {
+      redirect_uri: `${window.location.origin}/us/en/e-buy/callback`,
+      scope: 'openid profile email',
+    },
+  });
+
+  return auth0Client;
+}
+
+/**
+ * Auth helper functions
+ */
+export async function getUser() {
+  const client = await initAuth0();
+  const isAuth = await client.isAuthenticated();
+  return isAuth ? client.getUser() : null;
+}
+
+export async function login() {
+  const client = await initAuth0();
+  await client.loginWithRedirect({
+    appState: { returnTo: window.location.pathname + window.location.search },
+  });
+}
+
+export async function logout() {
+  const client = await initAuth0();
+  await client.logout({
+    logoutParams: { returnTo: window.location.origin },
+  });
+}
+
+export async function getIdToken() {
+  const auth0 = await initAuth0();
+  const claims = await auth0.getIdTokenClaims();
+  // eslint-disable-next-line no-underscore-dangle
+  return claims?.__raw;
+}
+
+export async function getExpiryTime() {
+  const auth0 = await initAuth0();
+  const claims = await auth0.getIdTokenClaims();
+  return claims?.exp;
+}
