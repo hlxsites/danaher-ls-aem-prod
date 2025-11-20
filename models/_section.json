@@ -43,6 +43,10 @@
             {
               "name": "No Padding Top",
               "value": "no-padding-top"
+            },
+            {
+              "name": "bg-danaherlightblue-50",
+              "value": "bg-danaherlightblue-50"
             }
           ]
         }
