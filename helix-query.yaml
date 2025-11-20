@@ -8,6 +8,7 @@ indices:
       - /us/en/new-lab/promotions/**
       - /us/en/library/**
       - /us/en/application/**
+      - /us/en/application-eds/**
       - /us/en/info/**
     target: /us/en/article-index.json
     properties:
