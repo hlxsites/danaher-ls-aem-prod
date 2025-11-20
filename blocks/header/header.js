@@ -619,17 +619,16 @@ function buildLoggedInUserBlock(loginLink, user) {
     loginLink.append(loginSpan);
   } else {
     loginLink.className = 'relative flex items-center justify-between h-15 w-15';
-    loginLink.href = '/us/en/signin/dashboard.html';
+    loginLink.href = '/us/en/profile.html';
     loginUser = span(
       {
         class:
-          'w-12 h-12 p-2 mb-2 overflow-hidden border rounded-full bg-danaherlightblue-500',
+          'icon icon-User [&_svg>use]:stroke-black',
       },
-      span(shortName(user)),
     );
     loginSpan = span(
       { class: 'pl-1 text-xs font-semibold text-black' },
-      'My Account',
+      user?.name,
     );
   }
   loginLink.setAttribute('aria-label', 'My Account');
