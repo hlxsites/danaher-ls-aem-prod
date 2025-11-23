@@ -341,13 +341,13 @@
     @apply !max-w-5xl !mr-0 !ml-0;
   }
 
-  .library main {
+  /* .library main {
     @apply flex flex-row gap-8 max-w-7xl mx-auto w-full bg-white;
   }
 
   .library main > div {
     @apply !py-10 sm:!py-8 md:!px-5 empty:hidden;
-  }
+  } */
 
   /* .library main .recent-articles-container {
     @apply hidden lg:block lg:w-recent-articles bg-danaherpurple-25 space-y-4 !py-28 shrink-0;

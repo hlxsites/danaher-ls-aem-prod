@@ -63,6 +63,7 @@ const TEMPLATE_LIST = {
   sidenav: 'sidenav',
 };
 TEMPLATE_LIST.news = TEMPLATE_LIST.blog;
+TEMPLATE_LIST.library = TEMPLATE_LIST.blog;
 
 export function getEdgeDeliveryPath(path) {
   return path.replace(/^\/content\/danaher\/ls/, '').replace(/\.html$/, '');
@@ -617,11 +618,7 @@ export function decorateMain(main) {
  */
 async function decorateTemplates(main) {
   try {
-    let template = toClassName(getMetadata('template'));
-    if (template === 'library') {
-      document.body.classList.remove('library');
-      template = 'blog';
-    }
+    const template = toClassName(getMetadata('template'));
     const templates = Object.keys(TEMPLATE_LIST);
     if (templates.includes(template)) {
       const templateObj = TEMPLATE_LIST[template];
