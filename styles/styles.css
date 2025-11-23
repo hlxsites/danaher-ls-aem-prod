@@ -1503,7 +1503,7 @@ header {
 .library main {
   margin-left: auto;
   margin-right: auto;
-  display: flex;
+  /* display: flex; */
   width: 100%;
   max-width: 80rem;
   flex-direction: row;
