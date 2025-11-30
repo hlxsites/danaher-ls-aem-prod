@@ -305,7 +305,6 @@
         "component": "text",
         "valueType": "string",
         "name": "accordion_title",
-        "value": "",
         "label": "Super Title"
       },
       {
@@ -338,6 +337,18 @@
             "value": "h6"
           }
         ]
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "label": "image option",
+        "options": [
+          {
+            "name": "Image",
+            "value": "image"
+          }
+        ]
       }
     ]
   },
@@ -345,16 +356,31 @@
     "id": "accordion-item",
     "fields": [
       {
+        "component": "reference",
+        "valueType": "Picture",
+        "classes": "Accordion (image)",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "classes": "Accordion (image)",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "value": ""
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "item_title",
-        "value": "",
         "label": "Title"
       },
       {
         "component": "select",
         "name": "item_titleType",
-        "label": "Accordion Item Title Type",
+        "label": "Title Type",
         "options": [
           {
             "name": "h1",
@@ -386,7 +412,6 @@
         "component": "richtext",
         "valueType": "string",
         "name": "item_description",
-        "value": "",
         "label": "Description"
       }
     ]

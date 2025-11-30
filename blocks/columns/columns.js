@@ -1030,4 +1030,142 @@ export default function decorate(block) {
        }
      }
      /** ********EDS FORM Ends****************** */
+    if (window.location.pathname.includes('/us/en/solutions/analytical') || window.location.pathname.includes('/us/en/new-lab')) {    
+ function renderAccordionInSecondColumn(sectionDiv) {
+  const columnsWrapper = sectionDiv.querySelector('.columns-wrapper');
+  if (!columnsWrapper) return;
+
+  const columnsBlock = columnsWrapper.querySelector('.columns.block');
+  if (!columnsBlock) return;
+
+  const container = columnsBlock.firstElementChild;
+  if (!container) return;
+  const colDivs = container.querySelectorAll(':scope > div');
+  if (colDivs.length < 2) return;
+
+  const secondColumn = colDivs[1];
+
+  // Detect headings or item containers for accordion
+  const headingSelector = ':scope > h3, :scope > h2, :scope > h4';
+  const directHeadings = Array.from(secondColumn.querySelectorAll(headingSelector));
+  let items = [];
+
+  if (directHeadings.length > 0) {
+    directHeadings.forEach((headingEl) => {
+      const headingText = headingEl.textContent ? headingEl.textContent.trim() : '';
+      const next = headingEl.nextElementSibling;
+      const isNextHeading = next && (next.matches && next.matches('h3, h2, h4'));
+      const contentEl = next && !isNextHeading ? next : null;
+      items.push({ headingEl, headingText: headingText || null, contentEl });
+    });
+  } else {
+    // fallback: each child is an item container
+    const childItems = Array.from(secondColumn.children).filter((c) => c.nodeType === 1);
+    childItems.forEach((child, idx) => {
+      const headingEl = child.querySelector('h3, h2, h4');
+      if (!headingEl) return; // Only process if heading exists
+      const headingText = headingEl.textContent.trim();
+      const contentEl = document.createElement('div');
+      Array.from(child.childNodes).forEach((n) => {
+        if (n !== headingEl) contentEl.appendChild(n);
+      });
+      items.push({ headingEl, headingText, contentEl });
+    });
+  }
+
+  // Only build accordion if items were found
+  if (items.length === 0) return;
+
+  // Create accordion wrapper + block
+  const accordionWrapper = document.createElement('div');
+  accordionWrapper.className = 'accordion-wrapper';
+
+  const accordionBlock = document.createElement('div');
+  accordionBlock.className = 'accordion block';
+  accordionBlock.setAttribute('data-block-name', 'accordion');
+  accordionBlock.setAttribute('data-block-status', 'loaded');
+
+  const accordionId = `accordion-${String(generateUUID()).slice(0, 5)}`;
+  const accordionContainer = document.createElement('div');
+  accordionContainer.id = accordionId;
+  accordionContainer.className = 'divide-y divide-gray-900/10';
+
+  items.forEach((itemObj, idx) => {
+    const { headingEl, headingText, contentEl } = itemObj;
+    const item = document.createElement('div');
+    item.className = 'accordion-item relative py-2';
+    item.id = `accordion-item-${idx}`;
+    
+
+    const label = headingText || (headingEl && headingEl.textContent.trim());
+
+    const titleRow = document.createElement('div');
+    titleRow.className = 'flex items-center justify-between w-full text-left font-semibold py-2 cursor-pointer peer-[&_span.plus]:opacity-100 peer-checked:[&_span.plus]:opacity-0 peer-checked:[&_span.plus]:rotate-45 peer-[&_span.minus]:opacity-0 peer-[&_span.minus]:rotate-90 peer-checked:[&_span.minus]:rotate-180 peer-checked:[&_span.minus]:opacity-100 peer-checked:[&_span.minus]:opacity-100';
+
+    // Move headingEl node itself into the title row
+    if (headingEl) {
+      headingEl.title = headingEl.textContent.trim();
+      headingEl.className = '!text-xl font-medium leading-7 my-0 mr-12';
+      titleRow.appendChild(headingEl);
+    } else {
+      const title = document.createElement('h3');
+      title.className = 'font-semibold text-lg m-0';
+      title.textContent = label;
+      titleRow.appendChild(title);
+    }
+
+    const icon = document.createElement('span');
+    icon.className = 'accordion-icon text-2xl ml-2 select-none';
+    icon.textContent = '+';
+    titleRow.appendChild(icon);
+
+  //   const contentContainer = div(
+  //   { class: 'grid text-sm overflow-hidden transition-all duration-300 ease-in-out grid-rows-[0fr] opacity-0 peer-checked:py-2 peer-checked:grid-rows-[1fr] peer-checked:opacity-100' },
+  //   div({ class: 'accordion-answer text-base leading-7 overflow-hidden' }),
+  // );
+
+    const contentContainer = document.createElement('div');
+    // contentContainer.className = 'grid text-sm overflow-hidden transition-all duration-300 ease-in-out grid-rows-[0fr] opacity-0 peer-checked:py-2 peer-checked:grid-rows-[1fr] peer-checked:opacity-100';
+    contentContainer.className = 'accordion-answer text-base leading-7 overflow-hidden';
+    contentContainer.hidden = true;
+    if (contentEl) contentContainer.appendChild(contentEl);
+    contentContainer.querySelector('a')?.classList.remove(...'btn btn-outline-primary'.split(' '));
+    contentContainer.querySelectorAll('a').forEach((link) => {
+    link.classList.add(...'text-sm font-bold text-danaherpurple-500 !no-underline'.split(' '));
+  });
+
+    titleRow.addEventListener('click', () => {
+      const expanded = !contentContainer.hidden;
+      accordionContainer.querySelectorAll('.accordion-content').forEach((c) => {
+        c.hidden = true;
+      });
+      accordionContainer.querySelectorAll('.accordion-icon').forEach((i) => {
+        i.textContent = '+';
+      });
+      if (!expanded) {
+        contentContainer.hidden = false;
+        icon.textContent = '−';
+      } else {
+        contentContainer.hidden = true;
+        icon.textContent = '+';
+      }
+    });
+
+    item.appendChild(titleRow);
+    item.appendChild(contentContainer);
+    accordionContainer.appendChild(item);
+  });
+
+  accordionBlock.appendChild(accordionContainer);
+  accordionWrapper.appendChild(accordionBlock);
+
+  // Only update the column if accordion is present
+  secondColumn.innerHTML = '';
+  secondColumn.appendChild(accordionWrapper);
+}
+  
+  if (block.classList.contains('columns-2-cols')) {
+    renderAccordionInSecondColumn(block.closest('.section'));
+  }
+} 
    }

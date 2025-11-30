@@ -9,7 +9,7 @@
 export const excludeProdPaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo'];
 
 // include pro paths
-export const includeProdPaths = ['e-buy', 'products/', 'brands', 'products.html', 'blog', 'news', 'videos', 'library', 'expert-eds', 'new-lab', 'application', 'solutions/digital/products'];
+export const includeProdPaths = ['e-buy', 'products/', 'brands', 'products.html', 'blog', 'news', 'videos', 'library', 'expert-eds', 'new-lab', 'application', 'solutions/analytical', 'solutions/digital/products'];
 
 // exclude stage paths
 export const excludeStagePaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo', 'topics-jck1'];
