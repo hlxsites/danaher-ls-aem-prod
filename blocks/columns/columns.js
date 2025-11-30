@@ -1143,23 +1143,22 @@ export default function decorate(block) {
         contentContainer.hidden = true;
         icon.textContent = '+';
       }
-    });
+        });
 
-    item.appendChild(titleRow);
-    item.appendChild(contentContainer);
-    accordionContainer.appendChild(item);
-  });
+        item.appendChild(titleRow);
+        item.appendChild(contentContainer);
+        accordionContainer.appendChild(item);
+      });
 
-  accordionBlock.appendChild(accordionContainer);
-  accordionWrapper.appendChild(accordionBlock);
+      accordionBlock.appendChild(accordionContainer);
+      accordionWrapper.appendChild(accordionBlock);
 
-  // Only update the column if accordion is present
-  secondColumn.innerHTML = '';
-  secondColumn.appendChild(accordionWrapper);
-}
-  
-  if (block.classList.contains('columns-2-cols')) {
-    renderAccordionInSecondColumn(block.closest('.section'));
+      // Only update the column if accordion is present
+      secondColumn.innerHTML = '';
+      secondColumn.appendChild(accordionWrapper);
+    }
+    if (block.classList.contains('columns-2-cols')) {
+      renderAccordionInSecondColumn(block.closest('.section'));
+    }
   }
-  } 
 }
