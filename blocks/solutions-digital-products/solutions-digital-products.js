@@ -40,9 +40,8 @@ export function createCard(product, idx, firstCard = false) {
   // Use product.path directly if it is an external URL, otherwise use makePublicUrl
   const isExternal = /^https?:\/\//.test(product.path);
   const href = isExternal ? product.path : makePublicUrl(product.path);
-  return li({
-    class: 'w-full flex flex-col col-span-1 relative mx-auto justify-center transform transition duration-500 border hover:scale-105 shadow-lg rounded-lg overflow-hidden bg-white max-w-xl',
-  },
+  return li(
+    { class: 'w-full flex flex-col col-span-1 relative mx-auto justify-center transform transition duration-500 border hover:scale-105 shadow-lg rounded-lg overflow-hidden bg-white max-w-xl' },
     a(
       {
         href,
@@ -76,7 +75,7 @@ export function createCard(product, idx, firstCard = false) {
         { class: 'inline-flex items-center w-full px-6 py-5 space-x-4 bg-gray-100' },
         span({ class: 'btn-primary-purple border-8 px-2 !rounded-full' }, 'View Products'),
       ),
-    )
+    ),
   );
 }
 

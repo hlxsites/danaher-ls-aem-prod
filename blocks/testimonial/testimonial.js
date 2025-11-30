@@ -6,7 +6,7 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 export default async function decorate(block) {
   // const [quoteIconCell] = block.children;
 
-   const toBoolean = (v) => {
+  const toBoolean = (v) => {
     if (typeof v === 'boolean') return v;
     if (v == null) return false;
     const s = String(v).trim().toLowerCase();
@@ -69,25 +69,25 @@ export default async function decorate(block) {
     image.classList.add(...'main-image w-64 h-64 rounded-full'.split(' '));
   }
   const authorTextDiv = block?.firstElementChild?.nextElementSibling?.nextElementSibling;
-    block.innerHTML = '';
-    const finalimageDiv = div({ class: 'hidden lg:block lg:flex-shrink-0' });
-    if (image) {
-      finalimageDiv.append(image);
+  block.innerHTML = '';
+  const finalimageDiv = div({ class: 'hidden lg:block lg:flex-shrink-0' });
+  if (image) {
+    finalimageDiv.append(image);
+  }
+  const finaldivOfDivEl = div({ class: 'text-2xl leading-9 font-medium text-danaherpurple-500 relative' });
+  if (divOfDivEl) {
+    finaldivOfDivEl.innerHTML = divOfDivEl.innerHTML;
+    let authorImageEl = '';
+    if (imagecopy) {
+      authorImageEl = img({ src: imagecopy.src, class: 'rounded-full h-16 w-16' });
     }
-    const finaldivOfDivEl = div({ class: 'text-2xl leading-9 font-medium text-danaherpurple-500 relative' });
-    if (divOfDivEl) {
-      finaldivOfDivEl.innerHTML = divOfDivEl.innerHTML;
-      let authorImageEl = '';
-      if (imagecopy) {
-        authorImageEl = img({ src: imagecopy.src, class: 'rounded-full h-16 w-16' });
-      }
-      const footerElem = div(
-        { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
-        authorImageEl,
-        div({ class: 'flex flex-col' }, authorTextDiv || ''),
-      );
-      finaldivOfDivEl.append(footerElem);
-      if (showQuoteIcon) {
+    const footerElem = div(
+      { class: 'testimonial-footer flex text-base leading-6 font-medium text-danahergray-900 mt-4 items-center gap-4' },
+      authorImageEl,
+      div({ class: 'flex flex-col' }, authorTextDiv || ''),
+    );
+    finaldivOfDivEl.append(footerElem);
+    if (showQuoteIcon) {
       const quoteIcon = div(span({ class: 'icon icon-quote' }));
       decorateIcons(quoteIcon);
       const icon = quoteIcon.querySelector('.icon-quote');
@@ -96,8 +96,8 @@ export default async function decorate(block) {
       }
       finaldivOfDivEl.append(quoteIcon);
     }
-    }
-    divEl.append(finalimageDiv);
-    divEl.append(finaldivOfDivEl);
-    block.append(divEl);
+  }
+  divEl.append(finalimageDiv);
+  divEl.append(finaldivOfDivEl);
+  block.append(divEl);
 }

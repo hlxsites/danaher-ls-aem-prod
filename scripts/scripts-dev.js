@@ -1093,9 +1093,9 @@ function getDLPage() {
   } else if (path.includes('/us/en/library')) {
     page.level = 'other';
     page.type = 'library';
-  } else if (path.includes("/us/en/videos")) {
-    page.level="top";
-    page.type="videos"
+  } else if (path.includes('/us/en/videos')) {
+    page.level = 'top';
+    page.type = 'videos';
   } else if (path.includes('/us/en/about-us')) {
     page.level = 'top';
     page.type = 'about-us';
