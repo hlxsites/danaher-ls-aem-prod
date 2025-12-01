@@ -20,7 +20,7 @@ import {
 import addProducts from './addproducts.js';
 import {
   // eslint-disable-next-line max-len
-  updateCartQuantity, getProductDetailObject, updateProductDetailObject, productData, updateBasketDetails,
+  updateCartQuantity, getProductDetailObject, updateProductDetailObject, updateBasketDetails,
 } from './cartSharedFile.js';
 
 export const cartItemsValue = [];
@@ -1036,7 +1036,7 @@ export const recommendedProduct = [
 export async function updateCart(newItem) {
   const getProductDetailsObject = await getProductDetailObject();
   if (getProductDetailsObject) {
-    const response = getProductDetailsObject.data.map((itemToBeDisplayed) => {
+    const response = getProductDetailsObject.data.map(async (itemToBeDisplayed) => {
       const opcoBe = Object.keys(itemToBeDisplayed);
       const imgsrc = opcoBe[0].split(' ')[0];
       if (newItem[0].data.manufacturer === opcoBe[0]) {
@@ -1045,7 +1045,7 @@ export async function updateCart(newItem) {
         );
         const cartContainer = document.getElementById(opcoBe[0]);
         if (cartContainer) {
-          cartContainer.append(cartItemsContainer(newItem[0].data)); // Add updated item
+          cartContainer.append(await cartItemsContainer(newItem[0].data)); // Add updated item
           quantityElement.innerHTML = ` ${itemToBeDisplayed[opcoBe].length} Items`;
           return cartContainer;
         }
@@ -1066,9 +1066,9 @@ export async function updateCart(newItem) {
 
           const logoDivDisplay = logoDiv(itemToBeDisplayed, opcoBe, imgsrc);
           cartListContainer.append(logoDivDisplay);
-          itemToBeDisplayed[opcoBe].forEach((item) => {
+          itemToBeDisplayed[opcoBe].forEach(async (item) => {
             cartItemDisplayContainer.append(divider(200));
-            cartItemDisplayContainer.append(cartItemsContainer(item));
+            cartItemDisplayContainer.append(await cartItemsContainer(item));
           });
 
           cartListContainer.append(cartItemDisplayContainer);
@@ -1089,9 +1089,9 @@ export async function updateCart(newItem) {
 
         const logoDivDisplay = logoDiv(itemToBeDisplayed, opcoBe, imgsrc);
         cartListContainer.append(logoDivDisplay);
-        itemToBeDisplayed[opcoBe].forEach((item) => {
+        itemToBeDisplayed[opcoBe].forEach(async (item) => {
           cartItemDisplayContainer.append(divider(200));
-          cartItemDisplayContainer.append(cartItemsContainer(item));
+          cartItemDisplayContainer.append(await cartItemsContainer(item));
         });
         cartListContainer.append(cartItemDisplayContainer);
         return cartItemContainer;
@@ -1169,14 +1169,18 @@ export const productDetails = async (getItemsFromBasket) => {
   const getItemFromBasket = getItemsFromBasket.data
     ? getItemsFromBasket.data
     : getItemsFromBasket;
+  await updateProductDetailObject();
+  return [{ status: 'success', data: getItemFromBasket[0]?.productData }];
 
-  const productDetailsList = await Promise.all(
-    getItemFromBasket?.map(async (product) => {
-      const productDataResponse = await productData(product);
-      return productDataResponse;
-    }),
-  );
-  return productDetailsList;
+  // const productDetailsList = await Promise.all(
+  //   getItemFromBasket?.map(async (product) => {
+  //     const productDataResponse = await productData(product);
+  //     return productDataResponse;
+  //   }),
+  // );
+  // console.log('productDetailsList : ', productDetailsList);
+
+  // return productDetailsList;
 };
 
 // update cart items
@@ -1236,6 +1240,8 @@ export const addItemToCart = async (item) => {
         update header cart item count
       */
       if (window.location.pathname === window.EbuyConfig.cartPageUrl) {
+        addItem.data.data[0].productData.itemQuantity = item?.sku?.quantity;
+        addItem.data.data[0].productData.lineItemId = addItem?.data?.data[0]?.id;
         const updateCartItem = await updateCartItems(addItem);
         await updateCheckoutSummary();
         await updateHeaderCart();
@@ -1264,6 +1270,8 @@ export const addItemToCart = async (item) => {
       const addItem = await addItemToBasket(item);
       if (addItem) {
         if (addItem.status === 'success') {
+          addItem.data.data[0].productData.itemQuantity = item?.sku?.quantity;
+          addItem.data.data[0].productData.lineItemId = addItem?.data?.data[0]?.id;
           const updateCartItem = await updateCartItems(addItem);
           if (window.location.pathname === window.EbuyConfig.cartPageUrl) {
             await updateCheckoutSummary();

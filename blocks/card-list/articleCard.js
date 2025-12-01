@@ -29,6 +29,17 @@ export default function createCard(article, firstCard = false) {
         linkText = 'Read Article →';
     }
   }
+  const isValidImage = (img) => img && img.trim() !== '' && img !== 'about:error';
+
+  let selectedImage;
+
+  if (isValidImage(article?.metaImage)) {
+    selectedImage = article.metaImage;
+  } else if (isValidImage(article?.image)) {
+    selectedImage = article.image;
+  } else {
+    selectedImage = '/content/dam/danaher/products/fallbackImage.jpeg';
+  }
   const cardWrapper = a(
     {
       class: 'group h-full ',
@@ -37,7 +48,7 @@ export default function createCard(article, firstCard = false) {
       title: article.title,
     },
     imageHelper(
-      article?.metaImage || article.image || '/content/dam/danaher/system/icons/preview-image.png',
+      selectedImage,
       article.title,
       firstCard,
     ),

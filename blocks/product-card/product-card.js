@@ -3,7 +3,7 @@ import {
   ul, a, p, div, span, h4, li,
 } from '../../scripts/dom-builder.js';
 import { buildItemListSchema } from '../../scripts/schema.js';
-import { makePublicUrl, imageHelper } from '../../scripts/scripts.js';
+import { makePublicUrl, imageHelper, getImageFromArray } from '../../scripts/scripts.js';
 
 export function createCard(product, idx, firstCard = false) {
   const cardWrapper = a(
@@ -38,8 +38,8 @@ export default async function decorate(block) {
     });
     response?.results?.forEach((product, index) => {
       product.path = product.clickUri;
-      const productImage = product?.raw?.images;
-      product.image = productImage ? product?.raw?.images?.at(0) : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble';
+      const productImage = getImageFromArray(product?.raw?.images);
+      product.image = productImage;
       product.description = product?.raw?.description;
       cardList.append(createCard(product, index, index === 0));
     });

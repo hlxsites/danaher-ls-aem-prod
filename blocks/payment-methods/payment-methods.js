@@ -12,7 +12,7 @@ import { removePreLoader, showNotification, showPreLoader } from '../../scripts/
 // eslint-disable-next-line consistent-return
 export default async function decorate(block) {
   const authenticationToken = await getAuthenticationToken();
-  if ((authenticationToken?.status === 'error') || (authenticationToken.user_type === 'guest')) {
+  if ((authenticationToken?.status === 'error') || (authenticationToken?.user_type === 'guest')) {
     window.location.href = window.EbuyConfig?.cartPageUrl;
     return false;
   }

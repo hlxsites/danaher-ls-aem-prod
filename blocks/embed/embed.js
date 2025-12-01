@@ -1,5 +1,77 @@
 import { loadScript, toClassName } from '../../scripts/lib-franklin.js';
 import { div } from '../../scripts/dom-builder.js';
+// eslint-disable-next-line import/no-cycle
+import { setJsonLd } from '../../scripts/scripts.js';
+
+// YT
+
+async function getYouTubeMeta(videoUrl) {
+  const videoId = new URL(videoUrl).searchParams.get('v');
+  const formattedUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  const res = await fetch(
+    `https://noembed.com/embed?dataType=json&url=${formattedUrl}`,
+  );
+  const data = await res.json();
+
+  return {
+    embedUrl: videoUrl,
+    name: data.title,
+    description: data.description,
+    thumbnailUrl: data.thumbnail_url,
+    duration: data.duration,
+    uploadDate: data.upload_date,
+
+    '@context': 'https://schema.org/',
+    '@type': 'VideoObject',
+    hasPart: [],
+  };
+}
+
+// Vimeo
+async function getVimeoMeta(videoUrl) {
+  const oembedUrl = `https://vimeo.com/api/oembed.json?url=${videoUrl}`;
+  const data = await fetch(oembedUrl).then((r) => r.json());
+
+  return {
+    embedUrl: videoUrl,
+    name: data.title,
+    description: data.description,
+    thumbnailUrl: data.thumbnail_url,
+    duration: data.duration,
+    uploadDate: data.upload_date,
+    '@context': 'https://schema.org/',
+    '@type': 'VideoObject',
+    hasPart: [],
+  };
+}
+
+// Vidyard
+async function getVidyardMeta(videoUrl) {
+  const oembedUrl = `https://api.vidyard.com/dashboard/v1/oembed?url=${videoUrl}`;
+  const data = await fetch(oembedUrl).then((r) => r.json());
+
+  return {
+    name: data.name || data.title,
+    description: data.description,
+    thumbnailUrl: data.thumbnail_url,
+    duration: data.duration,
+    uploadDate: data.upload_date,
+  };
+}
+
+// load the Schema
+async function getVideoMetadata(url) {
+  if (/youtube\.com|youtu\.be/.test(url)) {
+    setJsonLd(await getYouTubeMeta(url), 'Video');
+  }
+  if (/vimeo\.com/.test(url)) {
+    setJsonLd(await getVimeoMeta(url), 'Video');
+  }
+  if (/vidyard\.com/.test(url)) {
+    await getVidyardMeta(url);
+  }
+}
 
 const getDefaultEmbed = (url) => `<div style="flex justify-center left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;">
       <iframe src="${url.href}" style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;" allowfullscreen=""
@@ -85,7 +157,7 @@ const embedVidyard = (block, url, autoplay) => {
   return embedHTML;
 };
 
-const loadEmbed = (block, link, autoplay) => {
+const loadEmbed = async (block, link, autoplay) => {
   if (block.classList.contains('embed-is-loaded')) {
     return;
   }
@@ -112,6 +184,7 @@ const loadEmbed = (block, link, autoplay) => {
   const config = EMBEDS_CONFIG.find((e) => e.match.some((match) => link.includes(match)));
   const url = new URL(link);
   if (config) {
+    await getVideoMetadata(link);
     block.innerHTML = config.embed(block, url, autoplay);
     block.classList = `block embed embed-${toClassName(config.match[0])} my-8 mx-auto text-center`;
     block.parentNode.classList.add('w-full');

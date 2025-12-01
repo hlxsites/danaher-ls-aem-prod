@@ -1,3 +1,10 @@
+.btn-lg {
+  padding-top: .625rem;
+  padding-bottom: .625rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem
+}
+
 .dhls-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -9,8 +16,16 @@
   font-family: TWK Lausanne EDS
 }
 
+.my-profile-wrapper :is(.pointer-events-none) {
+  pointer-events: none
+}
+
 .my-profile-wrapper :is(.relative) {
   position: relative
+}
+
+.my-profile-wrapper :is(.left-0) {
+  left: 0px
 }
 
 .my-profile-wrapper :is(.\!mt-0) {
@@ -35,6 +50,10 @@
 
 .my-profile-wrapper :is(.inline-flex) {
   display: inline-flex
+}
+
+.my-profile-wrapper :is(.hidden) {
+  display: none
 }
 
 .my-profile-wrapper :is(.\!h-\[24px\]) {
@@ -65,6 +84,10 @@
   width: 24px !important
 }
 
+.my-profile-wrapper :is(.w-1\/2) {
+  width: 50%
+}
+
 .my-profile-wrapper :is(.w-72) {
   width: 18rem
 }
@@ -75,6 +98,10 @@
 
 .my-profile-wrapper :is(.w-full) {
   width: 100%
+}
+
+.my-profile-wrapper :is(.cursor-pointer) {
+  cursor: pointer
 }
 
 .my-profile-wrapper :is(.flex-col) {
@@ -95,6 +122,10 @@
 
 .my-profile-wrapper :is(.justify-center) {
   justify-content: center
+}
+
+.my-profile-wrapper :is(.justify-between) {
+  justify-content: space-between
 }
 
 .my-profile-wrapper :is(.gap-1) {
@@ -181,6 +212,11 @@
   border-style: dashed
 }
 
+.my-profile-wrapper :is(.border-danaherblue-500) {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 74 89 / var(--tw-border-opacity))
+}
+
 .my-profile-wrapper :is(.border-danaherpurple-500) {
   --tw-border-opacity: 1;
   border-color: rgb(117 35 255 / var(--tw-border-opacity))
@@ -189,6 +225,11 @@
 .my-profile-wrapper :is(.border-gray-300) {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity))
+}
+
+.my-profile-wrapper :is(.border-gray-600) {
+  --tw-border-opacity: 1;
+  border-color: rgb(75 85 99 / var(--tw-border-opacity))
 }
 
 .my-profile-wrapper :is(.border-white) {
@@ -229,6 +270,11 @@
   padding: 1.5rem
 }
 
+.my-profile-wrapper :is(.px-3) {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem
+}
+
 .my-profile-wrapper :is(.px-4) {
   padding-left: 1rem;
   padding-right: 1rem
@@ -244,6 +290,11 @@
   padding-right: 1.5rem
 }
 
+.my-profile-wrapper :is(.py-2) {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem
+}
+
 .my-profile-wrapper :is(.py-3) {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem
@@ -252,6 +303,14 @@
 .my-profile-wrapper :is(.py-6) {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem
+}
+
+.my-profile-wrapper :is(.pl-4) {
+  padding-left: 1rem
+}
+
+.my-profile-wrapper :is(.font-serif) {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif
 }
 
 .my-profile-wrapper :is(.\!text-4xl) {
@@ -295,6 +354,18 @@
   font-weight: 200
 }
 
+.my-profile-wrapper :is(.font-semibold) {
+  font-weight: 700
+}
+
+.my-profile-wrapper :is(.uppercase) {
+  text-transform: uppercase
+}
+
+.my-profile-wrapper :is(.lowercase) {
+  text-transform: lowercase
+}
+
 .my-profile-wrapper :is(.leading-10) {
   line-height: 2.5rem
 }
@@ -329,6 +400,21 @@
   color: rgb(117 35 255 / var(--tw-text-opacity))
 }
 
+.my-profile-wrapper :is(.text-gray-100) {
+  --tw-text-opacity: 1;
+  color: rgb(243 244 246 / var(--tw-text-opacity))
+}
+
+.my-profile-wrapper :is(.text-gray-500) {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
+}
+
+.my-profile-wrapper :is(.text-red-500) {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+
 .my-profile-wrapper :is(.text-white) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity))
@@ -336,6 +422,16 @@
 
 .my-profile-wrapper :is(.filter) {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+
+.my-profile-wrapper :is(.hover\:bg-danaherpurple-500:hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(117 35 255 / var(--tw-bg-opacity))
+}
+
+.my-profile-wrapper :is(.hover\:text-white:hover) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
 @media (min-width: 768px) {
@@ -369,6 +465,10 @@
 
 .my-profile-wrapper :is(.\[\&_svg\>use\]\:stroke-black svg>use) {
   stroke: #000
+}
+
+.my-profile-wrapper :is(.\[\&_svg\>use\]\:stroke-danaherpurple-50 svg>use) {
+  stroke: #EADEFF
 }
 
 .my-profile-wrapper :is(.\[\&_svg\>use\]\:stroke-danaherpurple-500 svg>use) {

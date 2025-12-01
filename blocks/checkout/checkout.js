@@ -10,7 +10,7 @@ export default async function decorate(block) {
 
   if (
     authenticationToken?.status === 'error'
-    || authenticationToken.user_type === 'guest' || !localStorage.getItem('productDetailObject')
+    || authenticationToken?.user_type === 'guest' || !localStorage.getItem('productDetailObject')
   ) {
     window.location.href = window.EbuyConfig?.cartPageUrl;
     return false;

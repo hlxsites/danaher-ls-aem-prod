@@ -5,7 +5,7 @@ import {
   getAuthorization, getCommerceBase,
   getProductResponse,
 } from '../../scripts/commerce.js';
-import { createOptimizedS7Picture, decorateModals } from '../../scripts/scripts.js';
+import { createOptimizedS7Picture, decorateModals, getImageFromArray } from '../../scripts/scripts.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
 function showImage(e) {
@@ -149,7 +149,7 @@ async function addToQuote(product) {
             unit: 'N/A',
           },
           productSKU: product?.raw?.sku,
-          image: product?.raw?.images?.[0],
+          image: getImageFromArray(product?.raw?.images),
           brand: product?.raw?.opco,
           referrer: window.location.href,
           referrerTitle: document.title.replace('| Danaher Lifesciences', '').replace('| Danaher Life Sciences', '').trim(),

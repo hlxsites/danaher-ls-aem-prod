@@ -2,6 +2,7 @@ import { getAuthorization, getCommerceBase } from '../../scripts/commerce.js';
 import {
   div, img, p, span,
 } from '../../scripts/dom-builder.js';
+import { getImageFromArray } from '../../scripts/scripts.js';
 
 const baseURL = getCommerceBase();
 /* eslint-disable no-console */
@@ -184,7 +185,7 @@ export default class ProductTile extends HTMLElement {
               unit: 'N/A',
             },
             productSKU: this.sku,
-            image: this.result?.raw?.images?.[0],
+            image: getImageFromArray(this.result?.raw?.images),
             brand: this.result?.raw?.opco,
             referrer: window.location.href,
             referrerTitle: document.title.replace('| Danaher Lifesciences', '').replace('| Danaher Life Sciences', '').trim(),

@@ -1,5 +1,5 @@
 import {
-  div, a, span, button,
+  div, a, span, button, p,
 } from '../../scripts/dom-builder.js';
 import { cartItem } from './cartItem.js';
 import emptyCart from './emptyCart.js';
@@ -11,9 +11,11 @@ import {
   checkoutSkeleton,
   clearCart,
   updateHeaderCart,
+  getPromotionData,
 } from '../../scripts/cart-checkout-utils.js';
 import { getAuthenticationToken } from '../../scripts/token-utils.js';
 import { removePreLoader, showNotification, showPreLoader } from '../../scripts/common-utils.js';
+import { decorateIcons } from '../../scripts/lib-franklin.js';
 
 export const prodQuantity = (totalProductQuantity) => div(
   {
@@ -52,6 +54,77 @@ export const updateCartQuantity = (newQuantity) => {
   return { status: 'success' };
 };
 
+// generate promotion bar
+function generatePromotionBar(basketData, promotion, qualify = true) {
+  const qualifyDiv = div(
+    {
+      class: 'flex justify-between gap-2 items-center',
+    },
+    span(
+      {
+        class: 'icon icon-check-plain [&_svg>use]:stroke-green-700 w-3 h-3',
+      },
+    ),
+    span(
+      {
+        class: 'font-semibold text-base text-green-700',
+      },
+      'You Qualify',
+    ),
+  );
+  const notQualifyDiv = div(
+    {
+      class: 'flex justify-between gap-2 items-center',
+    },
+    span(
+      {
+        class: 'icon icon-cross [&_svg>use]:stroke-red-700 w-3 h-3',
+      },
+    ),
+    span(
+      {
+        class: 'font-semibold text-base text-red-700',
+      },
+      'Not Quite Eligible',
+    ),
+  );
+  const promotionBar = div(
+    {
+      class: 'w-full p-4 items-center justify-between flex border border-gray-400 justify-between',
+    },
+    p(
+      {
+        class: 'font-semibold text-base',
+      },
+      span(
+        qualify ? promotion?.name?.replace(/<[^>]*>/g, '') : promotion?.replace(/<[^>]*>/g, ''),
+      ),
+    ),
+    qualify ? qualifyDiv : notQualifyDiv,
+  );
+  decorateIcons(promotionBar);
+  return promotionBar;
+}
+
+// update promotions
+export async function updatePromotions() {
+  const basketData = await getBasketDetails();
+  const promotionsWrapper = document.querySelector('#promotions-wrapper');
+  const promotionsItemsContainer = promotionsWrapper?.querySelector('#promotions-item-container');
+  const promotions = basketData?.data?.included?.lineItems_discounts;
+  const dynamicMessages = basketData?.data?.data?.discounts?.dynamicMessages;
+  if (dynamicMessages?.length > 0) {
+    dynamicMessages?.forEach((message) => {
+      promotionsWrapper?.querySelector('#promotions-item-container')?.append(generatePromotionBar(basketData, message, false));
+    });
+  }
+  if (promotions && typeof promotions === 'object' && promotionsItemsContainer && promotionsWrapper) {
+    promotionsItemsContainer.textContent = '';
+    Object.entries(promotions)?.forEach((promotion) => {
+      promotionsWrapper?.querySelector('#promotions-item-container')?.append(generatePromotionBar(basketData, promotion));
+    });
+  }
+}
 export default async function decorate(block) {
   document.querySelector('main')?.classList.add('bg-checkout');
   // showPreLoader();
@@ -87,6 +160,102 @@ export default async function decorate(block) {
     class: 'self-stretch p-4 md:px-10 md:py-14 bg-gray-50 inline-flex dhls-container mt-0 p-0 justify-center items-start gap-2 w-full',
     id: 'myCartContainerWrapper',
   });
+
+  const promotionsWrapper = div(
+    {
+      class: 'w-full bg-danaherpurple-25 p-6',
+      id: 'promotions-wrapper',
+    },
+    div(
+      {
+        class: 'dhls-container mt-0 w-full md:px-10 flex-col gap-6 flex',
+        id: 'promotions-container',
+      },
+      div(
+        {
+          class: 'flex justify-between w-full',
+        },
+
+        p(
+          {
+            class: 'text-base text-black',
+          },
+          'Discounted Pricing',
+        ),
+        div(
+          {
+            id: 'hide-promotion-tab',
+            class: 'flex gap-2 cursor-pointer',
+          },
+          button(
+            {
+              class: 'font-semibold text-base text-danaherpurple-500',
+            },
+            'Hide',
+          ),
+          span(
+            {
+              id: 'promotion-chevron',
+              class: 'icon icon-chevron-up [&_svg>use]:stroke-danaherpurple-500 transition cursor-pointer',
+            },
+          ),
+        ),
+      ),
+      div(
+        {
+          class: 'flex flex-col gap-6 transition-all duration-100 ease-in-out',
+          id: 'promotions-item-container',
+        },
+      ),
+    ),
+  );
+  let isVisible = true;
+  promotionsWrapper?.querySelector('#hide-promotion-tab')?.addEventListener('click', () => {
+    const promotionChevron = promotionsWrapper?.querySelector('#promotion-chevron');
+    const promotionItems = promotionsWrapper?.querySelector('#promotions-item-container');
+    if (isVisible) {
+      promotionItems.classList.add('max-h-0', 'hidden', 'z-0', 'opacity-0');
+      promotionItems.classList.remove('max-h-screen');
+    } else {
+      promotionItems.classList.remove('max-h-0', 'hidden', 'z-0', 'opacity-0');
+      promotionItems.classList.add('max-h-screen');
+    }
+    isVisible = !isVisible;
+    if (promotionChevron?.classList?.contains('rotate-180')) {
+      promotionChevron?.classList?.remove('rotate-180');
+    } else {
+      promotionChevron?.classList?.add('rotate-180');
+    }
+  });
+  if (authenticationToken?.user_type === 'customer') {
+    promotionsWrapper?.querySelector('#promotions-container')?.append(checkoutSkeleton());
+    // handle promotions
+    const appliedDiscounts = basketDetail?.data?.included?.discounts;
+    const itemPromotionIds = basketDetail?.data?.included?.lineItems_discounts;
+    // eslint-disable-next-line max-len
+    const lineItemPromotionIds = itemPromotionIds ? Object.values(itemPromotionIds).map(({ promotion }) => promotion) : [];
+    // eslint-disable-next-line max-len
+    const promotionIds = appliedDiscounts ? Object.values(appliedDiscounts).map(({ promotion }) => promotion) : [];
+    const uniquePromotionIds = [...new Set([...promotionIds, ...lineItemPromotionIds])];
+    if (uniquePromotionIds?.length > 0) {
+      uniquePromotionIds?.forEach(async (gpid) => {
+        const promoData = await getPromotionData(gpid);
+        promotionsWrapper?.querySelector('#promotions-item-container')?.append(generatePromotionBar(basketDetail, promoData));
+        promotionsWrapper?.querySelector('#promotions-container')?.querySelector('#checkoutSkeleton')?.remove();
+      });
+    }
+    const dynamicMessages = basketDetail?.data?.data?.discounts?.dynamicMessages;
+    if (dynamicMessages?.length > 0) {
+      dynamicMessages?.forEach((message) => {
+        promotionsWrapper?.querySelector('#promotions-item-container')?.append(generatePromotionBar(basketDetail, message, false));
+      });
+    }
+    if (uniquePromotionIds?.length > 0 || (dynamicMessages?.length > 0 || dynamicMessages)) {
+      block?.append(promotionsWrapper);
+    }
+  } else {
+    promotionsWrapper?.classList?.add('hidden');
+  }
   const myCartProductsWrapper = div({
     class: 'px-5 lg:px-10',
     id: 'myCartProductsWrapper',
@@ -264,4 +433,5 @@ export default async function decorate(block) {
       block.append(rcpWrapper);
     }
   }, 0);
+  decorateIcons(block);
 }

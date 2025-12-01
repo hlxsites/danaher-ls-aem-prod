@@ -101,3 +101,87 @@
   ]
   }
 </script>
+
+<script type="module">
+    import { getMetadata } from '/scripts/lib-franklin.js';
+    import { buildFAQSchema } from '/scripts/schema.js';
+
+    window.addEventListener('DOMContentLoaded', () => {
+
+    const template = getMetadata('template');
+    console.log('template:', template);
+
+    if (template !== 'pdp') {
+
+      // Read title
+      const metaTitle =
+        document.querySelector('meta[name="title"]')?.content ||
+        document.querySelector('meta[property="og:title"]')?.content ||
+        document.querySelector('title')?.innerText ||
+        "Image Title";
+
+      // Read description
+      const metaDescription =
+        document.querySelector('meta[name="description"]')?.content ||
+        document.querySelector('meta[property="og:description"]')?.content ||
+        "Image description";
+
+      // Current URL
+      const currentUrl = window.location.href;
+
+      // First image
+      const firstImage =
+        document.querySelector('img')?.src ||
+        "";
+
+      // Build Image JSON-LD Schema object
+      const ldJson = {
+        "@context": "https://schema.org",
+        "@type": "ImageObject",
+        "name": metaTitle,
+        "description": metaDescription,
+        "url": currentUrl,
+        "width": "1000",
+        "height": "442",
+        "contentUrl": firstImage,
+        "thumbnail": {
+          "@type": "ImageObject",
+          "url": firstImage,
+          "width": "400",
+          "height": "177"
+        }
+      };
+
+      // Inject JSON-LD
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-name", "image");
+      script.textContent = JSON.stringify(ldJson);
+
+      document.head.appendChild(script);
+      buildFAQSchema();
+    }
+    // Strict URL check ignoring params & hashes
+    if (window.location.href.split(/[?#]/)[0] === "https://lifesciences.danaher.com/" || window.location.href.split(/[?#]/)[0] === "https://stage.lifesciences.danaher.com/") {
+        const script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.textContent = JSON.stringify({
+          "@context": "https://schema.org", 
+          "@type": "WebSite", 
+          "url": " https://lifesciences.danaher.com/", 
+          "name": "Danaher Life Sciences", 
+          "alternateName": "LSIG", 
+          "description": " Explore our automation solutions, analytical innovations, and digital solutions to accelerate drug development time by up to 50%. We empower the creation of biopharmaceuticals, gene/cell therapies & innovative treatments.", 
+          "potentialAction": { 
+            "@type": "SearchAction", 
+            "target": "https://lifesciences.danaher.com/us/en/search.html#q={search_term_string}", 
+            "query-input": "required name=search_term_string" 
+          } 
+        });
+        document.head.appendChild(script);
+      }
+    });
+  </script>
+
+
+

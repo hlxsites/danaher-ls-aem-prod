@@ -248,46 +248,43 @@ async function loadSFDCForm(block) {
   // }
   // Extract form configuration from hidden p tags
   // if (hasForm) {
- 
-    const tags = [...block.querySelectorAll('p')];
-    tags.forEach((tag) => {
-      // const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-      const pText = tag.textContent.trim();
-      const hasAnchor = tag.querySelector('a');
-      // Hide p-tags that contain form configuration anchors
-      if (hasAnchor) {
-        tag.style.display = 'none';
-      }
-      // Hide p-tags that are form type indicators
-      if (pText && !hasAnchor && (
-        pText === 'TTAE' || pText.toLowerCase().includes('form')
+  const tags = [...block.querySelectorAll('p')];
+  tags.forEach((tag) => {
+    // const formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+    const pText = tag.textContent.trim();
+    const hasAnchor = tag.querySelector('a');
+    // Hide p-tags that contain form configuration anchors
+    if (hasAnchor) {
+      tag.style.display = 'none';
+    }
+    // Hide p-tags that are form type indicators
+    if (pText && !hasAnchor && (
+      pText === 'TTAE' || pText.toLowerCase().includes('form')
         || pText.length < 50 // Assume short text might be form indicators
-      )) {
-        tag.style.display = 'none';
-      }
-    });
-    let formId = '';
-    let formName = '';
-    let clientId = '';
-    let deExternalKey = '';
-    let action = '';
-    let inquiryType = '';
-    let pageTrackUrl = '';
-    let successUrl = '';
-    let errorUrl = '';
-
-    formId = tags[0]?.textContent.trim();
-    formName = tags[1]?.textContent.trim();
-    clientId = tags[2]?.textContent.trim();
-    deExternalKey = tags[3]?.textContent.trim();
-    action = tags[4]?.textContent.trim();
-    inquiryType = tags[5]?.textContent.trim();
-    pageTrackUrl = tags[6]?.textContent.trim();
-    successUrl = tags[7]?.textContent.trim();
-    errorUrl = tags[8]?.textContent.trim();
-
-    const expertformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
-    if (expertformId === 'TTAE') {
+    )) {
+      tag.style.display = 'none';
+    }
+  });
+  let formId = '';
+  let formName = '';
+  let clientId = '';
+  let deExternalKey = '';
+  let action = '';
+  let inquiryType = '';
+  let pageTrackUrl = '';
+  let successUrl = '';
+  let errorUrl = '';
+  formId = tags[0]?.textContent.trim();
+  formName = tags[1]?.textContent.trim();
+  clientId = tags[2]?.textContent.trim();
+  deExternalKey = tags[3]?.textContent.trim();
+  action = tags[4]?.textContent.trim();
+  inquiryType = tags[5]?.textContent.trim();
+  pageTrackUrl = tags[6]?.textContent.trim();
+  successUrl = tags[7]?.textContent.trim();
+  errorUrl = tags[8]?.textContent.trim();
+  const expertformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
+  if (expertformId === 'TTAE') {
     formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
     formName = document.querySelector('[data-aue-prop="formName"]')?.textContent;
     clientId = document.querySelector('[data-aue-prop="clientID"]')?.textContent;
@@ -300,21 +297,21 @@ async function loadSFDCForm(block) {
     errorUrl = links[2]?.href;
 
     [
-    'formId',
-    'formName',
-    'clientID',
-    'deExternalKey',
-    'action',
-    'Inquiry_Type',
-    'Page_Track_URL',
-    'successURL',
-    'errorURL',
-  ].forEach((prop) => {
-    document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
-      el.style.display = 'none';
+      'formId',
+      'formName',
+      'clientID',
+      'deExternalKey',
+      'action',
+      'Inquiry_Type',
+      'Page_Track_URL',
+      'successURL',
+      'errorURL',
+    ].forEach((prop) => {
+      document.querySelectorAll(`[data-aue-prop="${prop}"]`).forEach((el) => {
+        el.style.display = 'none';
+      });
     });
-  });
-}
+  }
 
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },

@@ -47,7 +47,6 @@ async function loadPdpBlocks() {
     const pdpPageTabsBlock = div(buildBlock('pdp-page-tabs', { elems: [] }));
     document.querySelector('main').append(pdpPageTabsBlock);
   }
-
   // Main: go through the tab order for the opco and append blocks IN ORDER
   tabOrderArr
     .sort((a, b) => a.order - b.order)
@@ -69,7 +68,6 @@ async function loadPdpBlocks() {
       };
       const blockName = blockMap[tabName];
       if (!blockName) return; // skip unmapped tab
-
       // Decision: add block if authored OR available via data
       let shouldAdd = false;
       switch (tabName) {
@@ -101,13 +99,12 @@ async function loadPdpBlocks() {
         }
           break;
         case 'relatedproducts':
-          shouldAdd = authoredTabs.has('relatedproducts');
+          shouldAdd = authoredTabs.has('relatedproducts') || JSON.parse(response?.raw?.associatedfamilys)?.length > 0;
           break;
         // Add more cases as needed
         default:
           break;
       }
-
       if (shouldAdd) {
         appendBlock(tabName, blockName);
       }

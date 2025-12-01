@@ -3,6 +3,7 @@ import { div, span } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import renderGridCard from './grid-data.js';
 import { getProductRecommendationsResponse } from '../../scripts/commerce.js';
+import { getImageFromArray } from '../../scripts/scripts.js';
 
 function getCardsPerPageGrid() {
   if (window.innerWidth < 640) return 1;
@@ -65,10 +66,11 @@ export default async function decorate(block) {
   const products = recommendationsResponse?.results || [];
 
   products?.forEach((product) => {
+    const productImage = getImageFromArray(product?.raw?.images);
     const mappedProduct = {
       title: product?.title || '',
       url: product?.clickUri || '',
-      image: product?.raw?.images?.[0] || '/content/dam/danaher/products/fallbackImage.jpeg',
+      image: productImage,
       description: product.raw?.description || '',
     };
 

@@ -1,4 +1,4 @@
-import { div, p } from '../../scripts/dom-builder.js';
+import { div, h2 } from '../../scripts/dom-builder.js';
 import tabsOrder from '../../scripts/tabs-order.js';
 
 // Global tracking for scroll behavior
@@ -180,7 +180,6 @@ export default async function decorate(block) {
       authoredTabMap[type] = authoredLabel;
     }
   });
-
   // Full map of static label to section ID/type
   const fullTabConfig = {
     overview: { label: 'Description', available: !!response?.raw?.richlongdescription?.trim() || ('overview' in authoredTabMap) },
@@ -200,6 +199,7 @@ export default async function decorate(block) {
         }
       })() || false,
     },
+    relatedproducts: { label: 'Related Products', available: JSON.parse(response?.raw?.associatedfamilys)?.length > 0 || ('relatedproducts' in authoredTabMap) },
   };
 
   // -------------- Generate tabsList in JSON order --------------
@@ -234,9 +234,9 @@ export default async function decorate(block) {
             index === 0 ? 'bg-danaherpurple-500 rounded-[5px]' : ''
           } w-12 h-1 md:w-1 md:h-12 md:left-0 md:top-[2px] md:absolute`,
         }),
-        p(
+        h2(
           {
-            class: `p-tab ${
+            class: `p-tab m-0 !text-base ${
               index === 0
                 ? 'text-danaherpurple-500 font-bold'
                 : 'text-black font-medium'

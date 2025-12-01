@@ -69,6 +69,18 @@ export function getEdgeDeliveryPath(path) {
   return path.replace(/^\/content\/danaher\/ls/, '').replace(/\.html$/, '');
 }
 
+/*
+  function to get image from array of files excluding pdf and other unsupported formats 
+  else return fallback image
+*/
+export function getImageFromArray(imagesArray) {
+  const image = imagesArray?.find((imag) => {
+    const imageurl = imag?.toLowerCase?.();
+    return imageurl && !imageurl.endsWith('.pdf');
+  }) || '/content/dam/danaher/products/fallbackImage.jpeg';
+  return image;
+}
+
 /**
  * Moves all the attributes from a given elmenet to another given element.
  * @param {Element} from the element to copy attributes from
@@ -1093,9 +1105,9 @@ function getDLPage() {
   } else if (path.includes('/us/en/library')) {
     page.level = 'other';
     page.type = 'library';
-  } else if (path.includes("/us/en/videos")) {
-    page.level="top";
-    page.type="videos"
+  } else if (path.includes('/us/en/videos')) {
+    page.level = 'top';
+    page.type = 'videos';
   } else if (path.includes('/us/en/about-us')) {
     page.level = 'top';
     page.type = 'about-us';

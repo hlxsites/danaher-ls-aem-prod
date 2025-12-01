@@ -260,12 +260,16 @@ export default function tabsOrder() {
         order: 2,
       },
       {
-        tabName: 'softwares',
+        tabName: 'resources',
         order: 3,
       },
       {
-        tabName: 'faqs',
+        tabName: 'softwares',
         order: 4,
+      },
+      {
+        tabName: 'faqs',
+        order: 5,
       },
     ],
   };

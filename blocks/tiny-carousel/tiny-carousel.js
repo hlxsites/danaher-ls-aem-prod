@@ -1,6 +1,7 @@
 import {
   div, p, img, a, span,
 } from '../../scripts/dom-builder.js';
+import { getImageFromArray } from '../../scripts/scripts.js';
 
 export default async function decorate(block) {
   const wrapper = block.closest('.tiny-carousel-wrapper');
@@ -70,7 +71,7 @@ export default async function decorate(block) {
         const product = data.results?.[0];
         if (!product) return null;
 
-        const image = product.raw?.images?.[0] || '';
+        const image = getImageFromArray(product.raw?.images);
 
         const productData = {
           id,
