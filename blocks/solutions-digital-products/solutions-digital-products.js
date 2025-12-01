@@ -6,49 +6,65 @@ import { makePublicUrl, imageHelper } from '../../scripts/scripts.js';
 // Manually authored product data
 const products = [
   {
-    title: 'Mica Microhub',
-    image: 'https://danahersls.scene7.com/is/image/danaher/leica-mica-see-through-light-path-e93369ff44f-hero',
-    description: 'This changes everything. More than a highly automated microscope, Mica unites widefield and confocal imaging in a sample protecting, incubating...',
-    path: '/en/products/family/mica.html',
+    title: 'Aivia AI Image Analysis Software',
+    image: 'https://danaherls.scene7.com/is/image/danaher/Aivia-card-2',
+    brand: 'Leica Microsystems',
+    description: '',
+    path: '/us/en/products/family/aivia-ai-image-analysis-softwares.html',
   },
   {
-    title: 'Leica DM IL LED Inverted Laboratory Microscope',
-    image: 'https://danahersls.scene7.com/is/image/danaher/leica-dmil-led-inverted-microscope-hero',
-    description: 'With high-performance optics and ergonomic design, the Leica DM IL LED is ideal for cell culture, micromanipulation, documentation of...',
-    path: '/en/products/family/dmil.html',
+    title: 'IN Carta Image Analysis Software',
+    image: 'https://danaherls.scene7.com/is/image/danaher/moldev-in-carta-image-analysis-software-image1',
+    brand: 'Molecular Devices',
+    description: '',
+    path: '/us/en/products/family/in-carta-image-analysis-software.html',
   },
   {
-    title: 'DMi1 Inverted Microscope for Cell Culture',
-    image: 'https://danahersls.scene7.com/is/image/danaher/leica-dmi1-inverted-microscope-hero',
-    description: 'The DMi1 inverted microscope supports your specific work routine in your cell culture lab. Its operation is so intuitive, its handling so comfortable that you can...',
-    path: '/en/products/family/dmi1.html',
+    title: 'Genedata Screener',
+    image: 'https://danaherls.scene7.com/is/image/danaher/gd-screener-50-hero-2',
+    brand: 'Genedata',
+    description: '',
+    path: 'https://www.genedata.com/platform/screener',
   },
   {
-    title: 'SpectraMax® iD3s and iD5e Multi-Mode Microplate',
-    image: 'https://danahersls.scene7.com/is/image/danaher/spectramax-id3s-id5e-hero',
-    description: 'Tunable wavelength selection, onboard injectors, and optional environmental controls to support cell-based & microbial assays.',
-    path: '/en/products/family/spectramax.html',
+    title: 'Polar BioPharma Lifecycle Management (BPLM)',
+    image: 'https://danaherls.scene7.com/is/image/danaher/card-idbs-polar',
+    brand: 'IDBS',
+    description: '',
+    path: '/us/en/products/family/polar.html',
   },
 ];
 
 export function createCard(product, idx, firstCard = false) {
-  const image = product.image || '/content/dam/danaher/products/fallbackImage.jpeg';
-  return li(
-    {
-      class: 'w-full flex flex-col col-span-1 relative mx-auto justify-center transform transition duration-500 border hover:scale-105 shadow-lg rounded-lg overflow-hidden bg-white max-w-xl',
-    },
+  const image = product.image || 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble';
+  // Use product.path directly if it is an external URL, otherwise use makePublicUrl
+  const isExternal = /^https?:\/\//.test(product.path);
+  const href = isExternal ? product.path : makePublicUrl(product.path);
+  return li({
+    class: 'w-full flex flex-col col-span-1 relative mx-auto justify-center transform transition duration-500 border hover:scale-105 shadow-lg rounded-lg overflow-hidden bg-white max-w-xl',
+  },
     a(
       {
-        href: makePublicUrl(product.path),
+        href,
         title: product.title,
         index: idx + 1,
+        ...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
       },
       imageHelper(image, product.title, firstCard),
-      h4(
-        {
-          class: '!px-7 !text-lg !font-semibold !text-danahergray-900 !line-clamp-3 !break-words !h-14',
-        },
-        product.title,
+      div(
+        { class: 'brand-title-align flex flex-col gap-1 px-6 pt-4 pb-0' },
+        p(
+          {
+            class: 'brand text-danaherpurple-500 font-bold m-0',
+          },
+          product.brand,
+        ),
+        h4(
+          {
+            class: 'title !text-lg !font-semibold !text-danahergray-900 !line-clamp-3 !break-words !h-14 m-0',
+          },
+          product.title,
+        ),
       ),
       p(
         {
@@ -60,7 +76,7 @@ export function createCard(product, idx, firstCard = false) {
         { class: 'inline-flex items-center w-full px-6 py-5 space-x-4 bg-gray-100' },
         span({ class: 'btn-primary-purple border-8 px-2 !rounded-full' }, 'View Products'),
       ),
-    ),
+    )
   );
 }
 
