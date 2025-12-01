@@ -99,7 +99,8 @@ async function loadPdpBlocks() {
         }
           break;
         case 'relatedproducts':
-          shouldAdd = authoredTabs.has('relatedproducts') || JSON.parse(response?.raw?.associatedfamilys)?.length > 0;
+          // shouldAdd = authoredTabs.has('relatedproducts') || (response?.raw?.associatedfamilys !== undefined && JSON.parse(response?.raw?.associatedfamilys)?.length > 0);
+          shouldAdd = authoredTabs.has('relatedproducts') || (!!response?.raw?.associatedfamilys && /^[\[\{].*[\]\}]$/.test(response.raw.associatedfamilys.trim()) && JSON.parse(response.raw.associatedfamilys).length > 0);
           break;
         // Add more cases as needed
         default:
