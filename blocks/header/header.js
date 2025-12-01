@@ -4,7 +4,7 @@ import {
   a,
   input,
   button,
-  h4,
+  p,
   ul,
   li,
 } from '../../scripts/dom-builder.js';
@@ -488,7 +488,7 @@ function hideFlyoutMenu() {
 function sortFlyoutMenus(menuPath) {
   const menuList = document.querySelector('#menu-flyout ul');
   const heading = menuPath.split('|');
-  if (heading) document.querySelector('#menu-flyout h4').textContent = heading[heading.length - 1];
+  if (heading) document.querySelector('#menu-flyout p').textContent = heading[heading.length - 1];
   [...menuList.children].forEach((menu) => {
     if (
       menu.getAttribute('data-content') !== menuPath
@@ -933,8 +933,8 @@ function buildFlyoutMenus(headerBlock) {
           'w-[360px] max-w-sm fixed h-full bg-white px-3 py-4 ease-out transition-all',
       },
       closeFlyout,
-      h4(
-        { class: 'text-2xl font-medium text-gray-900 mt-0 mx-2 mb-2' },
+      p(
+        { class: 'text-lg font-medium text-gray-900 mt-0 mx-2 mb-2' },
         'Flyout Menu Heading',
       ),
       navigateActions,

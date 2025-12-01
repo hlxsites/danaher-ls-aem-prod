@@ -1,68 +1,68 @@
-.container {
-  width: 100%
-}
-
 .\!container {
   width: 100% !important
 }
 
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px
-  }
+.container {
+  width: 100%
+}
 
+@media (min-width: 640px) {
   .\!container {
     max-width: 640px !important
+  }
+
+  .container {
+    max-width: 640px
   }
 }
 
 @media (min-width: 768px) {
-  .container {
-    max-width: 768px
-  }
-
   .\!container {
     max-width: 768px !important
+  }
+
+  .container {
+    max-width: 768px
   }
 }
 
 @media (min-width: 1024px) {
-  .container {
-    max-width: 1024px
-  }
-
   .\!container {
     max-width: 1024px !important
+  }
+
+  .container {
+    max-width: 1024px
   }
 }
 
 @media (min-width: 1280px) {
-  .container {
-    max-width: 1280px
-  }
-
   .\!container {
     max-width: 1280px !important
+  }
+
+  .container {
+    max-width: 1280px
   }
 }
 
 @media (min-width: 1536px) {
-  .container {
-    max-width: 1536px
-  }
-
   .\!container {
     max-width: 1536px !important
+  }
+
+  .container {
+    max-width: 1536px
   }
 }
 
 @media (min-width: 1760px) {
-  .container {
-    max-width: 1760px
-  }
-
   .\!container {
     max-width: 1760px !important
+  }
+
+  .container {
+    max-width: 1760px
   }
 }
 
@@ -77,6 +77,14 @@
   font-family: TWK Lausanne EDS
 }
 
+.pdp-description-wrapper :is(.absolute) {
+  position: absolute
+}
+
+.pdp-description-wrapper :is(.relative) {
+  position: relative
+}
+
 .pdp-description-wrapper :is(.order-1) {
   order: 1
 }
@@ -85,46 +93,29 @@
   order: 2
 }
 
-.pdp-description-wrapper :is(.\!m-2) {
-  margin: 0.5rem !important
-}
-
-.pdp-description-wrapper :is(.\!m-0) {
-  margin: 0px !important
-}
-
 .pdp-description-wrapper :is(.my-3) {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem
 }
 
-.pdp-description-wrapper :is(.\!my-2) {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important
+.pdp-description-wrapper :is(.\!ml-0) {
+  margin-left: 0px !important
 }
 
 .pdp-description-wrapper :is(.\!mr-5) {
   margin-right: 1.25rem !important
 }
 
-.pdp-description-wrapper :is(.mb-3) {
-  margin-bottom: 0.75rem
-}
-
-.pdp-description-wrapper :is(.ml-3) {
-  margin-left: 0.75rem
-}
-
-.pdp-description-wrapper :is(.mt-3) {
-  margin-top: 0.75rem
-}
-
-.pdp-description-wrapper :is(.mt-6) {
-  margin-top: 1.5rem
+.pdp-description-wrapper :is(.\!mt-0) {
+  margin-top: 0px !important
 }
 
 .pdp-description-wrapper :is(.mb-2) {
   margin-bottom: 0.5rem
+}
+
+.pdp-description-wrapper :is(.ml-3) {
+  margin-left: 0.75rem
 }
 
 .pdp-description-wrapper :is(.ml-6) {
@@ -133,22 +124,6 @@
 
 .pdp-description-wrapper :is(.mt-2) {
   margin-top: 0.5rem
-}
-
-.pdp-description-wrapper :is(.mb-1) {
-  margin-bottom: 0.25rem
-}
-
-.pdp-description-wrapper :is(.\!mb-2) {
-  margin-bottom: 0.5rem !important
-}
-
-.pdp-description-wrapper :is(.\!mt-0) {
-  margin-top: 0px !important
-}
-
-.pdp-description-wrapper :is(.\!ml-0) {
-  margin-left: 0px !important
 }
 
 .pdp-description-wrapper :is(.block) {
@@ -163,8 +138,20 @@
   display: grid
 }
 
+.pdp-description-wrapper :is(.h-full) {
+  height: 100%
+}
+
+.pdp-description-wrapper :is(.h-auto) {
+  height: auto
+}
+
 .pdp-description-wrapper :is(.w-full) {
   width: 100%
+}
+
+.pdp-description-wrapper :is(.max-w-full) {
+  max-width: 100%
 }
 
 .pdp-description-wrapper :is(.list-disc) {
@@ -199,10 +186,6 @@
   gap: 3rem
 }
 
-.pdp-description-wrapper :is(.gap-4) {
-  gap: 1rem
-}
-
 .pdp-description-wrapper :is(.gap-2) {
   gap: 0.5rem
 }
@@ -231,6 +214,11 @@
   background-color: rgb(243 244 246 / var(--tw-bg-opacity))
 }
 
+.pdp-description-wrapper :is(.object-contain) {
+  -o-object-fit: contain;
+     object-fit: contain
+}
+
 .pdp-description-wrapper :is(.py-3) {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem
@@ -240,8 +228,8 @@
   padding-bottom: 1.5rem !important
 }
 
-.pdp-description-wrapper :is(.pl-6) {
-  padding-left: 1.5rem
+.pdp-description-wrapper :is(.pb-\[56\.25\%\]) {
+  padding-bottom: 56.25%
 }
 
 .pdp-description-wrapper :is(.text-left) {
@@ -253,6 +241,11 @@
   line-height: 2rem
 }
 
+.pdp-description-wrapper :is(.text-xl) {
+  font-size: 1.25rem;
+  line-height: 1.75rem
+}
+
 .pdp-description-wrapper :is(.font-medium) {
   font-weight: 500
 }
@@ -261,26 +254,17 @@
   font-weight: 700
 }
 
-.pdp-description-wrapper :is(.font-dhlsMedium) {
-  font-weight: 400
-}
-
 .pdp-description-wrapper :is(.leading-8) {
   line-height: 2rem
 }
 
-.pdp-description-wrapper :is(.leading-6) {
-  line-height: 1.5rem
+.pdp-description-wrapper :is(.leading-\[22px\]) {
+  line-height: 22px
 }
 
 .pdp-description-wrapper :is(.text-black) {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity))
-}
-
-.pdp-description-wrapper :is(.text-gray-800) {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity))
 }
 
 .pdp-description-wrapper :is(.filter) {
@@ -296,5 +280,17 @@
 @media (min-width: 1024px) {
   .pdp-description-wrapper :is(.lg\:max-h-\[499px\]) {
     max-height: 499px
+  }
+
+  .pdp-description-wrapper :is(.lg\:max-w-\[499px\]) {
+    max-width: 499px
+  }
+
+  .pdp-description-wrapper :is(.lg\:items-center) {
+    align-items: center
+  }
+
+  .pdp-description-wrapper :is(.lg\:self-center) {
+    align-self: center
   }
 }

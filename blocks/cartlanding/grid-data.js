@@ -11,7 +11,7 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 // eslint-disable-next-line import/no-cycle
 import { decorateBuyButton } from '../../scripts/delayed.js';
 // eslint-disable-next-line import/no-cycle
-import { decorateModals } from '../../scripts/scripts.js';
+import { decorateModals, getImageFromArray } from '../../scripts/scripts.js';
 
 // Helper function to create a badge based on item.carrierFree
 function createCarrierFreeBadge(carrierFreeText) {
@@ -61,7 +61,7 @@ export default function renderGridCard(item) {
   };
 
   const imageWrapper = div({ class: 'relative w-full' });
-  const imageUrl = item.images?.[0] || '';
+  const imageUrl = getImageFromArray(item.images);
   const imageElement = div(
     { class: 'block w-full' },
     createImageWithFallback(imageUrl, item.title),

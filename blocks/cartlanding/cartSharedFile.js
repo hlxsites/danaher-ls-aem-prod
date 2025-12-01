@@ -5,7 +5,9 @@ import {
   patchApiData,
   getApiData,
 } from '../../scripts/api-utils.js';
-import { getAuthenticationToken } from '../../scripts/token-utils.js';
+import { getAuthenticationToken, triggerLogin } from '../../scripts/token-utils.js';
+// eslint-disable-next-line import/no-cycle
+import { getBasketDetails } from '../../scripts/cart-checkout-utils.js';
 
 /*
 
@@ -15,7 +17,8 @@ Function to update current basket details
 export async function updateBasketDetails() {
   const authenticationToken = await getAuthenticationToken();
   if (authenticationToken?.status === 'error') {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     // return { status: 'error', data: 'Unauthorized access.' };
   }
   const defaultHeader = new Headers({
@@ -23,7 +26,7 @@ export async function updateBasketDetails() {
     'Authentication-Token': authenticationToken.access_token,
     Accept: 'application/vnd.intershop.basket.v1+json',
   });
-  const url = `${baseURL}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument`;
+  const url = `${baseURL}/baskets/current?include=invoiceToAddress,commonShipToAddress,commonShippingMethod,discounts,lineItems,lineItems_discounts,lineItems_warranty,payments,payments_paymentMethod,payments_paymentInstrument,rebateMessages`;
   try {
     localStorage.removeItem('basketData');
     const response = await getApiData(url, defaultHeader);
@@ -41,14 +44,21 @@ export const productData = async (productArg) => {
   if (authenticationToken?.status === 'error') {
     return { status: 'error', data: 'Unauthorized access.' };
   }
-  const defaultHeader = new Headers({
-    'Content-Type': 'Application/json',
-    'Authentication-Token': authenticationToken.access_token,
-    // Accept: "application/vnd.intershop.basket.v1+json",
-  });
-  const url = `${baseURL}/products/${productArg.product}`;
+  // const defaultHeader = new Headers({
+  //   'Content-Type': 'Application/json',
+  //   'Authentication-Token': authenticationToken.access_token,
+  // });
+  const getBasketData = await getBasketDetails();
+
+  // const url = `${baseURL}/products/${productArg.product}`;
+
   try {
-    const response = await getApiData(url, defaultHeader);
+    // const response = await getApiData(url, defaultHeader);
+    let response = '';
+    if (getBasketData?.data?.included?.lineItems[lineItemId]?.productData) {
+      response = { status: 'success', data: getBasketData?.data?.included?.lineItems[lineItemId]?.productData };
+    }
+
     if (response) {
       if (response.status === 'success') {
         const product = response.data;
@@ -280,6 +290,7 @@ export const updateProductQuantityValue = async (
 ) => {
   if (type === 'delete-item') {
     const quantityElement = document.getElementById(lineItemId);
+    const quantityElementWrapper = document.getElementById(`item-${lineItemId}-wrapper`);
     const opco = manufacturer.split(' ')[0];
     const response = await sessionObject(
       type,
@@ -288,7 +299,8 @@ export const updateProductQuantityValue = async (
       manufacturer,
     );
     if (response) {
-      quantityElement.remove();
+      quantityElement?.remove();
+      quantityElementWrapper?.remove();
       const manufacturerElement = document.getElementById(manufacturer);
       const manufacturerDiv = document.getElementById(opco);
       const hr = manufacturerElement.querySelector('hr');

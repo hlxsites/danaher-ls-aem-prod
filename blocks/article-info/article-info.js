@@ -3,6 +3,30 @@ import {
 } from '../../scripts/dom-builder.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
+function addAuthorToArticleSchema(authorName) {
+  // 1. Find the JSON-LD script
+  const script = document.querySelector('script[type="application/ld+json"][data-name="article"]');
+  if (!script) {
+    return;
+  }
+
+  // 2. Parse existing schema
+  let schema;
+  try {
+    schema = JSON.parse(script.textContent.trim());
+  } catch (e) {
+    return;
+  }
+
+  // 3. Add / modify author field
+  schema.author = {
+    '@type': 'Person',
+    name: authorName,
+  };
+  // 4. Replace script content with updated schema
+  script.textContent = JSON.stringify(schema, null, 2);
+}
+
 export default function decorate(block) {
   // block.innerHTML = '';
   const authorName = getMetadata('authorname') || block?.firstElementChild?.textContent || '';
@@ -13,6 +37,9 @@ export default function decorate(block) {
   publishDate = publishDate.trim();
   if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(publishDate)) {
     publishDate += 'Z';
+  }
+  if (authorName !== null && authorName !== undefined && authorName.trim() !== '') {
+    addAuthorToArticleSchema(authorName.trim());
   }
   const readingTime = getMetadata('readingtime') || block?.firstElementChild?.nextElementSibling?.nextElementSibling?.nextElementSibling?.nextElementSibling?.nextElementSibling?.textContent || '';
   const expectedPublishFormat = new Date(publishDate);
@@ -28,7 +55,7 @@ export default function decorate(block) {
             { class: 'items-center flex justify-start my-4 w-full col-span-2' },
             div(
               { class: 'space-y-1 text-lg leading-6' },
-              div({ class: 'text-danaherblack-500 font-medium' }, authorName),
+              div({ class: 'article-author text-danaherblack-500 font-medium' }, authorName),
               div({ class: 'text-sm text-danaherblack-500 w-full' }, authorJobTitle),
               div({ class: 'text-danaherpurple-500 font-medium' }, articleOpco),
             ),

@@ -1,7 +1,7 @@
 import {
   div, h3, input, label, span,
 } from '../../scripts/dom-builder.js';
-import { generateUUID } from '../../scripts/scripts.js';
+import { generateUUID, setJsonLd } from '../../scripts/scripts.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 
 function toggleAccordion(blockUUID, activeAccordion) {
@@ -19,6 +19,33 @@ function toggleAccordion(blockUUID, activeAccordion) {
       accordion.children[1].setAttribute('aria-expanded', false);
     }
   });
+}
+
+const faqSchemaArray = [];
+function createFaqSchemaQuestionAnswer(question, answer) {
+  const faqSchema = {
+    '@type': 'Question',
+    acceptedAnswer: {
+      '@type': 'Answer',
+    },
+  };
+  faqSchema.name = question || '';
+  faqSchema.acceptedAnswer.text = answer || '';
+  faqSchemaArray.push(faqSchema);
+  return faqSchema;
+}
+
+function createdFAQSchema() {
+  if (faqSchemaArray.length === 0) return;
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqSchemaArray,
+
+  };
+  if (faqSchema) {
+    setJsonLd(faqSchema, 'faqsSchema');
+  }
 }
 
 function createAccordionBlock(question, answer, image, uuid, parentElement, index, customUUID) {
@@ -64,6 +91,7 @@ function createAccordionBlock(question, answer, image, uuid, parentElement, inde
   panel.querySelectorAll('a').forEach((link) => {
     link.classList.add(...'text-sm font-bold text-danaherpurple-500 !no-underline'.split(' '));
   });
+  createFaqSchemaQuestionAnswer(question, panel.textContent.trim() || '');
 
   summaryContent.addEventListener('click', () => {
     toggleAccordion(customUUID, parentElement);
@@ -112,7 +140,7 @@ export default function decorate(block) {
       index,
       customUUID,
     ));
-
+  createdFAQSchema();
   const accordionImages = filteredQuestions.map((question, index) => {
     if (index === 0) question.image?.classList.add(...'accordion-image h-full block'.split(' '));
     else question.image?.classList.add(...'accordion-image h-full hidden'.split(' '));

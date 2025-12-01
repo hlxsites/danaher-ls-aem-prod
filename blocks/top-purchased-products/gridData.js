@@ -3,13 +3,14 @@ import {
 } from '../../scripts/dom-builder.js';
 
 import { decorateIcons } from '../../scripts/lib-franklin.js';
+import { getImageFromArray } from '../../scripts/scripts.js';
 /**
  * Renders a product card in grid view.
  * @param {Object} item - Product data containing title, url, images, description, price, etc.
  * @returns {HTMLElement} - The rendered grid card element.
  */
 export default function renderGridCard(item) {
-  const imageUrl = item.images?.find((url) => !url.toLowerCase().endsWith('.pdf'));
+  const imageUrl = getImageFromArray(item?.images);
   const card = a(
     {
       href: item?.url,

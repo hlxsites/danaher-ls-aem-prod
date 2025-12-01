@@ -1,11 +1,12 @@
-import { getAuthenticationToken } from '../../scripts/token-utils.js';
+import { getAuthenticationToken, triggerLogin } from '../../scripts/token-utils.js';
 import { baseURL } from '../../scripts/common-utils.js';
 import { getApiData } from '../../scripts/api-utils.js';
 
 export const orderDetails = async () => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken || authenticationToken.user_type === 'guest') {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -29,7 +30,9 @@ export const orderDetails = async () => {
 
 export const requestedQuotes = async () => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -43,7 +46,8 @@ export const requestedQuotes = async () => {
     userId = userDataFromSession?.userData?.login;
     customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
   }
   const url = `${baseURL}/customers/${customerNo}/users/${userId}/quoterequests?attrs=number,name,lineItems,creationDate,validFromDate,validToDate,rejected`;
 
@@ -51,6 +55,7 @@ export const requestedQuotes = async () => {
     const response = await getApiData(url, defaultHeader);
     if (response) {
       if (response.data === 'Unauthorized! please try again.') {
+        triggerLogin();
         window.location.href = window.EbuyConfig?.loginPageUrl;
       }
       const quotesResponse = response.data.elements;
@@ -64,8 +69,9 @@ export const requestedQuotes = async () => {
 
 export const approvedQuotes = async () => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -79,7 +85,7 @@ export const approvedQuotes = async () => {
     userId = userDataFromSession?.userData?.login;
     customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
   }
   const url = `${baseURL}/customers/${customerNo}/users/${userId}/quotes?attrs=number,name,lineItems,creationDate,validFromDate,validToDate,rejected`;
 
@@ -94,14 +100,15 @@ export const approvedQuotes = async () => {
     }
     return { status: 'error', data: 'No response data.' };
   } catch (error) {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Exception occurred, redirecting.' };
   }
 };
 
 export const userOrderDetails = async (orderId) => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
     // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
@@ -127,7 +134,7 @@ export const userOrderDetails = async (orderId) => {
 
 export const requestedQuotesDetails = async (quoteId) => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -140,7 +147,8 @@ export const requestedQuotesDetails = async (quoteId) => {
     const response = await getApiData(url, defaultHeader);
     if (response) {
       if (response.data === 'Unauthorized! please try again.') {
-        window.location.href = window.EbuyConfig?.loginPageUrl;
+        triggerLogin();
+        // window.location.href = window.EbuyConfig?.loginPageUrl;
       }
       const quotesResponse = response.data;
       return quotesResponse;
@@ -153,8 +161,9 @@ export const requestedQuotesDetails = async (quoteId) => {
 
 export const approvedQuotesDetails = async (quoteId) => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -169,7 +178,8 @@ export const approvedQuotesDetails = async (quoteId) => {
     userId = userDataFromSession?.userData?.login;
     customerNo = userDataFromSession?.customerData?.customerNo;
   } else {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
   }
   const url = `${baseURL}/customers/${customerNo}/users/${userId}/quotes/${quoteId}`;
 
@@ -177,14 +187,16 @@ export const approvedQuotesDetails = async (quoteId) => {
     const response = await getApiData(url, defaultHeader);
     if (response) {
       if (response.data === 'Unauthorized! please try again.') {
-        window.location.href = window.EbuyConfig?.loginPageUrl;
+        triggerLogin();
+        // window.location.href = window.EbuyConfig?.loginPageUrl;
       }
       const quotesResponse = response.data;
       return quotesResponse;
     }
     return { status: 'error', data: 'No response data.' };
   } catch (error) {
-    window.location.href = '/us/en/e-buy/login';
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Exception occurred, redirecting.' };
   }
 };

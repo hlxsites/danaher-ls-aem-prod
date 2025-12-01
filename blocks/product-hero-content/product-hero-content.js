@@ -4,6 +4,60 @@ import {
 } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 
+function buildSubCategorySchema(categoryName, description, pageUrl) {
+  const existingScript = document.head.querySelector('script[data-name="subCategorySchema"]');
+
+  // If schema already exists → append new ListItem
+  if (existingScript) {
+    try {
+      const existingData = JSON.parse(existingScript.textContent.trim());
+
+      if (!Array.isArray(existingData.itemListElement)) {
+        existingData.itemListElement = [];
+      }
+
+      const newItem = {
+        '@type': 'ListItem',
+        position: existingData.itemListElement.length + 1,
+        name: categoryName,
+        description,
+        url: pageUrl,
+      };
+
+      existingData.itemListElement.push(newItem);
+
+      // Update script with new schema
+      existingScript.textContent = JSON.stringify(existingData, null, 2);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error updating existing subcategory schema:', err);
+    }
+  } else {
+    // If schema does NOT exist → create new ItemList schema
+    const data = {
+      '@context': 'https://schema.org/',
+      '@type': 'ItemList',
+      name: document.querySelector('meta[name="categorytitle"]')?.content || document.title,
+      description: document.querySelector('meta[name="description"]')?.content || document.title,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: categoryName,
+          description,
+          url: pageUrl,
+        },
+      ],
+    };
+
+    const script = document.createElement('script');
+    script.setAttribute('type', 'application/ld+json');
+    script.setAttribute('data-name', 'subCategorySchema');
+    script.textContent = JSON.stringify(data, null, 2);
+    document.head.appendChild(script);
+  }
+}
+
 export default function decorate(block) {
   block.parentElement.parentElement.style.padding = '0';
   block.parentElement.parentElement.style.margin = '0';
@@ -29,7 +83,7 @@ export default function decorate(block) {
     div(
       {
         id: subProductTitle.toLowerCase().replace(/\s+/g, '-'),
-        class: 'flex-1 text-black text-[32px] !font-medium !leading-10',
+        class: 'sch-subProdTitle flex-1 text-black text-[32px] !font-medium !leading-10',
       },
       subProductTitle,
     ),
@@ -49,7 +103,7 @@ export default function decorate(block) {
   );
   if (readMoreLabel.trim().length > 0 && readMoreLink.trim().length > 0) {
     const readMore = a({
-      class: 'text-danaherpurple-500 hover:text-danaherpurple-800 font-bold text-base leading-snug group flex gap-x-2',
+      class: 'sch-explore-link text-danaherpurple-500 hover:text-danaherpurple-800 font-bold text-base leading-snug group flex gap-x-2',
       href: readMoreLink,
       target: `${openNewTab === 'true' ? '_blank' : '_self'}`,
     }, readMoreLabel, span({ class: 'icon icon icon-arrow-right w-[18px] fill-current [&_svg>use]:stroke-danaherpurple-500 [&_svg>use]:hover:stroke-danaherpurple-800 group-hover:[&_svg>use]:stroke-danaherpurple-800' }));
@@ -80,4 +134,5 @@ export default function decorate(block) {
   // Clear block content and append
   block.innerHTML = '';
   block.appendChild(productHeroContentWrapper);
+  buildSubCategorySchema(block.querySelector('.sch-subProdTitle').textContent.trim(), subProductDescription, block.querySelector('.sch-explore-link') ? block.querySelector('.sch-explore-link').href : window.location.href);
 }

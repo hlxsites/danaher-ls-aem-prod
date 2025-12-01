@@ -46,7 +46,8 @@ function additionalPropertyToSchema(attr) {
     // Ensure section is a valid object
     if (!section || typeof section !== 'object') return [];
 
-    const sectionLabel = typeof section.label === 'string' ? section.label.trim() : '';
+    const sectionLabel = 'PropertyValue';
+    // typeof section.label === 'string' ? section.label.trim() : '';
     if (!sectionLabel) return [];
 
     const values = Array.isArray(section.value) ? section.value : [];
@@ -90,13 +91,21 @@ export function buildProductSchema(response) {
     '@type': 'Product',
     '@id': `https://lifesciences.danaher.com${makePublicUrl(window.location.pathname)}`,
     name: getMetadata('og:title').replace(' | Danaher Life Sciences', ''),
-    image: getMetadata('og:image'),
+    image: {
+      '@type': 'ImageObject',
+      url: getMetadata('og:image'),
+      width: 600,
+      height: 800,
+    },
     description: getMetadata('description'),
     brand: {
       '@type': 'Brand',
       name: getMetadata('brand'),
+      url: response?.[0]?.raw?.externallink || ''
     },
-    sku: getMetadata('sku'),
+    sku: getMetadata('sku') || response?.[0]?.raw?.sku || '',
+    mpn: getMetadata('sku') || response?.[0]?.raw?.sku || '',
+    category: response?.[0]?.raw?.categoriesname || '',
     offers: {
       '@type': 'Offer',
       priceCurrency: 'USD',
@@ -106,6 +115,7 @@ export function buildProductSchema(response) {
       seller: {
         '@type': 'Organization',
         name: getMetadata('brand'),
+        url: response?.[0]?.raw?.externallink || '',
       },
     },
     manufacturer: {
@@ -116,6 +126,8 @@ export function buildProductSchema(response) {
       '@type': 'WebPage',
       '@id': `https://lifesciences.danaher.com${makePublicUrl(window.location.pathname)}`,
     },
+    datePublished: getMetadata('publishdate') || new Date(response?.[0]?.raw?.date).toLocaleString("en-US") || '',
+    dateModified: getMetadata('updatedDate') || new Date(response?.[0]?.raw?.date).toLocaleString("en-US") || '',
   };
   // Add additionalProperty if attributejson exists
   if (response?.[0]?.raw?.attributejson) {

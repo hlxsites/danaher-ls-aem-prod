@@ -2,7 +2,7 @@ import {
   div, img, a, button, input, span,
 } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { decorateModals } from '../../scripts/scripts.js';
+import { decorateModals, getImageFromArray } from '../../scripts/scripts.js';
 
 // Helper function to create a badge based on item.carrierFree
 function createCarrierFreeBadge(carrierFreeText) {
@@ -51,7 +51,7 @@ export default function renderListCard(item) {
     return imageElement;
   };
 
-  const imageUrl = item?.images?.[0] || '';
+  const imageUrl = getImageFromArray(item.images);
   const card = div({
     class:
       'hover:shadow-md transform transition duration-500 self-stretch w-full outline outline-1 outline-gray-300 inline-flex flex-col md:flex-row justify-start items-center',

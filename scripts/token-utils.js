@@ -21,7 +21,17 @@ export const getAuthenticationToken = async () => {
   try {
     const idToken = await getIdToken();
     const expiryTime = await getExpiryTime();
+
+    if (!idToken) {
+      return {
+        access_token: getCookie(`eb_${siteID}_${env}_apiToken`),
+        user_type: 'guest',
+        user_data: JSON.stringify(getCookie(`${siteID}_${env}_user_data`)),
+      };
+    }
+
     if (idToken) {
+      setCookie(`${siteID}_${env}_user_type`, 'customer');
       return {
         access_token: idToken,
         user_type: 'customer',
@@ -54,4 +64,11 @@ export const setAuthenticationToken = (tokenData, loginData, type) => {
   } catch (error) {
     return { status: 'error', data: error.message };
   }
+};
+
+export const triggerLogin = () => {
+  setTimeout(() => {
+    const loginLink = document.querySelector('[href="/us/en/login.html"]');
+    loginLink?.click();
+  }, 1000);
 };

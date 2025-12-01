@@ -51,6 +51,7 @@ export default async function buildAutoBlocks() {
     );
     buildArticleSchema();
   } else {
+    buildArticleSchema();
     section.removeChild(blogH1);
     let columnElements = '';
     let blogHeroImage;
@@ -82,7 +83,7 @@ export default async function buildAutoBlocks() {
     );
     section.after(additionalContentSection);
 
-    buildArticleSchema();
+    // buildArticleSchema();
     section.parentElement.prepend(section);
   }
 }

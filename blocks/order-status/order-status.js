@@ -6,7 +6,7 @@ import {
   tbody,
   a,
 } from '../../scripts/dom-builder.js';
-import { getAuthenticationToken } from '../../scripts/token-utils.js';
+import { getAuthenticationToken, triggerLogin } from '../../scripts/token-utils.js';
 import { baseURL } from '../../scripts/common-utils.js';
 import { getApiData } from '../../scripts/api-utils.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
@@ -16,7 +16,9 @@ import { checkoutSkeleton } from '../../scripts/cart-checkout-utils.js';
 // let totalOrdersPlaced = '';
 const orderDetails = async () => {
   const authenticationToken = await getAuthenticationToken();
-  if (!authenticationToken) {
+  if (!authenticationToken || authenticationToken?.user_type === 'guest') {
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Unauthorized access.' };
   }
   const token = authenticationToken.access_token;
@@ -30,12 +32,13 @@ const orderDetails = async () => {
     const response = await getApiData(url, defaultHeader);
     if (response) {
       const orderDetailResponse = response.data;
-      if (response.data === 'Unauthorized! please try again.') window.location.href = window.EbuyConfig?.loginPageUrl;
+      if (response.data === 'Unauthorized! please try again.') triggerLogin();
       return orderDetailResponse.data;
     }
     return { status: 'error', data: 'No response data.' };
   } catch (error) {
-    window.location.href = window.EbuyConfig?.loginPageUrl;
+    triggerLogin();
+    // window.location.href = window.EbuyConfig?.loginPageUrl;
     return { status: 'error', data: 'Exception occurred, redirecting.' };
   }
 };

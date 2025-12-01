@@ -96,6 +96,10 @@
   bottom: 6rem
 }
 
+.cartlanding-wrapper :is(.bottom-\[20px\]) {
+  bottom: 20px
+}
+
 .cartlanding-wrapper :is(.left-0) {
   left: 0px
 }
@@ -118,10 +122,6 @@
 
 .cartlanding-wrapper :is(.right-10) {
   right: 2.5rem
-}
-
-.cartlanding-wrapper :is(.right-2) {
-  right: 0.5rem
 }
 
 .cartlanding-wrapper :is(.top-0) {
@@ -279,6 +279,10 @@
   height: 5rem !important
 }
 
+.cartlanding-wrapper :is(.\!h-4) {
+  height: 1rem !important
+}
+
 .cartlanding-wrapper :is(.h-0) {
   height: 0px
 }
@@ -347,6 +351,10 @@
   height: 0px
 }
 
+.cartlanding-wrapper :is(.h-\[122px\]) {
+  height: 122px
+}
+
 .cartlanding-wrapper :is(.h-\[164px\]) {
   height: 164px
 }
@@ -379,20 +387,16 @@
   height: 100vh
 }
 
-.cartlanding-wrapper :is(.h-\[122px\]) {
-  height: 122px
-}
-
 .cartlanding-wrapper :is(.\!h-6) {
   height: 1.5rem !important
 }
 
-.cartlanding-wrapper :is(.\!h-3) {
-  height: 0.75rem !important
+.cartlanding-wrapper :is(.h-\[80px\]) {
+  height: 80px
 }
 
-.cartlanding-wrapper :is(.\!h-4) {
-  height: 1rem !important
+.cartlanding-wrapper :is(.max-h-0) {
+  max-height: 0px
 }
 
 .cartlanding-wrapper :is(.max-h-48) {
@@ -405,6 +409,19 @@
 
 .cartlanding-wrapper :is(.max-h-\[97vh\]) {
   max-height: 97vh
+}
+
+.cartlanding-wrapper :is(.max-h-max) {
+  max-height: -moz-max-content;
+  max-height: max-content
+}
+
+.cartlanding-wrapper :is(.max-h-screen) {
+  max-height: 100vh
+}
+
+.cartlanding-wrapper :is(.\!w-4) {
+  width: 1rem !important
 }
 
 .cartlanding-wrapper :is(.\!w-\[32px\]) {
@@ -471,6 +488,10 @@
   width: 8rem
 }
 
+.cartlanding-wrapper :is(.w-4) {
+  width: 1rem
+}
+
 .cartlanding-wrapper :is(.w-5) {
   width: 1.25rem
 }
@@ -497,6 +518,10 @@
 
 .cartlanding-wrapper :is(.w-80) {
   width: 20rem
+}
+
+.cartlanding-wrapper :is(.w-\[122px\]) {
+  width: 122px
 }
 
 .cartlanding-wrapper :is(.w-\[18px\]) {
@@ -539,24 +564,16 @@
   width: 100vw
 }
 
-.cartlanding-wrapper :is(.w-\[122px\]) {
-  width: 122px
-}
-
 .cartlanding-wrapper :is(.\!w-6) {
   width: 1.5rem !important
 }
 
-.cartlanding-wrapper :is(.\!w-3) {
-  width: 0.75rem !important
+.cartlanding-wrapper :is(.\!w-\[24px\]) {
+  width: 24px !important
 }
 
-.cartlanding-wrapper :is(.\!w-4) {
-  width: 1rem !important
-}
-
-.cartlanding-wrapper :is(.w-4) {
-  width: 1rem
+.cartlanding-wrapper :is(.w-\[80px\]) {
+  width: 80px
 }
 
 .cartlanding-wrapper :is(.min-w-full) {
@@ -595,6 +612,14 @@
   max-width: 28rem
 }
 
+.cartlanding-wrapper :is(.max-w-\[608px\]) {
+  max-width: 608px
+}
+
+.cartlanding-wrapper :is(.max-w-\[80px\]) {
+  max-width: 80px
+}
+
 .cartlanding-wrapper :is(.flex-1) {
   flex: 1 1 0%
 }
@@ -610,6 +635,11 @@
 
 .cartlanding-wrapper :is(.translate-x-full) {
   --tw-translate-x: 100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
+.cartlanding-wrapper :is(.rotate-180) {
+  --tw-rotate: 180deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
 }
 
@@ -765,6 +795,10 @@
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse))
 }
 
+.cartlanding-wrapper :is(.self-end) {
+  align-self: flex-end
+}
+
 .cartlanding-wrapper :is(.self-stretch) {
   align-self: stretch
 }
@@ -889,9 +923,24 @@
   border-color: rgb(209 213 219 / var(--tw-border-opacity))
 }
 
+.cartlanding-wrapper :is(.border-gray-400) {
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity))
+}
+
 .cartlanding-wrapper :is(.border-gray-600) {
   --tw-border-opacity: 1;
   border-color: rgb(75 85 99 / var(--tw-border-opacity))
+}
+
+.cartlanding-wrapper :is(.border-red-700) {
+  --tw-border-opacity: 1;
+  border-color: rgb(185 28 28 / var(--tw-border-opacity))
+}
+
+.cartlanding-wrapper :is(.border-gray-100) {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity))
 }
 
 .cartlanding-wrapper :is(.bg-black) {
@@ -902,6 +951,11 @@
 .cartlanding-wrapper :is(.bg-danaherlightblue-50) {
   --tw-bg-opacity: 1;
   background-color: rgb(239 251 253 / var(--tw-bg-opacity))
+}
+
+.cartlanding-wrapper :is(.bg-danaherpurple-25) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 239 255 / var(--tw-bg-opacity))
 }
 
 .cartlanding-wrapper :is(.bg-danaherpurple-50) {
@@ -996,6 +1050,10 @@
 
 .cartlanding-wrapper :is(.p-\[0px\]) {
   padding: 0px
+}
+
+.cartlanding-wrapper :is(.p-\[10px\]) {
+  padding: 10px
 }
 
 .cartlanding-wrapper :is(.px-0) {
@@ -1151,6 +1209,14 @@
   padding-top: 5px
 }
 
+.cartlanding-wrapper :is(.\!pb-\[7px\]) {
+  padding-bottom: 7px !important
+}
+
+.cartlanding-wrapper :is(.\!pt-\[7px\]) {
+  padding-top: 7px !important
+}
+
 .cartlanding-wrapper :is(.text-center) {
   text-align: center
 }
@@ -1298,9 +1364,19 @@
   color: rgb(17 24 39 / var(--tw-text-opacity))
 }
 
+.cartlanding-wrapper :is(.text-green-700) {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity))
+}
+
 .cartlanding-wrapper :is(.text-red-500) {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+
+.cartlanding-wrapper :is(.text-red-700) {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity))
 }
 
 .cartlanding-wrapper :is(.text-white) {
@@ -1318,6 +1394,10 @@
 
 .cartlanding-wrapper :is(.decoration-danaherpurple-500) {
   text-decoration-color: #7523FF
+}
+
+.cartlanding-wrapper :is(.opacity-0) {
+  opacity: 0
 }
 
 .cartlanding-wrapper :is(.opacity-50) {
@@ -1408,10 +1488,20 @@
   transition-duration: 150ms
 }
 
+.cartlanding-wrapper :is(.transition-all) {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
 .cartlanding-wrapper :is(.transition-transform) {
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms
+}
+
+.cartlanding-wrapper :is(.duration-100) {
+  transition-duration: 100ms
 }
 
 .cartlanding-wrapper :is(.duration-1000) {
@@ -1781,6 +1871,14 @@
 
 .cartlanding-wrapper :is(.\[\&_svg\>use\]\:stroke-gray-600 svg>use) {
   stroke: #4b5563
+}
+
+.cartlanding-wrapper :is(.\[\&_svg\>use\]\:stroke-green-700 svg>use) {
+  stroke: #15803d
+}
+
+.cartlanding-wrapper :is(.\[\&_svg\>use\]\:stroke-red-700 svg>use) {
+  stroke: #b91c1c
 }
 
 .cartlanding-wrapper :is(.\[\&_svg\>use\]\:stroke-white svg>use) {

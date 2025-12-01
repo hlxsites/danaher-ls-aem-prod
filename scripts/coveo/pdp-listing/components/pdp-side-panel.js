@@ -10,7 +10,9 @@ import {
   //specificationsjsonFacetController,
   unitOfMeasureFacetController,
   skuSizeDetailsFacetController,
+  separationModesFacetController,
   unitSizeFacetController,
+  phaseFacetController,
 } from '../controllers/pdp-controllers.js';
 
 // === Util: Create element with shorthand ===
@@ -100,6 +102,25 @@ function getFacetDataFromControllers() {
       state: documentTypeFacetController.state,
       deselectAll : () => documentTypeFacetController.deselectAll()
     },
+
+    //Separation Mode
+    {
+      title: 'Separation Modes',
+      items: format(separationModesFacetController.state.values),
+      toggleSelect: (value) => separationModesFacetController.toggleSelect(value),
+      state: separationModesFacetController.state,
+      deselectAll : () => separationModesFacetController.deselectAll()
+    },
+
+    //Phase
+    {
+      title: 'Phase',
+      items: format(phaseFacetController.state.values),
+      toggleSelect: (value) => phaseFacetController.toggleSelect(value),
+      state: phaseFacetController.state,
+      deselectAll : () => phaseFacetController.deselectAll()
+    },
+    
     //Specifications
     // {
     //   title: 'Specifications',
@@ -229,7 +250,7 @@ function renderBreadcrumbs() {
 
 // === Create Individual Facet Block ===
 function createFacet(facet, isFirst = false) {
-  const wrapper = createEl('div', { className: 'w-full border-t border-gray-300' });
+  const wrapper = createEl('div', { className: 'w-full border-t border-gray-300 !mt-0' });
 
   const header = createEl('div', {
     className:
@@ -489,7 +510,8 @@ export function createFiltersPanel() {
     // Panel exists: update its content
     const body = panel.querySelector('.filters-body');
     const facetData = getFacetDataFromControllers();
-
+    console.log('facets data: ', facetData);
+    
     if (body && facetData) {
       body.innerHTML = ''; // Clear existing facets
       facetData.forEach((facet, index) => {

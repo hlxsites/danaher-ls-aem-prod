@@ -12,7 +12,7 @@ export default async function decorate(block) {
   let searchedAddressLength;
   if (
     authenticationToken?.status === 'error'
-    || authenticationToken.user_type === 'guest'
+    || authenticationToken?.user_type === 'guest'
   ) {
     window.location.href = window.EbuyConfig?.cartPageUrl;
     return false;

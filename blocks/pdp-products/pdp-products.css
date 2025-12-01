@@ -148,6 +148,10 @@
   margin-top: auto
 }
 
+.pdp-products-wrapper :is(.\!mt-0) {
+  margin-top: 0px !important
+}
+
 .pdp-products-wrapper :is(.line-clamp-2) {
   overflow: hidden;
   display: -webkit-box;

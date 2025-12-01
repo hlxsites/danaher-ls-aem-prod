@@ -265,6 +265,11 @@ const fileMappings = [
     wrapper: 'accordion-container-wrapper',
   },
   {
+    content: './blocks/accordion-with-image/accordion-with-image.js',
+    output: './blocks/accordion-with-image/accordion-with-image.css',
+    wrapper: 'accordion-with-image-wrapper',
+  },
+  {
     content: './blocks/learn-more/learn-more.js',
     output: './blocks/learn-more/learn-more.css',
     wrapper: 'learn-more-wrapper',
@@ -436,7 +441,7 @@ const fileMappings = [
     wrapper: 'pdp-carousel-wrapper',
   },
   {
-    content: './blocks/pdp-related-products/pdp-related-products.js',
+    content: ['./blocks/pdp-related-products/pdp-related-products.js', './blocks/pdp-related-products/grid-data.js', './blocks/pdp-related-products/listData.js'],
     output: './blocks/pdp-related-products/pdp-related-products.css',
     wrapper: 'pdp-related-products-wrapper',
   },
@@ -571,7 +576,7 @@ fileMappings.forEach(({
   process.env.IMPORTANT_WRAPPER = `.${wrapper}`;
   const command = `npx tailwindcss ${input ? `-i ${input}` : './styles/proxy-tailwind.css'
   } ${content ? `--content ${content}` : ''} -o ${output} ${watch ? '--watch' : ''
-  }`;
+  } --minify`;
   exec(command, (error, stdout, stderr) => {
     if (error) {
       // eslint-disable-next-line no-console

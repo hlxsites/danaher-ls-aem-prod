@@ -1,7 +1,7 @@
 import {
   div, h3, input, label, span,
 } from '../../scripts/dom-builder.js';
-import { generateUUID } from '../../scripts/scripts.js';
+import { generateUUID, setJsonLd } from '../../scripts/scripts.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 
 function toggleAccordion(blockUUID, activeAccordion) {
@@ -23,6 +23,32 @@ function toggleAccordion(blockUUID, activeAccordion) {
       panel.setAttribute('aria-expanded', 'false');
     }
   });
+}
+const faqSchemaArray = [];
+function createFaqSchemaQuestionAnswer(question, answer) {
+  const faqSchema = {
+    '@type': 'Question',
+    acceptedAnswer: {
+      '@type': 'Answer',
+    },
+  };
+  faqSchema.name = question || '';
+  faqSchema.acceptedAnswer.text = answer || '';
+  faqSchemaArray.push(faqSchema);
+  return faqSchema;
+}
+
+function createdFAQSchema() {
+  if (faqSchemaArray.length === 0) return;
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqSchemaArray,
+
+  };
+  if (faqSchema) {
+    setJsonLd(faqSchema, 'faqsSchema');
+  }
 }
 
 function createAccordionBlock(
@@ -98,7 +124,7 @@ function createAccordionBlock(
   answer.forEach((element) => {
     panel.querySelector('.accordion-answer').innerHTML += element;
   });
-
+  createFaqSchemaQuestionAnswer(question, panel.textContent.trim() || '');
   const liElements = panel.querySelectorAll('p,ul,li,a');
   liElements.forEach((liEle) => {
     const strongElements = liEle.querySelectorAll('strong');
@@ -189,6 +215,7 @@ export default async function decorate(block) {
         customUUID,
       );
     });
+    createdFAQSchema();
 
     const layoutContainer = div({
       class: 'flex flex-col lg:flex-row gap-x-5 w-full accordion-rendered',

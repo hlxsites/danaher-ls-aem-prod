@@ -65,6 +65,7 @@ import { initializeModules } from '../blocks/checkout/checkoutUtilities.js';
 // eslint-disable-next-line import/no-cycle
 import { getPaymentMethodType, getStripeElements, getStripeInstance } from '../blocks/checkout/paymentModule.js';
 import { getCookie } from './scripts.js';
+import { triggerLogin } from './token-utils.js';
 
 const { getAuthenticationToken } = await import('./token-utils.js');
 
@@ -337,9 +338,11 @@ export async function showMiniCart() {
           inp.classList.remove('border-2');
         }
       });
-      showCartItems.querySelectorAll('.cart-item-unit-price')?.forEach((inp) => {
-        inp?.classList.add('hidden');
-      });
+      setTimeout(() => {
+        showCartItems?.querySelectorAll('.cart-item-unit-price')?.forEach((inp) => {
+          inp?.classList.add('hidden');
+        });
+      }, 0);
       miniCartWrapper?.querySelector('#miniCartItems')?.append(showCartItems);
     }
     if (miniCartWrapper?.classList?.contains('translate-x-full')) {
@@ -363,7 +366,7 @@ export async function showMiniCart() {
     const authenticationToken = await getAuthenticationToken();
     if (
       authenticationToken?.status === 'error'
-      || authenticationToken.user_type === 'guest') {
+      || authenticationToken?.user_type === 'guest') {
       const getChecoutButton = miniCartWrapper.querySelector('#mini-cart-checkout');
       if (getChecoutButton) {
         getChecoutButton.textContent = 'Login / Create Account';
@@ -592,7 +595,9 @@ export const validateBasket = async (validateData) => {
     const response = await postApiData(url, data, defaultHeader);
 
     if (response?.status === 'error' && response?.data === 'Unauthorized!' && window.EbuyConfig?.loginPageUrl) {
-      window.location.href = `${window.EbuyConfig.loginPageUrl}?ref_url=${window.EbuyConfig?.cartPageUrl}`;
+      triggerLogin();
+      // eslint-disable-next-line max-len
+      // window.location.href = `${window.EbuyConfig.loginPageUrl}?ref_url=${window.EbuyConfig?.cartPageUrl}`;
       return false;
     }
     if (response?.data?.data?.results?.valid === false) {
@@ -2789,7 +2794,7 @@ get price type if its net or gross
   if (authenticationToken?.status === 'error') {
     return { status: 'error', data: 'Unauthorized access.' };
   }
-  if (authenticationToken.user_type === 'guest') {
+  if (authenticationToken?.user_type === 'guest') {
     userLoggedInStatus = false;
   } else {
     userLoggedInStatus = true;
@@ -3205,7 +3210,7 @@ get price type if its net or gross
         },
         button(
           {
-            class: `proceed-button w-full text-white text-xl  btn btn-lg font-medium btn-primary-purple rounded-full px-6 ${((authenticationToken.user_type === 'guest') || window.location.pathname === window.EbuyConfig?.orderSubmitPageUrl) ? 'hidden' : ''} `,
+            class: `proceed-button w-full text-white text-xl  btn btn-lg font-medium btn-primary-purple rounded-full px-6 ${((authenticationToken?.user_type === 'guest') || window.location.pathname === window.EbuyConfig?.orderSubmitPageUrl) ? 'hidden' : ''} `,
             id: 'proceed-button',
             'data-tab': 'shippingAddress',
             'data-activetab': 'shippingMethods',
@@ -4132,7 +4137,7 @@ export const cartItemsContainer = async (cartItemValue) => {
             },
             img({
               class: 'w-full h-auto',
-              src: cartItemValue?.images?.length > 0 ? cartItemValue?.images[0]?.effectiveUrl : 'https://s7d9.scene7.com/is/image/danaherstage/no-image-availble',
+              src: cartItemValue?.images?.length > 0 ? cartItemValue?.images[0]?.effectiveUrl : '/content/dam/danaher/products/fallbackImage.jpeg',
             }),
           ),
         ),

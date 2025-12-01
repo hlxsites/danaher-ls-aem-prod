@@ -8,6 +8,9 @@ import {
   span,
 } from '../../scripts/dom-builder.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
+// eslint-disable-next-line import/no-cycle
+import { decorateBuyButton } from '../../scripts/delayed.js';
+// eslint-disable-next-line import/no-cycle
 import { decorateModals, getImageFromArray } from '../../scripts/scripts.js';
 
 // Helper function to create a badge based on item.carrierFree
@@ -35,7 +38,7 @@ function createCarrierFreeBadge(carrierFreeText) {
 export default function renderGridCard(item) {
   const card = div({
     class:
-      'transform transition duration-500 hover:shadow-md min-w-[100%] w-full md:min-w-[305px] md:w-[305px] min-h-[485px] bg-white border border-1 border-gray-300 flex flex-col justify-start items-start',
+      'transform transition duration-500 hover:shadow-md bg-white border border-1 border-gray-300 flex flex-col justify-start items-start',
   });
 
   const fallbackImagePath = '/content/dam/danaher/products/fallbackImage.jpeg';
@@ -53,11 +56,6 @@ export default function renderGridCard(item) {
         item.url.includes(window.DanaherConfig.host) ? '_self' : '_blank',
       ),
     });
-
-    // imageElement.addEventListener('error', () => {
-    //   imageElement.src = fallbackImagePath;
-    //   imageElement.alt = 'Product image not available';
-    // });
 
     return imageElement;
   };
@@ -91,8 +89,7 @@ export default function renderGridCard(item) {
 
   // Combine pricingDetails and actionButtons in one block
   let pricingAndActions;
-  // if (item.showCart && item.price !== undefined) {
-  if (item.showCart && item.price === 'abc123') {
+  if (item.showCart) {
     pricingAndActions = div(
       { class: 'self-stretch bg-gray-50 flex flex-col gap-0' },
       div(
@@ -145,18 +142,18 @@ export default function renderGridCard(item) {
           class:
             'w-14 self-stretch py-1.5 bg-white rounded-md shadow-sm outline outline-1 outline-offset-[-1px] outline-gray-300 text-black text-base font-medium leading-normal text-center [&::-webkit-inner-spin-button]:mr-2',
         }),
-        a(
+        button(
           {
-            href: item.url,
             class:
-              'w-24 px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] flex justify-center items-center overflow-hidden',
+              'add-to-cart-btn w-24 px-5 py-2 bg-danaherpurple-500 hover:bg-danaherpurple-800 text-white rounded-[20px] cursor-pointer flex justify-center items-center overflow-hidden',
+            sku: item.sku,
           },
-          span(
-            {
-              class: 'inherit text-base font-medium leading-snug',
-            },
-            'Buy',
-          ),
+          // span(
+          //   {
+          //     class: 'inherit text-base font-medium leading-snug',
+          //   },
+          'Buy',
+          // ),
         ),
         div(
           {
@@ -243,7 +240,7 @@ export default function renderGridCard(item) {
       ),
     );
   }
-
+  decorateBuyButton(pricingAndActions);
   const viewDetailsButton = div(
     { class: 'self-stretch p-3 flex justify-start items-center' },
     a(
