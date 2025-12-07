@@ -59,6 +59,23 @@
       "id": "mini-teaser",
       "fields": [
         {
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "span",
+          "value": "",
+          "label": "Block Options",
+          "options": [
+            { "name": "DAMUser", "value": ":dam-User:" },
+            { "name": "DAMMail", "value": ":dam-Mail:" },
+            { "name": "Bookmark", "value": ":dam-Bookmark:" },
+            { "name": "Refresh", "value": ":dam-Refresh:" },
+            { "name": "Gift", "value": ":dam-Gift:" },
+            { "name": "DocumentText", "value": ":dam-Documenttext:" },
+            { "name": "Cube", "value": ":dam-Cube:" },
+            { "name": "Chat", "value": ":dam-Chat:" }
+          ]
+        },
+        {
           "component": "reference",
           "name": "mini-teaser_image",
           "label": "Image",
