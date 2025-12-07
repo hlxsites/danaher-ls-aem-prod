@@ -1549,6 +1549,10 @@
           {
             "name": "4 Columns",
             "value": "cols-4"
+          },
+          {
+            "name": "Add Border",
+            "value": "add-border"
           }
         ]
       }
