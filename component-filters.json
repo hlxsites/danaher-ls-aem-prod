@@ -74,6 +74,7 @@
       "related-articles",
       "social-media",
       "mini-teasers",
+      "page-jump-menu",
       "pdp-hero",
       "pdp-page-tabs",
       "pdp-bundle-list",
@@ -88,7 +89,6 @@
       "talk-to-an-expert-text",
       "see-all",
       "solutions-digital-products",
-      "page-jump-menu",
       "auth-callback"
     ]
   },
@@ -176,7 +176,8 @@
       "title",
       "form",
       "gated-form",
-      "embed"
+      "embed",
+      "accordion"
     ]
   },
   {
