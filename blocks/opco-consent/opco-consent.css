@@ -1,3 +1,99 @@
+/* Loader overlay */
+.opco-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.opco-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.opco-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  animation: opco-spin 0.8s linear infinite;
+}
+
+@keyframes opco-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.opco-loader-content p {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Floating sticky note (beside email icon) */
+#opco-sticky-note {
+  position: fixed;
+  bottom: 90px;
+  right: 32px;
+  min-width: 260px;
+  max-width: 320px;
+  background: #fffbe6;
+  color: #333;
+  border: 1px solid #ffe58f;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  padding: 16px 40px 16px 16px;
+  z-index: 3010;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: opco-sticky-fadein 0.5s;
+}
+
+.opco-sticky-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 20px;
+  color: #888;
+  cursor: pointer;
+  font-weight: bold;
+  background: none;
+  border: none;
+}
+
+.opco-sticky-close:hover {
+  color: #d0021b;
+}
+
+@keyframes opco-sticky-fadein {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body #lanyard_root * .\!ketch-p-0 {
   padding: 16px 0 !important;
 }
@@ -30,12 +126,586 @@ body #lanyard_root * :is(.ketch-peer:hover ~ .peer-hover\:after\:ketch-bg-gradie
 body #lanyard_root * .icon svg {
   height: 65px;
 }
-.text-center{
+
+.text-center {
   text-align: center;
 }
-pb-2{
+
+pb-2 {
   padding-bottom: 0.5rem !important;
 }
-.text-2xl{
+
+.text-2xl {
   font-size: 1.5rem !important;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
+  background: white;
+  margin: 0;
+  padding: 20px;
+  padding-top: 60px;
+  padding-left: 125px;
+  padding-right: 125px;
+}
+
+.subs {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 200px;
+  padding-bottom: 40px;
+  scroll-margin-top: 200px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 20px 20px;
+    padding-top: 60px;
+  }
+
+  .subs {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 320px;
+    padding-bottom: 40px;
+    margin-top: 0;
+    scroll-margin-top: 320px;
+  }
+
+  .preferences-sticky-bar {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .preferences-sticky-bar h2 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .preferences-sticky-bar p {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.sticky-header {
+  position: sticky;
+  top: 120px;
+  z-index: 1000;
+  background: white;
+  /* margin-top: 20px; */
+}
+
+.info-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.info-bar-content {
+  display: flex;
+  align-items: center;
+}
+
+.pointer-events {
+  pointer-events: none;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.scroll-section {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 125px 40px 125px;
+  background: white;
+  padding-top: 400px !important;
+}
+
+.preferences-sticky-bar {
+  position: fixed;
+  top: 80px;
+  /* below main header (adjust as needed) */
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: white;
+  padding: 22px 16.5% 1px;
+  /* matches the page spacing */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.05); */
+}
+
+/* Header / Taskbar */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: white;
+  color: black;
+  padding: 12px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  height: 60px;
+  width: auto;
+  padding-right: 100px;
+}
+
+.header-left span {
+  font-size: 28px;
+  font-weight: 700;
+  color: black;
+}
+
+.header-btn {
+  background-color: #808080;
+  border: none;
+  color: white;
+  padding: 9px 28px;
+  margin-right: 20px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.header-btn:hover {
+  background-color: #898989;
+}
+
+#message {
+  position: fixed;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e51b0;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: none;
+  z-index: 2000;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  width: 60%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.toggle-with-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-icon {
+  font-size: 16px;
+  color: #1e51b0;
+  cursor: pointer;
+  position: relative;
+}
+
+.info-icon:hover::after {
+  /* Ensure pseudo-element does not render; tooltip appears via .info-tooltip */
+  display: none;
+}
+
+.info-icon::after {
+  /* Ensure pseudo-element does not render */
+  display: none;
+}
+
+h2 {
+  margin-bottom: 12px;
+  padding-top: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 21px;
+  margin-bottom: 35px;
+  color: #444;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 10px;
+}
+
+p a {
+  color: #0000EE;
+  text-decoration: underline;
+}
+
+/* Subscription card */
+.subscription-card {
+  display: flex;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #ddd;
+  overflow: hidden;
+
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sub-logo-side {
+  flex: 0 0 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscription-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subscription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.subscription-description {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0 10px 0;
+}
+
+.channels {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  background: #f9fafb;
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Tri-state checkboxes */
+.channel input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #666;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  background: white;
+}
+
+.channel input[type=checkbox].granted {
+  background-color: #1e51b0;
+  border-color: #1e51b0;
+}
+
+.channel input[type=checkbox].granted::after {
+  content: "✔";
+  position: absolute;
+  top: -3px;
+  left: 2px;
+  font-size: 14px;
+  color: white;
+}
+
+.channel input[type=checkbox].denied {
+  background-color: red;
+  border-color: red;
+}
+
+.channel input[type=checkbox].denied::after {
+  content: "✖";
+  position: absolute;
+  top: -3px;
+  left: 2px;
+  font-size: 14px;
+  color: white;
+}
+
+/* Switch style */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: #1e51b0;
+}
+
+input:checked+.slider:before {
+  transform: translateX(20px);
+}
+
+.partial+.slider {
+  background-color: orange !important;
+}
+
+.denied-toggle+.slider {
+  background-color: red !important;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 16px 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.footer-btn {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.footer-btn:hover {
+  background-color: #5f5f5f;
+}
+
+.info-icon .info-tooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  border-radius: 8px;
+  min-width: 290px;
+  max-width: 360px;
+  color: #222;
+  font-size: 13px;
+}
+
+.info-icon {
+  cursor: pointer;
+  font-size: 20px;
+  color: #1e51b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  line-height: 28px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure tooltip is absolutely positioned and doesn't affect header layout */
+.info-icon-wrapper .info-tooltip {
+  display: none;
+  /* controlled by JS */
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  transform: none;
+  z-index: 1200;
+  min-width: 290px;
+  max-width: 360px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  border-radius: 8px;
+  color: #222;
+  font-size: 13px;
+  pointer-events: auto;
+}
+
+/* Make sure header allows overflow so tooltip can extend without shifting layout */
+.header-bar {
+  overflow: visible;
+}
+
+/* Small spacing and alignment for the header dummy toggle */
+.header-dummy-toggle {
+  margin-left: 12px;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-dummy-toggle .slider {
+  width: 40px;
+  height: 20px;
+}
+
+/* Floating email icon (bottom-right) */
+#opco-email-icon {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e51b0 0%, #5b3fa8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  z-index: 3000;
+  box-shadow: 0 8px 18px rgba(13, 36, 95, 0.25);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms ease;
+}
+
+#opco-email-icon svg {
+  display: block;
+}
+
+#opco-email-icon:hover,
+#opco-email-icon:focus {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 12px 28px rgba(13, 36, 95, 0.32);
+}
+
+/* Small accessibility focus ring */
+#opco-email-icon:focus {
+  outline: 3px solid rgba(94, 56, 162, 0.18);
+  outline-offset: 4px;
+}
+
+/* Desktop-only message for mobile/tablet screens */
+.desktop-only-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.desktop-only-content {
+  text-align: center;
+  background: white;
+  padding: 48px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+}
+
+.desktop-only-content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1e51b0;
+  margin: 0 0 16px 0;
+}
+
+.desktop-only-content p {
+  font-size: 16px;
+  color: #666;
+  margin: 12px 0;
+  line-height: 1.6;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  #opco-email-icon {
+    right: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+  }
 }
