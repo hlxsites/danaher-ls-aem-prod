@@ -180,9 +180,17 @@ export default async function decorate(block) {
       authoredTabMap[type] = authoredLabel;
     }
   });
+  const hasFamilies = (() => {
+    try {
+      const val = response?.raw?.associatedfamilys;
+      return Array.isArray(JSON.parse(val)) && JSON.parse(val).length > 0;
+    } catch {
+      return false;
+    }
+  })();
   // Full map of static label to section ID/type
   const fullTabConfig = {
-    overview: { label: 'Description', available: !!response?.raw?.richlongdescription?.trim() || ('overview' in authoredTabMap) },
+    overview: { label: 'Description', available: !!response?.raw?.overview?.trim() || !!response?.raw?.richlongdescription?.trim() || ('overview' in authoredTabMap) },
     specifications: { label: 'Specifications', available: (!!response?.raw?.attributejson?.trim() && JSON.parse(response.raw.attributejson).length > 0) || ('specifications' in authoredTabMap) },
     products: { label: 'Products', available: response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0 && !(response?.raw?.familyskusizeflag?.includes('True|') || false) },
     resources: { label: 'Resources', available: !!response?.raw?.numresources > 0 },
@@ -199,7 +207,7 @@ export default async function decorate(block) {
         }
       })() || false,
     },
-    relatedproducts: { label: 'Related Products', available: JSON.parse(response?.raw?.associatedfamilys)?.length > 0 || ('relatedproducts' in authoredTabMap) },
+    relatedproducts: { label: 'Related Products', available: hasFamilies || ('relatedproducts' in authoredTabMap) },
   };
 
   // -------------- Generate tabsList in JSON order --------------
@@ -230,17 +238,15 @@ export default async function decorate(block) {
             'shrink-0 px-6 py-4 md:relative flex flex-col-reverse md:flex-row justify-start items-center gap-3',
         },
         div({
-          class: `${
-            index === 0 ? 'bg-danaherpurple-500 rounded-[5px]' : ''
-          } w-12 h-1 md:w-1 md:h-12 md:left-0 md:top-[2px] md:absolute`,
+          class: `${index === 0 ? 'bg-danaherpurple-500 rounded-[5px]' : ''
+            } w-12 h-1 md:w-1 md:h-12 md:left-0 md:top-[2px] md:absolute`,
         }),
         h2(
           {
-            class: `p-tab m-0 !text-base ${
-              index === 0
+            class: `p-tab m-0 !text-base ${index === 0
                 ? 'text-danaherpurple-500 font-bold'
                 : 'text-black font-medium'
-            } text-base cursor-pointer`,
+              } text-base cursor-pointer`,
             onclick: updatePageTabs,
           },
           tab.label,

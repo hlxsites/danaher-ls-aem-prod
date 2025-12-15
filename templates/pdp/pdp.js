@@ -67,12 +67,20 @@ async function loadPdpBlocks() {
         //      'analysis': 'pdp-analysis',
       };
       const blockName = blockMap[tabName];
+      const hasFamilies = (() => {
+        try {
+          const val = response?.raw?.associatedfamilys;
+          return Array.isArray(JSON.parse(val)) && JSON.parse(val).length > 0;
+        } catch {
+          return false;
+        }
+      })();
       if (!blockName) return; // skip unmapped tab
       // Decision: add block if authored OR available via data
       let shouldAdd = false;
       switch (tabName) {
         case 'overview':
-          shouldAdd = authoredTabs.has('overview') || response?.raw?.richlongdescription;
+          shouldAdd = authoredTabs.has('overview') || response?.raw?.richlongdescription || response?.raw?.overview;
           break;
         case 'products':
           shouldAdd = authoredTabs.has('products') || (response?.raw?.objecttype === 'Family' && response?.raw?.numproducts > 0);
@@ -99,7 +107,7 @@ async function loadPdpBlocks() {
         }
           break;
         case 'relatedproducts':
-          shouldAdd = authoredTabs.has('relatedproducts') || JSON.parse(response?.raw?.associatedfamilys)?.length > 0;
+          shouldAdd = authoredTabs.has('relatedproducts') || hasFamilies;
           break;
         // Add more cases as needed
         default:
