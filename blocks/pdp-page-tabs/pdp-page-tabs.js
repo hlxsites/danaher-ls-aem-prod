@@ -199,16 +199,7 @@ export default async function decorate(block) {
         }
       })() || false,
     },
-    relatedproducts: { label: 'Related Products', available: response?.raw?.associatedfamilys !== undefined && JSON.parse(response?.raw?.associatedfamilys)?.length > 0 || ('relatedproducts' in authoredTabMap) },
-    // relatedproducts: { label: 'Related Products', available: JSON.parse(response?.raw?.associatedfamilys)?.length > 0 || ('relatedproducts' in authoredTabMap) },
-  //   relatedproducts: {
-  //   label: 'Related Products',
-  //   available:
-  //     (response?.raw?.associatedfamilys &&
-  //     response.raw.associatedfamilys.trim().startsWith('[') &&
-  //     JSON.parse(response.raw.associatedfamilys).length > 0)
-  //     || ('relatedproducts' in authoredTabMap)
-  // },
+    relatedproducts: { label: 'Related Products', available: JSON.parse(response?.raw?.associatedfamilys)?.length > 0 || ('relatedproducts' in authoredTabMap) },
   };
 
   // -------------- Generate tabsList in JSON order --------------
