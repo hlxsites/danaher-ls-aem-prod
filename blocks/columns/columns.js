@@ -1029,7 +1029,7 @@ export default function decorate(block) {
     }
   }
   /** ********EDS FORM Ends****************** */
-  if (window.location.pathname.includes('/us/en/solutions/analytical') || window.location.pathname.includes('/us/en/new-lab')) {    
+  if (window.location.pathname.includes('/us/en/solutions/analytical-eds/') || window.location.pathname.includes('/us/en/new-lab')) {    
   function renderAccordionInSecondColumn(sectionDiv) {
   const columnsWrapper = sectionDiv.querySelector('.columns-wrapper');
   if (!columnsWrapper) return;
