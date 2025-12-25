@@ -1055,16 +1055,25 @@ export default function decorate(block) {
       wrapper.appendChild(next.cloneNode(true));
       wrapper.appendChild(next.nextElementSibling.cloneNode(true));
       contentEl = wrapper;
+      // Remove original nodes from DOM
+      next.nextElementSibling.remove();
+      next.remove();
     } else if (next && next.tagName === 'UL' && next.previousElementSibling && next.previousElementSibling.tagName === 'P') {
       // Already handled above, but just in case order is different
       const wrapper = document.createElement('div');
       wrapper.appendChild(next.previousElementSibling.cloneNode(true));
       wrapper.appendChild(next.cloneNode(true));
       contentEl = wrapper;
+      // Remove original nodes from DOM
+      next.previousElementSibling.remove();
+      next.remove();
     } else {
       const isNextHeading = next && (next.matches && next.matches('h3, h2, h4'));
       contentEl = next && !isNextHeading ? next : null;
+      if (contentEl) contentEl.remove();
     }
+    // Remove the heading itself from DOM
+    headingEl.remove();
     items.push({ headingEl, headingText: headingText || null, contentEl });
   });
   } else {
@@ -1171,6 +1180,22 @@ export default function decorate(block) {
       secondColumn.appendChild(accordionWrapper);
     }
     if (block.classList.contains('columns-2-cols')) {
-      renderAccordionInSecondColumn(block.closest('.section'));
+      // Only add accordion if second column has at least one h3 (question) AND a ul (answer)
+      const sectionDiv = block.closest('.section');
+      const columnsWrapper = sectionDiv.querySelector('.columns-wrapper');
+      if (!columnsWrapper) return;
+      const columnsBlock = columnsWrapper.querySelector('.columns.block');
+      if (!columnsBlock) return;
+      const container = columnsBlock.firstElementChild;
+      if (!container) return;
+      const colDivs = container.querySelectorAll(':scope > div');
+      if (colDivs.length < 2) return;
+      const secondColumn = colDivs[1];
+      // Only add accordion if both h3 and ul exist in second column
+      const hasH3 = !!secondColumn.querySelector('h3');
+      const hasUL = !!secondColumn.querySelector('ul');
+      if (hasH3 && hasUL) {
+        renderAccordionInSecondColumn(sectionDiv);
+      }
     }
 }
