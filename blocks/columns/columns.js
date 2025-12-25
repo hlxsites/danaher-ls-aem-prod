@@ -1046,12 +1046,27 @@ export default function decorate(block) {
   let items = [];
   if (directHeadings.length > 0) {
   directHeadings.forEach((headingEl) => {
-  const headingText = headingEl.textContent ? headingEl.textContent.trim() : '';
-  const next = headingEl.nextElementSibling;
-  const isNextHeading = next && (next.matches && next.matches('h3, h2, h4'));
-  const contentEl = next && !isNextHeading ? next : null;
-  items.push({ headingEl, headingText: headingText || null, contentEl });
-    });
+    const headingText = headingEl.textContent ? headingEl.textContent.trim() : '';
+    let contentEl = null;
+    let next = headingEl.nextElementSibling;
+    // Group <p> and following <ul> together if present
+    if (next && next.tagName === 'P' && next.nextElementSibling && next.nextElementSibling.tagName === 'UL') {
+      const wrapper = document.createElement('div');
+      wrapper.appendChild(next.cloneNode(true));
+      wrapper.appendChild(next.nextElementSibling.cloneNode(true));
+      contentEl = wrapper;
+    } else if (next && next.tagName === 'UL' && next.previousElementSibling && next.previousElementSibling.tagName === 'P') {
+      // Already handled above, but just in case order is different
+      const wrapper = document.createElement('div');
+      wrapper.appendChild(next.previousElementSibling.cloneNode(true));
+      wrapper.appendChild(next.cloneNode(true));
+      contentEl = wrapper;
+    } else {
+      const isNextHeading = next && (next.matches && next.matches('h3, h2, h4'));
+      contentEl = next && !isNextHeading ? next : null;
+    }
+    items.push({ headingEl, headingText: headingText || null, contentEl });
+  });
   } else {
     // fallback: each child is an item container
     const childItems = Array.from(secondColumn.children).filter((c) => c.nodeType === 1);
@@ -1152,9 +1167,7 @@ export default function decorate(block) {
 
       accordionBlock.appendChild(accordionContainer);
       accordionWrapper.appendChild(accordionBlock);
-
-      // Only update the column if accordion is present
-      secondColumn.innerHTML = '';
+      // Append the accordion below existing content
       secondColumn.appendChild(accordionWrapper);
     }
     if (block.classList.contains('columns-2-cols')) {
