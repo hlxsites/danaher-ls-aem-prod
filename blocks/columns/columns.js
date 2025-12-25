@@ -1177,6 +1177,7 @@ export default function decorate(block) {
       accordionBlock.appendChild(accordionContainer);
       accordionWrapper.appendChild(accordionBlock);
       // Append the accordion below existing content
+      secondColumn.innerHTML = '';
       secondColumn.appendChild(accordionWrapper);
     }
     if (block.classList.contains('columns-2-cols')) {
