@@ -7,6 +7,7 @@ import {
 import loadSFDCForm from '../form/form.js';
 import decorateImageLink from '../image-link/image-link.js';
 import loadGatedForm from '../gated-form/gated-form.js';
+import { generateUUID } from '../../scripts/scripts.js';
 
 /** *****JOIN-TODAY FORM Starts ******* */
 
@@ -1029,7 +1030,6 @@ export default function decorate(block) {
     }
   }
   /** ********EDS FORM Ends****************** */
-  if (window.location.pathname.includes('/us/en/solutions/analytical-eds/') || window.location.pathname.includes('/us/en/new-lab')) {    
   function renderAccordionInSecondColumn(sectionDiv) {
   const columnsWrapper = sectionDiv.querySelector('.columns-wrapper');
   if (!columnsWrapper) return;
@@ -1160,5 +1160,4 @@ export default function decorate(block) {
     if (block.classList.contains('columns-2-cols')) {
       renderAccordionInSecondColumn(block.closest('.section'));
     }
-  }
 }

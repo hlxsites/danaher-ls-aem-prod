@@ -76,7 +76,12 @@
             { "name": "Gift", "value": ":dam-Gift:" },
             { "name": "DocumentText", "value": ":dam-Documenttext:" },
             { "name": "Cube", "value": ":dam-Cube:" },
-            { "name": "Chat", "value": ":dam-Chat:" }
+            { "name": "Chat", "value": ":dam-Chat:" },
+            { "name": "Clock", "value": ":dam-Clock:" },
+            { "name": "ViewGrid", "value": ":dam-View_grid:" },
+            { "name": "CubeTransparent", "value": ":dam-Cube_transparent:" },
+            { "name": "DocumentNew", "value": ":dam-doc-new:" },
+            { "name": "DAMUsers", "value": ":dam-Users:" }
           ]
         },
         {
