@@ -86,7 +86,14 @@
       "talk-to-an-expert-text",
       "see-all",
       "solutions-digital-products",
-      "auth-callback"
+      "auth-callback",
+      "accordion-column"
+    ]
+  },
+  {
+    "id": "accordion-column",
+    "components": [
+      "accordion-item"
     ]
   },
   {
@@ -173,8 +180,7 @@
       "title",
       "form",
       "gated-form",
-      "embed",
-      "accordion"
+      "embed"
     ]
   },
   {
