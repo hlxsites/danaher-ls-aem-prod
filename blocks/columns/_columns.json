@@ -68,8 +68,7 @@
         "title",
         "form",
         "gated-form",
-        "embed",
-        "accordion"
+        "embed"
       ]
     }
   ]
