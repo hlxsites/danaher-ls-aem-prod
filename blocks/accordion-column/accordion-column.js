@@ -178,11 +178,11 @@ export default async function decorate(block) {
   const dynamicData = Array.from(block.children)
     .slice(1)
     .map((element) => {
-      const paragraphs = element.querySelectorAll('p');
+      const paragraphs = element.querySelectorAll('h3');
       const firstParagraph = paragraphs[0];
       const question = firstParagraph?.textContent.trim() || '';
 
-      element.children[0]?.firstElementChild?.remove();
+      element.children[1]?.firstElementChild?.remove();
       const allChildren = Array.from(element.children);
       element.querySelectorAll('a')?.forEach((aEle) => {
         if (aEle) aEle.classList.add(...'text-sm font-bold text-danaherpurple-500 !no-underline'.split(' '));
@@ -209,7 +209,7 @@ export default async function decorate(block) {
     createdFAQSchema();
 
     const layoutContainer = div({
-      class: 'flex flex-col lg:flex-row gap-x-5 w-full accordion-rendered',
+      class: 'flex flex-col lg:flex-row gap-x-5 w-full accordion-rendered'
     });
     const faqTextContainer = div(
       { class: 'lg:w-[400px]' },
