@@ -138,16 +138,6 @@ function createAccordionBlock(
 
   panel.querySelectorAll('a').forEach((link) => {
     link.classList.remove('btn', 'btn-outline-primary');
-    link.classList.add(
-      'text-black',
-      'underline',
-      'decoration-black',
-      'hover:decoration-danaherpurple-500',
-      'hover:bg-danaherpurple-25',
-      'text-danaherpurple-500',
-      'hover:bg-danaherpurple-25',
-      'hover:text-danaherpurple-500',
-    );
   });
 
   summaryContent.addEventListener('click', (event) => {
@@ -195,7 +185,7 @@ export default async function decorate(block) {
       element.children[0]?.firstElementChild?.remove();
       const allChildren = Array.from(element.children);
       element.querySelectorAll('a')?.forEach((aEle) => {
-        if (aEle) aEle.classList.add(...'!text-black !underline !decoration-danaherpurple-500 hover:bg-danaherpurple-500 hover:!text-white'.split(' '));
+        if (aEle) aEle.classList.add(...'text-sm font-bold text-danaherpurple-500 !no-underline'.split(' '));
       });
 
       const answer = allChildren.map((child) => child.outerHTML).join('');
