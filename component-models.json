@@ -1670,12 +1670,6 @@
       },
       {
         "component": "text",
-        "name": "mini-teaser_icon",
-        "value": "",
-        "label": "Icon"
-      },
-      {
-        "component": "text",
         "valueType": "string",
         "name": "mini-teaser_title",
         "value": "",
