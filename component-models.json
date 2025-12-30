@@ -1659,13 +1659,13 @@
       },
       {
         "component": "reference",
-        "name": "mini-teaser_image",
+        "name": "mini-teaser_span",
         "label": "Image",
         "multi": false
       },
       {
         "component": "text",
-        "name": "mini-teaser_imageAlt",
+        "name": "mini-teaser_spanAlt",
         "label": "Alt Text"
       },
       {
@@ -1678,7 +1678,6 @@
       {
         "component": "select",
         "name": "mini-teaser_titleType",
-        "value": "h3",
         "label": "Title Type",
         "valueType": "string",
         "options": [
