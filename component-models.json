@@ -268,12 +268,12 @@
     ]
   },
   {
-    "id": "accordion-column",
+    "id": "accordion-container",
     "fields": [
       {
         "component": "text",
         "valueType": "string",
-        "name": "accordion_column_title",
+        "name": "accordion_container_title",
         "value": "",
         "label": "Super Title"
       }
@@ -299,12 +299,12 @@
     ]
   },
   {
-    "id": "accordion-container",
+    "id": "accordion-in-column",
     "fields": [
       {
         "component": "text",
         "valueType": "string",
-        "name": "accordion_container_title",
+        "name": "accordion_in_column_title",
         "value": "",
         "label": "Super Title"
       }

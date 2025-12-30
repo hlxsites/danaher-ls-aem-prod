@@ -87,17 +87,17 @@
       "see-all",
       "solutions-digital-products",
       "auth-callback",
-      "accordion-column"
+      "accordion-in-column"
     ]
   },
   {
-    "id": "accordion-column",
+    "id": "accordion-container",
     "components": [
       "accordion-item"
     ]
   },
   {
-    "id": "accordion-container",
+    "id": "accordion-in-column",
     "components": [
       "accordion-item"
     ]

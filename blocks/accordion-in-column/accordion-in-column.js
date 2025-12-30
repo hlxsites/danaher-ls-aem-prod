@@ -65,7 +65,12 @@ function createAccordionBlock(
     'accordion-item',
     'relative',
     'py-2',
+    // 'border-t',
+    'border-gray-300',
   );
+  if (index > 0) {
+    parentElement.classList.add('border-t');
+  }
   parentElement.id = `accordion-item-${index}`;
 
   const inputId = `accordion-${uuid}-${index}`;
@@ -163,7 +168,7 @@ function createAccordionBlock(
 }
 
 export default async function decorate(block) {
-  const wrapper = document.querySelector('.accordion-column-wrapper');
+  const wrapper = document.querySelector('.accordion-in-column-wrapper');
   wrapper?.parentElement?.removeAttribute('class');
   wrapper?.parentElement?.removeAttribute('style');
 
