@@ -65,7 +65,12 @@ function createAccordionBlock(
     'accordion-item',
     'relative',
     'py-2',
+    // 'border-t',
+    'border-gray-300',
   );
+  if (index > 0) {
+    parentElement.classList.add('border-t');
+  }
   parentElement.id = `accordion-item-${index}`;
 
   const inputId = `accordion-${uuid}-${index}`;
