@@ -7,6 +7,7 @@ export default function decorate(block) {
     else block.classList.add('lg:grid-cols-3');
     element.classList.add(...'items-center mt-2 border-l border-danahergray-300 pl-6'.split(' '));
     element.querySelector('span')?.classList.add(...'w-16 h-16 stroke-current'.split(' '));
+    // element.querySelector('picture')?.classList.add(...'w-16 h-16 stroke-current'.split(' '));
     const h3El = element.querySelector('h3');
     if (h3El) {
       h3El.classList.add(...'mt-4 mb-0 h-16 line-clamp-2 break-words'.split(' '));
@@ -16,6 +17,11 @@ export default function decorate(block) {
     if (pEl) {
       pEl.classList.add(...'line-clamp-3 h-24 pt-4 break-words'.split(' '));
       pEl.title = pEl.textContent;
+    }
+    const picture = element.querySelector('picture');
+    if (picture) {
+      pEl.classList.remove(...'line-clamp-3 h-24 pt-4 break-words'.split(' '));
+      picture.classList.add(...'w-16 h-16 stroke-current'.split(' '));
     }
     if (pEl.firstElementChild !== null) pEl?.parentNode?.firstElementChild?.classList.remove('h-20');
     const link = element.querySelector('a');
