@@ -86,13 +86,13 @@
         },
         {
           "component": "reference",
-          "name": "mini-teaser_span",
+          "name": "mini-teaser_image",
           "label": "Image",
           "multi": false
         },
         {
           "component": "text",
-          "name": "mini-teaser_spanAlt",
+          "name": "mini-teaser_imageAlt",
           "label": "Alt Text"
         },
         {
