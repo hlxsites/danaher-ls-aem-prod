@@ -168,7 +168,7 @@ function createAccordionBlock(
 }
 
 export default async function decorate(block) {
-  const wrapper = document.querySelector('.accordion-column-wrapper');
+  const wrapper = document.querySelector('.accordion-in-column-wrapper');
   wrapper?.parentElement?.removeAttribute('class');
   wrapper?.parentElement?.removeAttribute('style');
 

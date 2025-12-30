@@ -1,16 +1,16 @@
 {
     "definitions": [
         {
-            "title": "Accordion-Column",
-            "id": "accordion-column",
+            "title": "Accordion-In-Column",
+            "id": "accordion-in-column",
             "plugins": {
               "xwalk": {
                 "page": {
                   "resourceType": "core/franklin/components/block/v1/block",
                   "template": {
-                    "name": "Accordion-Column",
-                    "model": "accordion-column",
-                    "filter": "accordion-column"
+                    "name": "Accordion-In-Column",
+                    "model": "accordion-in-column",
+                    "filter": "accordion-in-column"
                   }
                 }
               }
@@ -35,12 +35,12 @@
     "models": [
       
         {
-            "id": "accordion-column",
+            "id": "accordion-in-column",
             "fields": [
                 {
                     "component": "text",
                     "valueType": "string",
-                    "name": "accordion_column_title",
+                    "name": "accordion_in_column_title",
                     "value": "",
                     "label": "Super Title"
                   }
@@ -68,7 +68,7 @@
     ],
     "filters": [
         {
-            "id": "accordion-column",
+            "id": "accordion-in-column",
             "components": [
               "accordion-item"
             ]
