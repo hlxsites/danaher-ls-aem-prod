@@ -49,6 +49,12 @@
             "label": "Topics"
           },
           {
+            "component": "text",
+            "valueType": "string",
+            "name": "solutions",
+            "label": "Solutions"
+          },
+          {
             "component": "reference",
             "valueType": "string",
             "name": "metaimage",
