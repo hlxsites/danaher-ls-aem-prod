@@ -966,7 +966,7 @@
         ]
       },
       {
-        "component": "text",
+        "component": "richtext",
         "name": "carousel_ProductInfo",
         "label": "Left Side Product Info",
         "description": "Descriptive paragraph below heading"
