@@ -83,9 +83,8 @@ function createAccordionBlock(question, answer, image, uuid, parentElement, inde
     div({ class: 'accordion-answer text-base leading-7 overflow-hidden' }),
   );
 
-  answer.forEach((element) => {
-    panel.querySelector('.accordion-answer').innerHTML += element;
-  });
+  const answerContent = answer.join('');
+  panel.querySelector('.accordion-answer').innerHTML = answerContent;
 
   panel.querySelector('a')?.classList.remove(...'btn btn-outline-primary'.split(' '));
   panel.querySelectorAll('a').forEach((link) => {
@@ -123,7 +122,9 @@ export default function decorate(block) {
       question: questionElement?.textContent,
       image: imageElements?.parentElement,
       answer: Array.from(answerElements?.children || []).length
-        ? Array.from(answerElements.children).map((child) => child.innerHTML)
+        ? Array.from(answerElements.children)
+          .filter((child) => child.tagName !== 'H3')
+          .map((child) => child.innerHTML)
         : [answerElements?.innerHTML || ''],
       uuid: generateUUID(),
       parentElement: element,
