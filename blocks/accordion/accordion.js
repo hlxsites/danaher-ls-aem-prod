@@ -118,12 +118,13 @@ export default function decorate(block) {
   const questions = [...block.children].map((element) => {
     const questionElement = element.querySelector(':scope > div > h3');
     const imageElements = element.querySelector(':scope > div > picture');
-    const answerElements = imageElements ? Array.from(element.querySelector(':scope > div:nth-child(2)').children).slice(1)
-      : Array.from(element.querySelector(':scope > div').children).slice(1);
+    const answerElements = element.querySelector(':scope > div:nth-child(2)');
     return {
       question: questionElement?.textContent,
       image: imageElements?.parentElement,
-      answer: answerElements.map((elem) => elem.outerHTML),
+      answer: Array.from(answerElements?.children || []).length
+        ? Array.from(answerElements.children).map((child) => child.innerHTML)
+        : [answerElements?.innerHTML || ''],
       uuid: generateUUID(),
       parentElement: element,
     };
