@@ -1267,20 +1267,6 @@ window.EbuyConfig = {
 // Datalayer Init - Start
 window.dataLayer = [];
 window.dataLayer.push({
-  user: {
-    customerID: '',
-    accountType: 'guest',
-    marketCode: '',
-    company: '',
-    role: '',
-    city: '',
-    state: '',
-    country: '',
-    postalCode: '',
-    lastVisit: '',
-  },
-});
-window.dataLayer.push({
   page: getDLPage(),
 });
 // Datalayer Init - End
