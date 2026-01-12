@@ -1,5 +1,5 @@
 import { userLogin } from '../../scripts/auth-utils.js';
-import { initAuth0, getIdToken } from '../../scripts/auth.js';
+import { initAuth0, getIdToken, getUser } from '../../scripts/auth.js';
 
 const hostName = window.location.hostname;
 let env;
@@ -20,10 +20,17 @@ export default async function decorate(block) {
     const auth0Client = await initAuth0();
     const result = await auth0Client.handleRedirectCallback();
     const idToken = await getIdToken();
+    const auth0User = await getUser();
     sessionStorage.setItem(
       `${window.DanaherConfig?.siteID}_${env}_apiToken`,
       JSON.stringify({ access_token: idToken }),
     );
+    if (auth0User) {
+      sessionStorage.setItem(
+        `${window.DanaherConfig?.siteID}_${env}_auth0User`,
+        auth0User?.sub,
+      );
+    }
     await userLogin('customer', idToken);
     const target = result?.appState?.returnTo || '/';
     window.location.href = target;

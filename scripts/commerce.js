@@ -54,7 +54,7 @@ export function getCommerceBase() {
 //   }
 //   return authHeader;
 // }
-
+let hasDataLayerSent = false;
 export function getAuthorization() {
   const authHeader = new Headers();
   const siteID = window.DanaherConfig?.siteID;
@@ -89,6 +89,25 @@ export function getAuthorization() {
     const apiToken = getCookie(`${siteID}_${env}_apiToken`);
     authHeader.append('authentication-token', apiToken);
   }
+  if (hasDataLayerSent) return authHeader;
+  const userData = getCookie(`${siteID}_${env}_user_data`);
+  const auth0Sub = sessionStorage.getItem(`${siteID}_${env}_auth0User`) || '';
+  window.dataLayer.push({
+    user: {
+      auth0Id: auth0Sub,
+      customerID: userData?.customerData?.customerNo || '',
+      accountType: userData ? 'B2B' : 'guest',
+      marketCode: '',
+      company: userData?.customerData?.companyName || '',
+      role: '',
+      city: '',
+      state: '',
+      country: '',
+      postalCode: '',
+      lastVisit: '',
+    },
+  });
+  hasDataLayerSent = true;
   return authHeader;
 }
 
