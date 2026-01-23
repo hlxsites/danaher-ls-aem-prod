@@ -1119,6 +1119,120 @@
     ]
   },
   {
+    "id": "download-in-column",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "download_title",
+        "value": "",
+        "label": "Super Title"
+      }
+    ]
+  },
+  {
+    "id": "download-in-column-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "download-in-column-item_text",
+        "label": "Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "download-in-column-item_title",
+        "label": "Title"
+      },
+      {
+        "component": "select",
+        "name": "download-in-column-item_titleType",
+        "label": "Title Type",
+        "options": [
+          {
+            "name": "h1",
+            "value": "h1"
+          },
+          {
+            "name": "h2",
+            "value": "h2"
+          },
+          {
+            "name": "h3",
+            "value": "h3"
+          },
+          {
+            "name": "h4",
+            "value": "h4"
+          },
+          {
+            "name": "h5",
+            "value": "h5"
+          },
+          {
+            "name": "h6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "download-in-column-item_description",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "aem-content",
+        "name": "download-in-column-item_link",
+        "label": "Button Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "download-in-column-item_linkText",
+        "label": "Button Text",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "download-in-column-item_linkType",
+        "label": "Button Type",
+        "options": [
+          {
+            "name": "default",
+            "value": ""
+          },
+          {
+            "name": "primary",
+            "value": "primary"
+          },
+          {
+            "name": "secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "Picture",
+        "name": "download-in-column-item_image",
+        "label": "Image",
+        "multi": false,
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "download-in-column-item_imageAlt",
+        "label": "Alt Text",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "dual-carousel",
     "fields": [
       {

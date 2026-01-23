@@ -87,7 +87,8 @@
       "see-all",
       "solutions-digital-products",
       "auth-callback",
-      "accordion-in-column"
+      "accordion-in-column",
+      "download-in-column"
     ]
   },
   {
@@ -181,6 +182,12 @@
       "form",
       "gated-form",
       "embed"
+    ]
+  },
+  {
+    "id": "download-in-column",
+    "components": [
+      "download-in-column-item"
     ]
   },
   {
