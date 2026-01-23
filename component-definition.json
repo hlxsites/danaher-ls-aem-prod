@@ -421,6 +421,37 @@
           }
         },
         {
+          "title": "Download In Column",
+          "id": "download-in-column",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Download In Column",
+                  "model": "download-in-column",
+                  "filter": "download-in-column"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Download In Column Item",
+          "id": "download-in-column-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Download In Column Item",
+                  "model": "download-in-column-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Dual Carousel",
           "id": "dual-carousel",
           "plugins": {
