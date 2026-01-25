@@ -2352,6 +2352,24 @@
     ]
   },
   {
+    "id": "product-card",
+    "fields": [
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "Solutions",
+            "value": "solutions"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "product-categories",
     "fields": [
       {

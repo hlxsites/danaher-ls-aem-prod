@@ -313,6 +313,12 @@
     ]
   },
   {
+    "id": "product-card",
+    "components": [
+      ""
+    ]
+  },
+  {
     "id": "product-categories",
     "components": [
       ""
