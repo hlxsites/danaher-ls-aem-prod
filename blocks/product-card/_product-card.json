@@ -1,0 +1,42 @@
+{
+  "definitions": [
+    {
+      "title": "Product-Card",
+      "id": "product-card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Product-Card",
+              "model": "product-card"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "product-card",
+      "fields": [
+        {
+          "component": "multiselect",
+          "valueType": "string",
+          "name": "classes",
+          "value": "",
+          "label": "Block Options",
+          "options": [
+            { "name": "Solutions", "value": "solutions" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "product-card",
+      "components": [""]
+    }
+  ]
+}
