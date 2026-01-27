@@ -90,7 +90,8 @@
       "accordion-in-column",
       "download-in-column",
       "product-card",
-      "timeline"
+      "timeline",
+      "side-nav"
     ]
   },
   {
@@ -368,6 +369,12 @@
     "id": "shop-featured-products",
     "components": [
       "shop-featured-products-item"
+    ]
+  },
+  {
+    "id": "side-nav",
+    "components": [
+      ""
     ]
   },
   {
