@@ -2837,6 +2837,32 @@
     ]
   },
   {
+    "id": "side-nav",
+    "fields": [
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "classes",
+        "value": "",
+        "label": "Block Options",
+        "options": [
+          {
+            "name": "Topics",
+            "value": "topics"
+          },
+          {
+            "name": "Products",
+            "value": "products"
+          },
+          {
+            "name": "Process Steps",
+            "value": "process-steps"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "simple-text",
     "fields": [
       {
@@ -3094,44 +3120,44 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "itemNo",
+        "name": "timeline-item_itemNo",
         "label": "Item No"
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "item_text",
+        "name": "timeline-item_text",
         "label": "Text"
       },
       {
         "component": "richtext",
         "valueType": "string",
-        "name": "item_description",
+        "name": "timeline-item_description",
         "label": "Description"
       },
       {
         "component": "reference",
         "valueType": "Picture",
-        "name": "image",
+        "name": "timeline-itemimage",
         "label": "Image",
         "multi": false
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "imageAlt",
+        "name": "timeline-item_imageAlt",
         "label": "Alt Text",
         "value": ""
       },
       {
         "component": "text",
         "valueType": "string",
-        "name": "item_title",
+        "name": "timeline-item_title",
         "label": "Title"
       },
       {
         "component": "select",
-        "name": "item_titleType",
+        "name": "timeline-item_titleType",
         "label": "Title Type",
         "options": [
           {
