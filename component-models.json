@@ -55,6 +55,12 @@
             "label": "Solutions"
           },
           {
+            "component": "text",
+            "valueType": "string",
+            "name": "solution",
+            "label": "Solution"
+          },
+          {
             "component": "reference",
             "valueType": "string",
             "name": "metaimage",
