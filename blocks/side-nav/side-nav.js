@@ -90,19 +90,42 @@ export default async function decorate(block) {
   if (blockParent?.classList.contains('default-content-wrapper')) {
     navHeadingDiv.classList.add('pt-0');
   }
-  block.append(navHeadingDiv, sideNavElements);
-  const blockSideNavContent = block?.parentElement?.parentElement?.nextElementSibling?.querySelector('.default-content-wrapper');
-  block?.parentElement?.parentElement?.querySelector('.default-content-wrapper')?.append(blockSideNavContent);
-  const currentSection = block?.closest('.section .product-card-container');
+    block.append(navHeadingDiv, sideNavElements);
+    // Do not pull content from the next section into the side-nav; keep sections separate
+  const currentSection = block?.closest('.section');
   const nextSection = currentSection?.nextElementSibling;
   if (!currentSection || !nextSection) return;
   const parentWrapper = currentSection.querySelector('.default-content-wrapper');
   const nestedWrapper = parentWrapper?.querySelector('.default-content-wrapper');
 
-  if (!nestedWrapper) return;
-  const productCardWrapper = nextSection.querySelector('.product-card-wrapper');
-  if (nestedWrapper && productCardWrapper) {
-    productCardWrapper.prepend(nestedWrapper);
+  const productCardWrapper = document.querySelector('.product-card-wrapper')
+    || nextSection?.querySelector('.product-card-wrapper');
+  const productCardContainer = document.querySelector('.section.product-card-container')
+    || productCardWrapper?.closest('.section');
+
+  if (productCardContainer) {
+    // Ensure product-card section is positioned AFTER the side-nav section
+    if (currentSection && productCardContainer !== currentSection) {
+      currentSection.insertAdjacentElement('afterend', productCardContainer);
+    }
+    // Append nested content to the end of the product-card wrapper to preserve order
+    if (nestedWrapper && productCardWrapper) {
+      productCardWrapper.append(nestedWrapper);
+    }
+    // Apply layout classes to the product-card content area when it exists
+    const productCardContent = productCardContainer.querySelector('.default-content-wrapper');
+    productCardContent?.classList.add(...'lg:col-span-8 lg:col-start-5 space-y-4 mb-2 flex-1 lg:pt-6 px-0 stretch'.split(' '));
+  } else {
+    // No product-card section: place the immediate next section's content alongside the side-nav
+    const sideNavContainerWrapper = currentSection.querySelector('.default-content-wrapper');
+    const nextContentWrapper = nextSection?.querySelector('.default-content-wrapper');
+    if (sideNavContainerWrapper && nextContentWrapper) {
+      sideNavContainerWrapper.append(nextContentWrapper);
+      nextContentWrapper.classList.add(...'lg:col-span-8 lg:col-start-5 space-y-4 mb-2 flex-1 lg:pt-6 px-0 stretch'.split(' '));
+      // Remove empty next section to avoid vertical gap
+      if (!nextSection.textContent.trim()) {
+        nextSection.remove();
+      }
+    }
   }
-  block?.parentElement?.parentElement?.nextElementSibling?.classList.add(...'lg:col-span-8 lg:col-start-5 space-y-4 mb-2 flex-1 lg:pt-6 px-0 stretch'.split(' '));
 }
