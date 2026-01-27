@@ -54,32 +54,32 @@
           {
             "component": "text",
             "valueType": "string",
-            "name": "timeline-item_itemNo",
+            "name": "itemNo",
             "label": "Item No"
           },
           {
             "component": "reference",
             "valueType": "Picture",
-            "name": "timeline-itemimage",
+            "name": "image",
             "label": "Image",
             "multi": false
           },
           {
             "component": "text",
             "valueType": "string",
-            "name": "timeline-item_imageAlt",
+            "name": "imageAlt",
             "label": "Alt Text",
             "value": ""
           },
           {
             "component": "text",
             "valueType": "string",
-            "name": "timeline-item_title",
+            "name": "title",
             "label": "Title"
           },
           {
             "component": "select",
-            "name": "timeline-item_titleType",
+            "name": "titleType",
             "label": "Title Type",
             "options": [
               { "name": "h1", "value": "h1" },
@@ -93,14 +93,19 @@
           {
             "component": "text",
             "valueType": "string",
-            "name": "timeline-item_text",
-            "label": "Text"
+            "name": "description",
+            "label": "Description"
           },
           {
-            "component": "richtext",
-            "valueType": "string",
-            "name": "timeline-item_description",
-            "label": "Description"
+          "component": "aem-content",
+          "name": "link",
+          "label": "Link Reference"
+          },
+          {
+          "component": "text",
+          "name": "linkText",
+          "label": "Link Text",
+          "value": ""
           }
         ]
       }
