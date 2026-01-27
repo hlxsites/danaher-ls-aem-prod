@@ -58,18 +58,6 @@
             "label": "Item No"
           },
           {
-            "component": "text",
-            "valueType": "string",
-            "name": "timeline-item_text",
-            "label": "Text"
-          },
-          {
-            "component": "richtext",
-            "valueType": "string",
-            "name": "timeline-item_description",
-            "label": "Description"
-          },
-          {
             "component": "reference",
             "valueType": "Picture",
             "name": "timeline-itemimage",
@@ -101,6 +89,18 @@
               { "name": "h5", "value": "h5" },
               { "name": "h6", "value": "h6" }
             ]
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "timeline-item_text",
+            "label": "Text"
+          },
+          {
+            "component": "richtext",
+            "valueType": "string",
+            "name": "timeline-item_description",
+            "label": "Description"
           }
         ]
       }
