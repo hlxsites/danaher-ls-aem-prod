@@ -138,7 +138,8 @@
       "auth-callback",
       "accordion-in-column",
       "download-in-column",
-      "product-card"
+      "product-card",
+      "timeline"
     ]
     }
   ]

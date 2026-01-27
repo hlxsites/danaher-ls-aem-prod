@@ -89,7 +89,8 @@
       "auth-callback",
       "accordion-in-column",
       "download-in-column",
-      "product-card"
+      "product-card",
+      "timeline"
     ]
   },
   {
@@ -412,6 +413,12 @@
     "id": "talk-to-an-expert-text",
     "components": [
       " "
+    ]
+  },
+  {
+    "id": "timeline",
+    "components": [
+      "timeline-item"
     ]
   },
   {

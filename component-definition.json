@@ -1480,6 +1480,36 @@
           }
         },
         {
+          "title": "Timeline",
+          "id": "timeline",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Timeline",
+                  "model": "timeline"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Timeline Item",
+          "id": "timeline-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Timeline Item",
+                  "model": "timeline-item"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Tiny-Carousel",
           "id": "tiny-carousel",
           "plugins": {
