@@ -16,7 +16,7 @@
       }
     },
     {
-        "title": "Timeline",
+        "title": "Timeline Item",
         "id": "timeline-item",
         "plugins": {
           "xwalk": {
