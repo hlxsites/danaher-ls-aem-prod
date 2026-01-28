@@ -52,12 +52,6 @@
         "id": "timeline-item",
         "fields": [
           {
-            "component": "text",
-            "valueType": "string",
-            "name": "itemNo",
-            "label": "Item No"
-          },
-          {
             "component": "reference",
             "valueType": "Picture",
             "name": "image",
@@ -70,6 +64,18 @@
             "name": "imageAlt",
             "label": "Alt Text",
             "value": ""
+          },
+          {
+            "component": "text",
+            "valueType": "string",
+            "name": "itemNo",
+            "label": "Item No"
+          },
+          {
+            "component": "richtext",
+            "valueType": "string",
+            "name": "description",
+            "label": "Description Text"
           },
           {
             "component": "text",
@@ -97,16 +103,40 @@
             "label": "Description"
           },
           {
-          "component": "aem-content",
-          "name": "link",
-          "label": "Link Reference"
+            "component": "aem-content",
+            "name": "link",
+            "label": "Link Reference"
           },
           {
-          "component": "text",
-          "name": "linkText",
-          "label": "Link Text",
-          "value": ""
-          }
+            "component": "text",
+            "name": "linkText",
+            "label": "Link Text",
+            "value": ""
+          },
+          {
+            "component": "text",
+            "name": "linkTitle",
+            "label": "Link Title"
+          },
+          {
+            "component": "select",
+            "name": "linkType",
+            "label": "Link Type",
+            "options": [
+              {
+                "name": "default",
+                "value": ""
+              },
+              {
+                "name": "primary",
+                "value": "primary"
+              },
+              {
+                "name": "secondary",
+                "value": "secondary"
+              }
+          ]
+        }
         ]
       }
   ],
