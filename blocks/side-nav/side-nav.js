@@ -94,7 +94,9 @@ export default async function decorate(block) {
     // Do not pull content from the next section into the side-nav; keep sections separate
   const currentSection = block?.closest('.section');
   const nextSection = currentSection?.nextElementSibling;
-  if (!currentSection || !nextSection) return;
+  // Proceed even if there is no next section; we still want to
+  // reposition any product-card section relative to the side-nav.
+  if (!currentSection) return;
   const parentWrapper = currentSection.querySelector('.default-content-wrapper');
   const nestedWrapper = parentWrapper?.querySelector('.default-content-wrapper');
 
