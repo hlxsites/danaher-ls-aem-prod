@@ -347,13 +347,6 @@ async function loadGatedForm(block) {
     });
   }
 
-  // Finalize fallbacks after all sources are read
-  pageTrackUrl = normalizeUrl(pageTrackUrl)
-    || localStorage.getItem('danaher_utm_previouspage')
-    || window.location.href;
-  successUrl = normalizeUrl(successUrl) || pageTrackUrl;
-  errorUrl = normalizeUrl(errorUrl) || pageTrackUrl;
-
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },
     form(
