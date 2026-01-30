@@ -319,10 +319,8 @@ async function loadGatedForm(block) {
     // Accept either anchor href or plain text content as URL values
     pageTrackUrl = links[0]?.href;
     successUrl = links[1]?.href;
-    errorUrl = links[2]?.href;
-    if (errorUrl === 'undefined') {
-      errorUrl = links[2]?.textContent?.trim();
-    }
+    // errorUrl = links[2]?.href;
+    errorUrl = links[2]?.textContent?.trim();
 
     [
       'formId',
