@@ -306,6 +306,14 @@ async function loadGatedForm(block) {
   successUrl = tags[8]?.textContent.trim();
   errorUrl = tags[9]?.textContent.trim();
 
+  // Normalize and apply safe fallbacks to avoid "undefined" values
+  const normalizeUrl = (u) => {
+    if (typeof u !== 'string') return '';
+    const t = u.trim();
+    if (!t || t.toLowerCase() === 'undefined' || t.toLowerCase() === 'null') return '';
+    return t;
+  };
+
   const gatedformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
   if (gatedformId === 'wsawgenedataform' || gatedformId === 'genedataform' || gatedformId === 'gatedform' || gatedformId === 'labinquiry') {
     formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
@@ -317,9 +325,9 @@ async function loadGatedForm(block) {
     formType = document.querySelector('[data-aue-prop="Form_Type"]')?.textContent;
     const links = block.querySelectorAll('a');
     // Accept either anchor href or plain text content as URL values
-    pageTrackUrl = links[0]?.href || links[0]?.textContent?.trim();
-    successUrl = links[1]?.href || links[1]?.textContent?.trim();
-    errorUrl = links[2]?.href || links[2]?.textContent?.trim();
+    pageTrackUrl = normalizeUrl(links[0]?.href || links[0]?.textContent?.trim());
+    successUrl = normalizeUrl(links[1]?.href || links[1]?.textContent?.trim());
+    errorUrl = normalizeUrl(links[2]?.href || links[2]?.textContent?.trim());
 
     [
       'formId',
@@ -338,6 +346,13 @@ async function loadGatedForm(block) {
       });
     });
   }
+
+  // Finalize fallbacks after all sources are read
+  pageTrackUrl = normalizeUrl(pageTrackUrl)
+    || localStorage.getItem('danaher_utm_previouspage')
+    || window.location.href;
+  successUrl = normalizeUrl(successUrl) || pageTrackUrl;
+  errorUrl = normalizeUrl(errorUrl) || pageTrackUrl;
 
   const formEl = div(
     { class: 'relative my-2 mx-0 md:ml-2' },

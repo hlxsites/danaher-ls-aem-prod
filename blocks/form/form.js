@@ -283,6 +283,15 @@ async function loadSFDCForm(block) {
   pageTrackUrl = tags[6]?.textContent.trim();
   successUrl = tags[7]?.textContent.trim();
   errorUrl = tags[8]?.textContent.trim();
+
+   // Normalize and apply safe fallbacks to avoid "undefined" values
+  const normalizeUrl = (u) => {
+    if (typeof u !== 'string') return '';
+    const t = u.trim();
+    if (!t || t.toLowerCase() === 'undefined' || t.toLowerCase() === 'null') return '';
+    return t;
+  };
+
   const expertformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
   if (expertformId === 'TTAE') {
     formId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
@@ -292,9 +301,10 @@ async function loadSFDCForm(block) {
     action = document.querySelector('[data-aue-prop="action"]')?.textContent;
     inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
     const links = block.querySelectorAll('a');
-    pageTrackUrl = links[0]?.href || links[0]?.textContent?.trim();
-    successUrl = links[1]?.href || links[1]?.textContent?.trim();
-    errorUrl = links[2]?.href || links[2]?.textContent?.trim();
+    // Accept either anchor href or plain text content as URL values
+    pageTrackUrl = normalizeUrl(links[0]?.href || links[0]?.textContent?.trim());
+    successUrl = normalizeUrl(links[1]?.href || links[1]?.textContent?.trim());
+    errorUrl = normalizeUrl(links[2]?.href || links[2]?.textContent?.trim());
 
     [
       'formId',
