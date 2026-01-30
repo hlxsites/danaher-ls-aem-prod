@@ -64,7 +64,6 @@ const TEMPLATE_LIST = {
 };
 TEMPLATE_LIST.news = TEMPLATE_LIST.blog;
 TEMPLATE_LIST.library = TEMPLATE_LIST.blog;
-TEMPLATE_LIST.videos = TEMPLATE_LIST.blog;
 
 export function getEdgeDeliveryPath(path) {
   return path.replace(/^\/content\/danaher\/ls/, '').replace(/\.html$/, '');
