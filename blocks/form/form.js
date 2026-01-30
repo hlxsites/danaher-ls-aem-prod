@@ -292,9 +292,9 @@ async function loadSFDCForm(block) {
     action = document.querySelector('[data-aue-prop="action"]')?.textContent;
     inquiryType = document.querySelector('[data-aue-prop="Inquiry_Type"]')?.textContent;
     const links = block.querySelectorAll('a');
-    pageTrackUrl = links[0]?.href;
-    successUrl = links[1]?.href;
-    errorUrl = links[2]?.href;
+    pageTrackUrl = links[0]?.href || links[0]?.textContent?.trim();
+    successUrl = links[1]?.href || links[1]?.textContent?.trim();
+    errorUrl = links[2]?.href || links[2]?.textContent?.trim();
 
     [
       'formId',
