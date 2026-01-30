@@ -282,8 +282,7 @@ async function loadSFDCForm(block) {
   inquiryType = tags[5]?.textContent.trim();
   pageTrackUrl = tags[6]?.textContent.trim();
   successUrl = tags[7]?.textContent.trim();
-  errorUrl = tags[8]?.textContent.trim();
-  console.log('errorUrl-1', errorUrl);
+  errorUrl = tags[8]?.textContent.trim() || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
 
   const expertformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
   if (expertformId === 'TTAE') {
@@ -297,8 +296,7 @@ async function loadSFDCForm(block) {
     // Accept either anchor href or plain text content as URL values
     pageTrackUrl = links[0]?.href;
     successUrl = links[1]?.href;
-    errorUrl = links[2]?.href;
-    console.log('errorUrl-2', errorUrl);
+    errorUrl = links[2]?.href || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
 
     [
       'formId',
