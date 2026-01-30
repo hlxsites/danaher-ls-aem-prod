@@ -296,7 +296,7 @@ async function loadSFDCForm(block) {
     // Accept either anchor href or plain text content as URL values
     pageTrackUrl = links[0]?.href;
     successUrl = links[1]?.href;
-    errorUrl = links[2]?.href || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
+    errorUrl = links[2]?.href;
 
     [
       'formId',
