@@ -282,7 +282,7 @@ async function loadSFDCForm(block) {
   inquiryType = tags[5]?.textContent.trim();
   pageTrackUrl = tags[6]?.textContent.trim();
   successUrl = tags[7]?.textContent.trim();
-  errorUrl = tags[8]?.textContent.trim() || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
+  errorUrl = tags[8]?.textContent.trim();
 
   const expertformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
   if (expertformId === 'TTAE') {
