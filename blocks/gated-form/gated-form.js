@@ -304,7 +304,7 @@ async function loadGatedForm(block) {
   formType = tags[6]?.textContent.trim();
   pageTrackUrl = tags[7]?.textContent.trim();
   successUrl = tags[8]?.textContent.trim();
-  errorUrl = tags[9]?.textContent.trim() || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
+  errorUrl = tags[9]?.textContent.trim();
 
   const gatedformId = document.querySelector('[data-aue-prop="formId"]')?.textContent;
   if (gatedformId === 'wsawgenedataform' || gatedformId === 'genedataform' || gatedformId === 'gatedform' || gatedformId === 'labinquiry') {
@@ -319,7 +319,7 @@ async function loadGatedForm(block) {
     // Accept either anchor href or plain text content as URL values
     pageTrackUrl = links[0]?.href;
     successUrl = links[1]?.href;
-    errorUrl = links[2]?.href;
+    errorUrl = links[2]?.href || 'https://help.salesforce.com/s/articleView?id=sf.mc_es_demanager.htm';
 
     [
       'formId',
