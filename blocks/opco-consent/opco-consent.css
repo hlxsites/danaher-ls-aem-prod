@@ -359,13 +359,19 @@ p a {
   text-decoration: underline;
 }
 
+#consent-modal,
+#verification-modal,
+#session-expired-modal {
+  z-index: 2000;
+}
+
 /* Subscription card */
 .subscription-card {
   display: flex;
   border-radius: 8px;
   margin-bottom: 16px;
   border-bottom: 2px solid #ddd;
-  overflow: hidden;
+  overflow: visible;
 
   width: 100%;
   max-width: 1200px;
