@@ -17,6 +17,7 @@ import {
 
 // Track initial state of subscriptions/channels
 const initialSubscriptionState = {};
+const markForDeleteOPCOs = []; // Track OPCOs with mail === true
 const CONFIG = {
   debug: false, // Set to false in production
   allowedDomains: [
@@ -26,6 +27,12 @@ const CONFIG = {
     "http://127.0.0.1",
   ],
 };
+
+// ======================
+// SESSION TIMEOUT CONFIG
+// ======================
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+let inactivityTimer = null;
 
 let channelData = null;
 
@@ -39,130 +46,148 @@ function getSubscriptionData() {
     // Production environment - only Danaher Group Companies
     return {
       subscriptions: [
-        {
-          name: "Danaher Group Companies",
-          logo: "/icons/danaher.png",
-          description: "Receive marketing from Danaher Group Companies.",
-          channels: ["email", "phone"],
-        },
+        // {
+        //   name: "Danaher Group Companies",
+        //   logo: "/icons/danaher.png",
+        //   description: "Receive marketing from Danaher Group Companies.",
+        //   channels: ["email", "phone"],
+        // },
       ],
     };
   } else {
     // Development environment - all subscriptions
     return {
       subscriptions: [
-        {
-          name: "Danaher Group Companies",
-          logo: "/icons/danaher.png",
-          description: "Receive marketing from Danaher Group Companies.",
-          channels: ["email", "phone"],
-        },
+        // {
+        //   name: "Danaher Group Companies",
+        //   logo: "/icons/danaher.png",
+        //   description: "Receive marketing from Danaher Group Companies.",
+        //   channels: ["email", "phone"],
+        // },
         {
           name: "Abcam",
           logo: "/icons/abcam.png",
-          description: "Receive marketing from Abcam.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Abcam. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "Aldevron",
           logo: "/icons/aldevron-4c.png",
-          description: "Receive marketing from Aldevron.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Aldevron. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Beckman Coulter",
           logo: "/icons/beckmancoulter.png",
-          description: "Receive marketing from Beckman Coulter.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Beckman Coulter. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone"],
         },
         {
           name: "Beckman Coulter Life Sciences",
           logo: "/icons/beckmancoulterls.png",
-          description: "Receive marketing from Beckman Coulter Life Sciences.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Beckman Coulter Life Sciences. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone"],
         },
         {
           name: "Cepheid",
           logo: "/icons/cepheid.png",
-          description: "Receive marketing from Cepheid.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Cepheid. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "Cytiva",
           logo: "/icons/cytiva.png",
-          description: "Receive marketing from Cytiva.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Cytiva. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Genedata",
           logo: "/icons/genedata.png",
-          description: "Receive marketing from Genedata.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Genedata. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "HemoCue",
           logo: "/icons/HemoCue.png",
-          description: "Receive marketing from HemoCue.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from HemoCue. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone"],
         },
         {
           name: "IDBS",
           logo: "/icons/idbs-4c.png",
-          description: "Receive marketing from IDBS.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from IDBS. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "IDT",
           logo: "/icons/idt.png",
-          description: "Receive marketing from IDT.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from IDT. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "Leica Biosystems",
           logo: "/icons/leica-biosystems.png",
-          description: "Receive marketing from Leica Biosystems.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Leica Biosystems. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Leica Microsystems",
           logo: "/icons/leica-microsystems-4c.png",
-          description: "Receive marketing from Leica Microsystems.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Leica Microsystems. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "Mammotome",
           logo: "/icons/mammotome.png",
-          description: "Receive marketing from Mammotome.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Mammotome. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Molecular Devices",
           logo: "/icons/molecular-devices-4c.png",
-          description: "Receive marketing from Molecular Devices.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Molecular Devices. I consent to be contacted by phone / email as per given preference.",
           channels: ["email"],
         },
         {
           name: "Pall",
           logo: "/icons/pall.png",
-          description: "Receive marketing from Pall.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Pall. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone"],
         },
         {
           name: "Phenomenex",
           logo: "/icons/phenomenex.png",
-          description: "Receive marketing from Phenomenex.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Phenomenex. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Radiometer",
           logo: "/icons/radiometer.png",
-          description: "Receive marketing from Radiometer.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Radiometer. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone", "sms"],
         },
         {
           name: "Sciex",
           logo: "/icons/sciex-4c.png",
-          description: "Receive marketing from Sciex.",
+          description:
+            "I am interested in receiving information about products, services, events (workshops, webinars), and educational content from Sciex. I consent to be contacted by phone / email as per given preference.",
           channels: ["email", "phone"],
         },
       ],
@@ -171,6 +196,30 @@ function getSubscriptionData() {
 }
 
 const subscriptionData = getSubscriptionData();
+
+// OPCO URL Mapping - Update these URLs with actual links per OPCO
+const OPCO_URLS = {
+  "Danaher Group Companies": "https://www.danaher.com",
+  "Abcam": "https://www.abcam.com",
+  "Aldevron": "https://www.aldevron.com",
+  "Beckman Coulter": "https://www.beckmancoulter.com",
+  "Beckman Coulter Life Sciences": "https://www.beckman.com",
+  "Cepheid": "https://www.cepheid.com",
+  "Cytiva": "https://www.cytiva.com",
+  "Genedata": "https://www.genedata.com",
+  "HemoCue": "https://www.hemocue.com",
+  "IDBS": "https://www.idbs.com",
+  "IDT": "https://www.idtdna.com",
+  "Leica Biosystems": "https://www.leicabiosystems.com",
+  "Leica Microsystems": "https://www.leica-microsystems.com",
+  "Mammotome": "https://www.mammotome.com",
+  "Molecular Devices": "https://www.moleculardevices.com",
+  "Pall": "https://www.pall.com",
+  "Phenomenex": "https://www.phenomenex.com",
+  "Radiometer": "https://www.radiometer.com",
+  "Sciex": "https://www.sciex.com",
+};
+
 const TOPIC_TO_SUBSCRIPTION = [
   {
     sub: "Danaher Group Companies",
@@ -268,31 +317,51 @@ async function fetchSubscriptions(identities) {
     return data;
   } catch (error) {
     hideLoader();
+
+    // For production/stage, show error modal
     showModalwithRefresh(
       "Unable to load your subscription data. Please refresh the page and try again.",
       false
     );
-    console.error("Subscription API Error:", error);
     throw error;
   }
 }
 
 async function loadChannelData(emailHash) {
+  resetInactivityTimer();
   try {
     const data = await fetchSubscriptions(emailHash);
     channelData = data;
 
-    // ADD THIS LINE ↓↓↓
-    applyChannelDataToUI();
+    // Step 1: Identify OPCOs marked for deletion based on mail field
+    identifyDeletedOPCOs();
+    
+    // Step 2: Clear existing cards and rebuild without deleted OPCOs
+    const container = document.getElementById("consent-body");
+    if (container) {
+      container.innerHTML = "";
+    }
+    buildCards();
+    
+    // Step 3: Build the Mark for Delete drawer
+    buildMarkForDeleteDrawer();
+
+    // Step 4: Apply channel data states to all existing checkboxes
+    applyChannelStates();
+
+    // Step 5: Attach info icon listeners to newly created cards
+    attachInfoIconListeners();
 
     storeInitialState();
+    checkForChanges();
   } catch (error) {
-    console.error("Error fetching subscription:", error);
     // Show error popup to user
-    showModalwithRefresh(
-      "Unable to load your subscription data. Please refresh the page and try again.",
-      false
-    );
+    if (!isEnvironment("localhost")) {
+      showModalwithRefresh(
+        "Unable to load your subscription data. Please refresh the page and try again.",
+        false
+      );
+    }
   }
 }
 
@@ -318,19 +387,127 @@ function createSwitch(id) {
   return label;
 }
 
+function createInfoIcon() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "info-icon-wrapper";
+  wrapper.style.position = "relative";
+  wrapper.style.overflow = "visible";
+  const infoIcon = document.createElement("span");
+  infoIcon.className = "info-icon";
+  infoIcon.setAttribute("tabindex", "0");
+  infoIcon.setAttribute("aria-hidden", "true");
+  infoIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50" aria-hidden="true">
+    <path d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 25 11 A 3 3 0 0 0 22 14 A 3 3 0 0 0 25 17 A 3 3 0 0 0 28 14 A 3 3 0 0 0 25 11 z M 21 21 L 21 23 L 22 23 L 23 23 L 23 36 L 22 36 L 21 36 L 21 38 L 22 38 L 23 38 L 27 38 L 28 38 L 29 38 L 29 36 L 28 36 L 27 36 L 27 21 L 26 21 L 22 21 L 21 21 z"></path>
+  </svg>`;
+  wrapper.appendChild(infoIcon);
+  const tooltip = document.createElement("div");
+  tooltip.className = "info-tooltip";
+  tooltip.style.position = "absolute";
+  tooltip.style.zIndex = "1200";
+  tooltip.style.display = "none";
+  tooltip.innerHTML = `
+    <div class="info-bar">
+      <div class="info-bar-content">
+        <span style="margin-right:8px;">All Consent Given</span>
+        <label class="switch dummy-toggle pointer-events">
+          <input class="pointer-events" type="checkbox" checked disabled >
+          <span class="slider granted" style="background-color:#1e51b0;"></span>
+        </label>
+      </div>
+      <div class="info-bar-content">
+        <span style="margin-right:8px;">Partial Consent Given/Withdrawn</span>
+        <label class="switch dummy-toggle pointer-events">
+          <input class="pointer-events" type="checkbox" checked disabled>
+          <span class="slider denied" style="background-color:orange !important;"></span>
+        </label>
+      </div>
+      <div class="info-bar-content">
+        <span style="margin-right:8px;">All Consent Withdrawn</span>
+        <label class="switch dummy-toggle pointer-events">
+          <input class="pointer-events" type="uncheckbox" checked disabled>
+          <span class="slider denied" style="background-color:red !important;"></span>
+        </label>
+      </div>
+      <div class="info-bar-content">
+        <span style="margin-right:8px;">No Consent Given</span>
+        <label class="switch dummy-toggle pointer-events">
+          <input class="pointer-events" type="uncheckbox" checked disabled>
+          <span class="slider denied" style="background-color:#CCCCCC !important;"></span>
+        </label>
+      </div>
+    </div>
+  `;
+  wrapper.appendChild(tooltip);
+  return wrapper;
+}
+
+// Attach event listeners to info icons (can be called multiple times)
+function attachInfoIconListeners() {
+  const infoIcons = document.querySelectorAll(".info-icon");
+  infoIcons.forEach((infoIcon) => {
+    const wrapper = infoIcon?.closest(".info-icon-wrapper");
+    const tooltip = wrapper?.querySelector(".info-tooltip");
+    if (infoIcon && tooltip) {
+      // Remove old listeners if any by cloning and replacing
+      const newWrapper = wrapper.cloneNode(true);
+      wrapper.parentNode.replaceChild(newWrapper, wrapper);
+      const newIcon = newWrapper.querySelector(".info-icon");
+      const newTooltip = newWrapper.querySelector(".info-tooltip");
+      
+      // Add new listeners
+      let tooltipHideTimeout = null;
+      newWrapper.addEventListener("mouseenter", () => {
+        if (tooltipHideTimeout) {
+          clearTimeout(tooltipHideTimeout);
+          tooltipHideTimeout = null;
+        }
+        newTooltip.style.display = "block";
+      });
+
+      newWrapper.addEventListener("mouseleave", () => {
+        tooltipHideTimeout = setTimeout(() => {
+          newTooltip.style.display = "none";
+          tooltipHideTimeout = null;
+        }, 150);
+      });
+    }
+  });
+}
+
 function updateToggleState(sub) {
   const checkboxes = document.querySelectorAll(
     `input[type=checkbox][data-sub='${sub}']`
   );
-  const master = document
-    .getElementById(`${sub}-toggle`)
-    .parentElement.querySelector("input");
+  // Find the master toggle input for this subscription. It may exist
+  // as the regular toggle (`<id>-toggle`) or the delete-drawer toggle
+  // (`<id>-delete-toggle`). Be defensive in case the element isn't present.
+  const masterInput =
+    document.getElementById(`${sub}-toggle`) ||
+    document.getElementById(`${sub}-delete-toggle`);
+  if (!masterInput) {
+    // No master toggle found for this subscription (possible for
+    // subscriptions that were removed from the main list). Safely exit.
+    return;
+  }
+  const master = masterInput;
   let grantedCount = 0;
   let deniedCount = 0;
   checkboxes.forEach((cb) => {
     if (cb.classList.contains("granted")) grantedCount++;
     if (cb.classList.contains("denied")) deniedCount++;
   });
+  // If there are no checkboxes for this subscription, clear master state
+  // and return early.
+  if (checkboxes.length === 0) {
+    try {
+      master.checked = false;
+      master.classList.remove("partial", "denied-toggle");
+    } catch (err) {
+      /* ignore */
+    }
+    return;
+  }
+
   if (grantedCount === checkboxes.length) {
     master.checked = true;
     master.classList.remove("partial");
@@ -350,11 +527,42 @@ function updateToggleState(sub) {
   }
 }
 // ======================
-// APPLY CHANNEL DATA TO UI
+// IDENTIFY DELETED OPCOs (only those with mail === granted)
 // ======================
-function applyChannelDataToUI() {
+function identifyDeletedOPCOs() {
   if (!channelData?.data?.topics) {
-    console.warn("No channel data found — skipping UI mapping");
+    return;
+  }
+
+  // Clear the markForDeleteOPCOs array
+  markForDeleteOPCOs.length = 0;
+
+  subscriptionData.subscriptions.forEach((sub) => {
+    const topics = channelData?.data?.topics || {};
+    let topicKey = null;
+
+    for (const key of Object.keys(topics)) {
+      const mappedSub = findSubscriptionFromTopic(key);
+      if (mappedSub === sub.name) {
+        topicKey = key;
+        break;
+      }
+    }
+    const topicObj = channelData.data.topics[topicKey];
+
+    // Check if this OPCO has mail === "granted"
+    if (topicObj && topicObj.mail && topicObj.mail.status === "granted") {
+      // Collect this OPCO for the "Mark for Delete" section
+      markForDeleteOPCOs.push(sub.name);
+    }
+  });
+}
+
+// ======================
+// APPLY CHANNEL STATES TO CHECKBOXES (after all checkboxes are created)
+// ======================
+function applyChannelStates() {
+  if (!channelData?.data?.topics) {
     return;
   }
 
@@ -371,20 +579,42 @@ function applyChannelDataToUI() {
     }
     const topicObj = channelData.data.topics[topicKey];
 
-    if (topicObj && topicObj.mail && topicObj.mail.status === "granted") {
+    // If this subscription is marked for deletion (mail === granted),
+    // do NOT populate channel values — leave checkboxes and master
+    // toggle in the NULL state.
+    if (markForDeleteOPCOs.includes(sub.name)) {
       sub.channels.forEach((channel) => {
-        const cb = document.querySelector(
+        const cbs = document.querySelectorAll(
           `input[type=checkbox][data-sub='${sub.name}'][data-channel='${channel}']`
         );
-        if (!cb) return;
-
-        cb.classList.remove("granted", "denied"); // force NULL
+        cbs.forEach((cb) => {
+          cb.classList.remove("granted", "denied");
+          try {
+            cb.checked = false;
+          } catch (err) {
+            /* ignore */
+          }
+        });
       });
 
-      updateToggleState(sub.name);
-      return; // skip rest for this OPCO
+      // Clear master toggle(s) for this subscription
+      const master =
+        document.getElementById(`${sub.name}-toggle`) ||
+        document.getElementById(`${sub.name}-delete-toggle`);
+      if (master) {
+        try {
+          master.checked = false;
+          master.classList.remove("partial", "denied-toggle");
+        } catch (err) {
+          /* ignore */
+        }
+      }
+
+      // Skip applying real channel states for deleted OPCOs
+      return;
     }
 
+    // Apply channel states to checkboxes for OPCOs not marked for deletion
     sub.channels.forEach((channel) => {
       const cb = document.querySelector(
         `input[type=checkbox][data-sub='${sub.name}'][data-channel='${channel}']`
@@ -414,29 +644,102 @@ function applyChannelDataToUI() {
   });
 }
 
+// Legacy function for backward compatibility
+function applyChannelDataToUI() {
+  identifyDeletedOPCOs();
+  applyChannelStates();
+}
+
 function buildCards() {
   const container = document.getElementById("consent-body");
+  
+  // Separate OPCOs into two groups: those with values and those without
+  const opcoWithValues = [];
+  const opcoWithoutValues = [];
+  
   subscriptionData.subscriptions.forEach((sub) => {
+    // Skip OPCOs marked for delete (mail === true)
+    if (markForDeleteOPCOs.includes(sub.name)) {
+      return;
+    }
+    
+    // Check if this OPCO has any channel values (granted or denied)
+    let hasValues = false;
+    if (channelData?.data?.topics) {
+      const topics = channelData.data.topics || {};
+      let topicKey = null;
+      for (const key of Object.keys(topics)) {
+        const mappedSub = findSubscriptionFromTopic(key);
+        if (mappedSub === sub.name) {
+          topicKey = key;
+          break;
+        }
+      }
+      const topicObj = channelData.data.topics[topicKey];
+      
+      // Check if any channel has a value (granted or denied)
+      if (topicObj) {
+        hasValues = sub.channels.some(ch => topicObj[ch] && topicObj[ch].status);
+      }
+    }
+    
+    if (hasValues) {
+      opcoWithValues.push(sub);
+    } else {
+      opcoWithoutValues.push(sub);
+    }
+  });
+  
+  // Sort both groups alphabetically
+  opcoWithValues.sort((a, b) => a.name.localeCompare(b.name));
+  opcoWithoutValues.sort((a, b) => a.name.localeCompare(b.name));
+  
+  // Combine: OPCOs with values first, then those without
+  const sortedSubscriptions = [...opcoWithValues, ...opcoWithoutValues];
+  
+  // Now build cards in the sorted order
+  sortedSubscriptions.forEach((sub) => {
+
     const card = document.createElement("div");
     card.className = "subscription-card";
+    
+    // Create logo (make it clickable)
     const logoDiv = document.createElement("div");
     logoDiv.className = "sub-logo-side";
     logoDiv.style.backgroundImage = `url(${sub.logo})`;
+    logoDiv.style.cursor = "pointer";
+    logoDiv.style.textDecoration = "underline";
+    logoDiv.title = `Visit ${sub.name}`;
+    logoDiv.onclick = () => {
+      window.open(OPCO_URLS[sub.name] || "#", "_blank");
+    };
     card.appendChild(logoDiv);
     const content = document.createElement("div");
     content.className = "subscription-content";
 
     const header = document.createElement("div");
     header.className = "subscription-header";
-    const name = document.createElement("span");
-    name.textContent = sub.name;
-    header.appendChild(name);
+    
+    // Create name link
+    const nameLink = document.createElement("a");
+    nameLink.href = OPCO_URLS[sub.name] || "#";
+    nameLink.target = "_blank";
+    nameLink.rel = "noopener noreferrer";
+    nameLink.style.textDecoration = "none";
+    nameLink.style.color = "inherit";
+    nameLink.style.cursor = "pointer";
+    nameLink.title = `Visit ${sub.name}`;
+    nameLink.textContent = sub.name;
+    header.appendChild(nameLink);
 
     const toggleWrapper = document.createElement("div");
     toggleWrapper.className = "toggle-with-info";
 
     const masterSwitch = createSwitch(`${sub.name}-toggle`);
     toggleWrapper.appendChild(masterSwitch);
+
+    const infoIconWrapper = createInfoIcon();
+    toggleWrapper.appendChild(infoIconWrapper);
 
     header.appendChild(toggleWrapper);
     content.appendChild(header);
@@ -446,6 +749,277 @@ function buildCards() {
     desc.textContent = sub.description;
     content.appendChild(desc);
 
+    const channelsDiv = document.createElement("div");
+    channelsDiv.className = "channels";
+    
+    // Check if mail is granted - if so, don't show email/phone/sms channels
+    // Only check if channelData is loaded
+    let hasMailGranted = false;
+    if (channelData?.data?.topics) {
+      const topics = channelData.data.topics || {};
+      let topicKey = null;
+      for (const key of Object.keys(topics)) {
+        const mappedSub = findSubscriptionFromTopic(key);
+        if (mappedSub === sub.name) {
+          topicKey = key;
+          break;
+        }
+      }
+      const topicObj = channelData.data.topics[topicKey];
+      hasMailGranted = topicObj && topicObj.mail && topicObj.mail.status === "granted";
+    }
+    
+    // Only render channels if mail is NOT granted (or if no channel data yet)
+    if (!hasMailGranted) {
+      sub.channels.forEach((ch) => {
+        const label = document.createElement("label");
+        label.className = "channel";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.dataset.sub = sub.name;
+        cb.dataset.channel = ch;
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(ch.toUpperCase()));
+        channelsDiv.appendChild(label);
+
+        cb.addEventListener("click", (e) => {
+          e.preventDefault();
+          let newState = "";
+          if (
+            !cb.classList.contains("granted") &&
+            !cb.classList.contains("denied")
+          ) {
+            newState = "granted";
+          } else if (cb.classList.contains("granted")) {
+            newState = "denied";
+          } else if (cb.classList.contains("denied")) {
+            newState = "granted";
+          }
+
+          cb.classList.remove("granted", "denied");
+          if (newState) cb.classList.add(newState);
+
+          updateToggleState(sub.name);
+          // Toggle Save button if anything changed
+          checkForChanges();
+        });
+      });
+    }
+
+    content.appendChild(channelsDiv);
+    card.appendChild(content);
+    container.appendChild(card);
+
+    masterSwitch.querySelector("input").addEventListener("change", (e) => {
+      const checked = e.target.checked;
+      container
+        .querySelectorAll(`input[type=checkbox][data-sub='${sub.name}']`)
+        .forEach((cb) => {
+          cb.classList.remove("granted", "denied");
+          // Ensure the visual checked state and classes reflect the master toggle
+          if (checked) {
+            cb.classList.add("granted");
+            try {
+              cb.checked = true;
+            } catch (err) {
+              /* ignore if not supported */
+            }
+          } else {
+            cb.classList.add("denied");
+            try {
+              cb.checked = false;
+            } catch (err) {
+              /* ignore if not supported */
+            }
+          }
+        });
+      updateToggleState(sub.name);
+      // Toggle Save button if anything changed
+      checkForChanges();
+    });
+  });
+}
+
+// ======================
+// BUILD MARK FOR DELETE DRAWER
+// ======================
+function buildMarkForDeleteDrawer() {
+  const pageContainer = document.querySelector(".page-container");
+  if (!pageContainer) return;
+
+  // If there are no OPCOs to mark for delete, remove the drawer completely
+  if (!markForDeleteOPCOs || markForDeleteOPCOs.length === 0) {
+    const existingDrawer = document.getElementById("mark-for-delete-drawer");
+    if (existingDrawer) {
+      existingDrawer.remove();
+    }
+    return;
+  }
+
+  // If drawer exists, remove it so we can rebuild with updated list
+  const existingDrawer = document.getElementById("mark-for-delete-drawer");
+  if (existingDrawer) {
+    existingDrawer.remove();
+  }
+
+  // Sort deleted OPCOs alphabetically
+  const sortedDeleteOPCOs = [...markForDeleteOPCOs].sort();
+
+  // Create drawer container
+  const drawerContainer = document.createElement("div");
+  drawerContainer.id = "mark-for-delete-drawer";
+  drawerContainer.style.cssText = ``;
+
+  // Create drawer header with toggle
+  const drawerHeader = document.createElement("div");
+  drawerHeader.style.cssText = `
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px 0;
+  `;
+
+  // Arrow icon
+  const arrowIcon = document.createElement("span");
+  arrowIcon.id = "delete-drawer-arrow";
+  arrowIcon.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-90deg); transition: transform 0.3s ease;">
+      <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+  arrowIcon.style.cssText = `
+    display: inline-block;
+    margin-right: 12px;
+    flex-shrink: 0;
+  `;
+
+  // Title
+  const drawerTitle = document.createElement("h3");
+  drawerTitle.textContent = "OpCo Where Data Deleted As Per Your Request";
+  drawerTitle.style.cssText = `
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  `;
+
+  drawerHeader.appendChild(arrowIcon);
+  drawerHeader.appendChild(drawerTitle);
+
+  // Content container (initially hidden)
+  const drawerContent = document.createElement("div");
+  drawerContent.id = "delete-drawer-content";
+  drawerContent.style.cssText = `
+    display: none;
+    margin-top: 20px;
+    animation: slideDown 0.3s ease;
+  `;
+
+  // Add confirmation checkbox and label
+  const confirmationContainer = document.createElement("div");
+  confirmationContainer.style.cssText = `
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+  `;
+
+  // Create a simple default checkbox (without any class styling)
+  const confirmCheckbox = document.createElement("input");
+  confirmCheckbox.type = "checkbox";
+  confirmCheckbox.id = "delete-confirm-checkbox";
+  confirmCheckbox.checked = false; // Unchecked by default
+  confirmCheckbox.style.cssText = `
+    flex-shrink: 0;
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  `;
+  confirmationContainer.appendChild(confirmCheckbox);
+
+  // Add label text as p tag (not clickable, no grey background)
+  const testLabel = document.createElement("p");
+  testLabel.style.cssText = `
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0;
+  `;
+  testLabel.innerHTML = "Your data for below OpCo's has been permanently deleted as per your request.<strong>To resubscribe</strong> & manage Preferences please confirm here";
+  confirmationContainer.appendChild(testLabel);
+  drawerContent.appendChild(confirmationContainer);
+
+  // Container for deleted OPCOs tiles
+  const deletedCardsContainer = document.createElement("div");
+  deletedCardsContainer.id = "deleted-opcos-container";
+  deletedCardsContainer.style.cssText = `
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  `;
+
+  // Create tiles for deleted OPCOs (exactly like regular subscription cards)
+  sortedDeleteOPCOs.forEach((opcoName) => {
+    // Find the subscription data for this OPCO
+    const sub = subscriptionData.subscriptions.find((s) => s.name === opcoName);
+    if (!sub) return;
+
+    const card = document.createElement("div");
+    card.className = "subscription-card";
+    
+    // Create logo (make it clickable)
+    const logoDiv = document.createElement("div");
+    logoDiv.className = "sub-logo-side";
+    logoDiv.style.backgroundImage = `url(${sub.logo})`;
+    logoDiv.style.cursor = "pointer";
+    logoDiv.style.textDecoration = "underline";
+    logoDiv.title = `Visit ${sub.name}`;
+    logoDiv.onclick = () => {
+      window.open(OPCO_URLS[sub.name] || "#", "_blank");
+    };
+    card.appendChild(logoDiv);
+
+    const content = document.createElement("div");
+    content.className = "subscription-content";
+
+    const header = document.createElement("div");
+    header.className = "subscription-header";
+    
+    // Create name link
+    const nameLink = document.createElement("a");
+    nameLink.href = OPCO_URLS[sub.name] || "#";
+    nameLink.target = "_blank";
+    nameLink.rel = "noopener noreferrer";
+    nameLink.style.textDecoration = "none";
+    nameLink.style.color = "inherit";
+    nameLink.style.cursor = "pointer";
+    nameLink.title = `Visit ${sub.name}`;
+    nameLink.textContent = sub.name;
+    header.appendChild(nameLink);
+
+    // Add toggle with info icon (exactly like regular cards)
+    const toggleWrapper = document.createElement("div");
+    toggleWrapper.className = "toggle-with-info";
+
+    const masterSwitch = createSwitch(`${opcoName}-delete-toggle`);
+    toggleWrapper.appendChild(masterSwitch);
+
+    const infoIconWrapper = createInfoIcon();
+    toggleWrapper.appendChild(infoIconWrapper);
+
+    header.appendChild(toggleWrapper);
+    content.appendChild(header);
+
+    const desc = document.createElement("div");
+    desc.className = "subscription-description";
+    desc.textContent = sub.description;
+    content.appendChild(desc);
+
+    // Add channels with checkboxes (exactly like regular cards)
     const channelsDiv = document.createElement("div");
     channelsDiv.className = "channels";
     sub.channels.forEach((ch) => {
@@ -484,11 +1058,12 @@ function buildCards() {
 
     content.appendChild(channelsDiv);
     card.appendChild(content);
-    container.appendChild(card);
+    deletedCardsContainer.appendChild(card);
 
+    // Master toggle functionality (exactly like regular cards)
     masterSwitch.querySelector("input").addEventListener("change", (e) => {
       const checked = e.target.checked;
-      container
+      deletedCardsContainer
         .querySelectorAll(`input[type=checkbox][data-sub='${sub.name}']`)
         .forEach((cb) => {
           cb.classList.remove("granted", "denied");
@@ -514,6 +1089,116 @@ function buildCards() {
       checkForChanges();
     });
   });
+
+  drawerContent.appendChild(deletedCardsContainer);
+
+  // Add confirmation checkbox event listener
+  confirmCheckbox.addEventListener("change", (e) => {
+    const isConfirmed = e.target.checked;
+    
+    // Get all checkboxes and toggles in the deleted OPCOs container
+    const allChannelCheckboxes = deletedCardsContainer.querySelectorAll(
+      `input[type=checkbox][data-channel]`
+    );
+    const allToggleInputs = deletedCardsContainer.querySelectorAll(
+      `input[type=checkbox][id*="-delete-toggle"]`
+    );
+    
+    const disabledTooltip = "Please provide your confirmation first for resubscribe";
+
+    // If unchecked, reset all states to null
+    if (!isConfirmed) {
+      allChannelCheckboxes.forEach((cb) => {
+        cb.classList.remove("granted", "denied");
+        cb.checked = false;
+        cb.disabled = true;
+        cb.style.cursor = "not-allowed";
+        cb.style.opacity = "0.5";
+        cb.title = disabledTooltip;
+      });
+
+      allToggleInputs.forEach((toggle) => {
+        toggle.checked = false;
+        toggle.disabled = true;
+        toggle.classList.remove("partial", "denied-toggle");
+        toggle.title = disabledTooltip;
+        const switchLabel = toggle.closest(".switch");
+        if (switchLabel) {
+          switchLabel.style.opacity = "0.5";
+          switchLabel.style.cursor = "not-allowed";
+          switchLabel.style.pointerEvents = "auto";
+          switchLabel.title = disabledTooltip;
+          const slider = switchLabel.querySelector(".slider");
+          if (slider) {
+            slider.title = disabledTooltip;
+            slider.style.pointerEvents = "auto";
+          }
+        }
+      });
+    } else {
+      // If checked, enable all checkboxes and toggles
+      allChannelCheckboxes.forEach((cb) => {
+        cb.disabled = false;
+        cb.style.cursor = "pointer";
+        cb.style.opacity = "1";
+        cb.title = "";
+      });
+
+      allToggleInputs.forEach((toggle) => {
+        toggle.disabled = false;
+        toggle.title = "";
+        const switchLabel = toggle.closest(".switch");
+        if (switchLabel) {
+          switchLabel.style.opacity = "1";
+          switchLabel.style.cursor = "pointer";
+          switchLabel.style.pointerEvents = "auto";
+          switchLabel.title = "";
+          const slider = switchLabel.querySelector(".slider");
+          if (slider) {
+            slider.title = "";
+          }
+        }
+      });
+    }
+  });
+
+  // Initialize disabled state on load (confirmation checkbox is unchecked by default)
+  confirmCheckbox.dispatchEvent(new Event("change"));
+
+  // Add animation styles if not already present
+  if (!document.getElementById("delete-drawer-styles")) {
+    const styleEl = document.createElement("style");
+    styleEl.id = "delete-drawer-styles";
+    styleEl.textContent = `
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(styleEl);
+  }
+
+  // Toggle functionality
+  drawerHeader.addEventListener("click", () => {
+    const isHidden = drawerContent.style.display === "none";
+    drawerContent.style.display = isHidden ? "block" : "none";
+
+    // Rotate arrow
+    const arrow = arrowIcon.querySelector("svg");
+    if (arrow) {
+      arrow.style.transform = isHidden ? "rotate(0deg)" : "rotate(-90deg)";
+    }
+  });
+
+  drawerContainer.appendChild(drawerHeader);
+  drawerContainer.appendChild(drawerContent);
+  pageContainer.appendChild(drawerContainer);
 }
 
 function getChangedSubscriptions() {
@@ -587,12 +1272,12 @@ function checkForChanges() {
     setSaveButtonEnabled(hasChanges);
   } catch (err) {
     // If anything goes wrong, be conservative and enable the button so user can try to save
-    console.error("checkForChanges failed:", err);
     setSaveButtonEnabled(true);
   }
 }
 
 function savePreferences() {
+  resetInactivityTimer();
   showSaveModal("Really want to save preferences?", true);
 }
 // Store initial state of all subscriptions/channels
@@ -618,8 +1303,50 @@ window.savePreferences = savePreferences;
 // ======================
 // UTILITIES
 // ======================
+
+function closeAllPopups() {
+  const modalIds = [
+    "consent-modal",
+    "verification-modal",
+    "session-expired-modal",
+  ];
+
+  modalIds.forEach((id) => {
+    const modal = document.getElementById(id);
+    if (modal) {
+      document.body.removeChild(modal);
+    }
+  });
+
+  // Also close any generic overlay just in case
+  document
+    .querySelectorAll('[id$="modal"], .opco-modal')
+    .forEach((el) => el.remove());
+}
+
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+
+  inactivityTimer = setTimeout(() => {
+    expireSession();
+  }, SESSION_TIMEOUT_MS);
+}
+
+function expireSession() {
+  // Clear timers
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+
+  // Clear session-related storage
+  sessionStorage.clear();
+  localStorage.removeItem("reference");
+  localStorage.removeItem(getStorageKey());
+
+  // Show session expired modal
+  showSessionExpiredModal();
+}
+
 function debugLog(...args) {
-  if (CONFIG.debug) console.log("[DEBUG]", ...args);
+  // Debug logging disabled
 }
 
 function isEnvironment(env) {
@@ -649,7 +1376,118 @@ async function hashEmail(email) {
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
 }
+
+async function sendOTP(email, recaptchaToken = null) {
+  resetInactivityTimer();
+  showLoader("Sending OTP...");
+  try {
+    const response = await fetch(
+      "https://" + `${window.location.host}` + "/bin/boomi/otp",
+      // "http://localhost:4502/bin/boomi/otp",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // ADD THIS LINE - Required to handle the boomi_otp_data cookie
+        credentials: "include",
+        body: JSON.stringify({ email, recaptchaToken }),
+      }
+    );
+    hideLoader();
+    if (!response.ok) {
+      throw new Error(`Failed to send OTP: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    hideLoader();
+    throw error;
+  }
+}
+
+async function hashOTP(otp) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(otp);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const cookies = document.cookie.split(";");
+  for (let cookie of cookies) {
+    cookie = cookie.trim();
+    if (cookie.indexOf(nameEQ) === 0) {
+      return cookie.substring(nameEQ.length);
+    }
+  }
+  return null;
+}
+
+async function verifyOTP(email, code) {
+  resetInactivityTimer();
+
+  try {
+    // Get OTP data from cookie
+    const otpCookieData = getCookie("boomi_otp_data");
+
+    if (!otpCookieData) {
+      return {
+        success: false,
+        message: "OTP not found. Please request a new OTP.",
+      };
+    }
+
+    // Decode URL-encoded cookie data before parsing JSON
+    const decodedOtpData = decodeURIComponent(otpCookieData);
+    const otpData = JSON.parse(decodedOtpData);
+    const { EMAIL, OTP: hashedOTP, OTPExpiration } = otpData;
+
+    // Check if OTP has expired
+    // Parse the backend UTC time format: "2026-01-27+07:41:13" (+ is separator between date and time)
+    // Convert to ISO format that JavaScript can parse
+    const formattedOTPExpiration = OTPExpiration.replace("+", "T");
+    const expirationDate = new Date(formattedOTPExpiration + "Z"); // Add Z for UTC timezone
+    const expirationTimeUTC = expirationDate.getTime();
+
+    // Validate the parsed date
+    if (isNaN(expirationTimeUTC)) {
+      return {
+        success: false,
+        message: "Invalid OTP data. Please request a new OTP.",
+      };
+    }
+
+    // Get current time in UTC (getTime() always returns UTC milliseconds since epoch)
+    const currentTimeUTC = new Date().getTime();
+
+    if (currentTimeUTC > expirationTimeUTC) {
+      return {
+        success: false,
+        message: "OTP has expired. Please request a new OTP.",
+      };
+    }
+
+    // Hash the user-entered OTP
+    const userHashedOTP = await hashOTP(code);
+
+    // Compare hashes
+    if (userHashedOTP !== hashedOTP) {
+      return { success: false, message: "Invalid OTP code" };
+    }
+
+    return { success: true, message: "OTP verified successfully" };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Error verifying OTP. Please try again.",
+    };
+  }
+}
 async function updateConsent(changedSubs) {
+  resetInactivityTimer();
   showLoader("Saving your preferences...");
   try {
     const response = await fetch(
@@ -667,7 +1505,6 @@ async function updateConsent(changedSubs) {
     return data;
   } catch (error) {
     hideLoader();
-    console.error("Boomi API Error:", error);
     throw error;
   }
 }
@@ -676,7 +1513,77 @@ async function updateConsent(changedSubs) {
 // UI COMPONENTS
 // ======================
 
+let recaptchaToken = null;
+let recaptchaWidgetId = null;
+
+function renderRecaptcha(containerId) {
+  const maxRetries = 50; // Retry up to 5 seconds (50 * 100ms)
+  let retryCount = 0;
+
+  const tryRender = () => {
+    retryCount++;
+
+    // Check if container exists
+    const container = document.getElementById(containerId);
+    if (!container) {
+      if (retryCount < maxRetries) {
+        setTimeout(tryRender, 100);
+      }
+      return;
+    }
+
+    // Check if grecaptcha is available
+    if (typeof grecaptcha === "undefined") {
+      if (retryCount < maxRetries) {
+        setTimeout(tryRender, 100);
+      }
+      return;
+    }
+
+    try {
+      // Clear container before rendering (remove any existing widget)
+      container.innerHTML = "";
+
+      recaptchaWidgetId = grecaptcha.render(containerId, {
+        sitekey: "6LdBcUosAAAAAJQ8DH4us83jDxEEsG4xHKfbLKvA",
+        callback: onRecaptchaSuccess,
+        "expired-callback": onRecaptchaExpired,
+      });
+    } catch (error) {
+      if (retryCount < maxRetries) {
+        setTimeout(tryRender, 100);
+      }
+    }
+  };
+
+  tryRender();
+}
+
+function onRecaptchaSuccess(token) {
+  recaptchaToken = token;
+  checkSendButton();
+}
+
+function onRecaptchaExpired() {
+  recaptchaToken = null;
+  checkSendButton();
+}
+
+function checkSendButton() {
+  const emailInput = document.getElementById("email-input");
+  const submitBtn = document.getElementById("email-submit");
+  const val = emailInput ? emailInput.value.trim() : "";
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isEmailValid = emailRegex.test(val);
+  const isRecaptchaDone = recaptchaToken !== null;
+  submitBtn.disabled = !(isEmailValid && isRecaptchaDone);
+  submitBtn.style.opacity = submitBtn.disabled ? "0.5" : "1";
+  submitBtn.style.cursor = submitBtn.disabled ? "not-allowed" : "pointer";
+}
+
 function showSaveModal(message, isSuccess = true) {
+  resetInactivityTimer();
+  closeAllPopups();
   const modalId = "consent-modal";
   let modal = document.getElementById(modalId);
 
@@ -723,7 +1630,6 @@ function showSaveModal(message, isSuccess = true) {
               emailprocessing(decodedEmail, newUrl);
             }
           } catch (err) {
-            console.error("Failed to save preferences:", err);
             showModal(
               "Failed to save preferences. Please try again later.",
               false
@@ -753,6 +1659,7 @@ function showSaveModal(message, isSuccess = true) {
 }
 
 function showModal(message, isSuccess = true) {
+  closeAllPopups();
   const modalId = "consent-modal";
   let modal = document.getElementById(modalId);
 
@@ -795,6 +1702,7 @@ function showModal(message, isSuccess = true) {
 }
 
 function showModalwithRefresh(message, isSuccess = true) {
+  closeAllPopups();
   const modalId = "consent-modal";
   let modal = document.getElementById(modalId);
 
@@ -837,6 +1745,8 @@ function showModalwithRefresh(message, isSuccess = true) {
 }
 
 function showEmailPopup(message, isSuccess = true) {
+  resetInactivityTimer();
+  closeAllPopups();
   const modalId = "consent-modal";
   let modal = document.getElementById(modalId);
 
@@ -856,7 +1766,16 @@ function showEmailPopup(message, isSuccess = true) {
     justify-content: center;
     z-index: 1000;
   `;
-  let isEmailValid = false;
+  recaptchaToken = null;
+
+  // Reset existing reCAPTCHA widget safely
+  if (recaptchaWidgetId !== null && typeof grecaptcha !== "undefined") {
+    try {
+      grecaptcha.reset(recaptchaWidgetId);
+    } catch (err) {
+      recaptchaWidgetId = null; // Reset the widget ID so it will be recreated
+    }
+  }
 
   // EMAIL INPUT FIELD WITH LIVE VALIDATION
   const emailInputField = input({
@@ -876,19 +1795,12 @@ function showEmailPopup(message, isSuccess = true) {
         // INVALID EMAIL
         errorMsg.innerText = "Please enter a valid email address.";
         errorMsg.style.visibility = "visible";
-
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = "0.5";
-        submitBtn.style.cursor = "not-allowed";
       } else {
         // VALID EMAIL
         errorMsg.innerText = "";
         errorMsg.style.visibility = "hidden";
-
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = "1";
-        submitBtn.style.cursor = "pointer";
       }
+      checkSendButton();
     },
   });
 
@@ -902,7 +1814,14 @@ function showEmailPopup(message, isSuccess = true) {
     ""
   );
 
-  // SUBMIT BUTTON (DISABLED UNTIL EMAIL IS VALID)
+  // RECAPTCHA CONTAINER
+  const recaptchaContainer = div({
+    id: "recaptcha-container",
+    style:
+      "margin-top: 10px; transform: scale(0.8); transform-origin: top left;",
+  });
+
+  // SUBMIT BUTTON (DISABLED UNTIL EMAIL IS VALID AND RECAPTCHA COMPLETED)
   const submitButton = button(
     {
       id: "email-submit",
@@ -910,14 +1829,50 @@ function showEmailPopup(message, isSuccess = true) {
       class: `mb-4 px-4 py-2 mb-2 rounded bg-danaherpurple-800 text-white`,
       style:
         "margin-left:auto;display:block;margin-right:20px;margin-bottom:20px;opacity:0.5;cursor:not-allowed;",
-      onClick: () => {
+      onClick: async () => {
+        if (!recaptchaToken) {
+          const errorMsg = document.getElementById("email-error");
+          errorMsg.innerText = "Please complete the reCAPTCHA.";
+          errorMsg.style.visibility = "visible";
+          return;
+        }
+
         const emailInput = document.getElementById("email-input");
-        const emailValue = emailInput.value.trim();
-        emailprocessing(emailValue);
-        document.body.removeChild(modal);
+        const inputEmail = emailInput.value.trim();
+        const lowercaseInputEmail = inputEmail.toLowerCase();
+        const safeEmail = obfuscateEmail(lowercaseInputEmail);
+        sessionStorage.setItem("temp_ref", safeEmail);
+
+        try {
+          await sendOTP(safeEmail, recaptchaToken);
+          closeAllPopups();
+          showVerificationPopup(safeEmail);
+        } catch (err) {
+          // Reset reCAPTCHA on failure
+          recaptchaToken = null;
+          setTimeout(() => {
+            if (
+              recaptchaWidgetId !== null &&
+              typeof grecaptcha !== "undefined"
+            ) {
+              try {
+                grecaptcha.reset(recaptchaWidgetId);
+              } catch (resetErr) {
+                // Ignore reset error
+              }
+            }
+            checkSendButton();
+          }, 100);
+          const errorMsg = document.getElementById("email-error");
+          if (errorMsg) {
+            errorMsg.innerText =
+              "Failed to send OTP. Please complete reCAPTCHA again and try.";
+            errorMsg.style.visibility = "visible";
+          }
+        }
       },
     },
-    "Submit"
+    "Send OTP"
   );
 
   const content = div(
@@ -932,9 +1887,300 @@ function showEmailPopup(message, isSuccess = true) {
         "Please Enter Your Valid Email Address:"
       ),
       emailInputField,
-      emailError
+      emailError,
+      recaptchaContainer
     ),
     submitButton
+  );
+
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+
+  // Render reCAPTCHA after modal is in DOM
+  renderRecaptcha("recaptcha-container");
+}
+
+function showVerificationPopup(email) {
+  resetInactivityTimer();
+  closeAllPopups();
+  const DecodedEmail = deobfuscateEmail(email);
+  const modalId = "verification-modal";
+  let modal = document.getElementById(modalId);
+
+  if (modal) document.body.removeChild(modal);
+
+  modal = document.createElement("div");
+  modal.id = modalId;
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  `;
+
+  const otpInputs = [];
+  const otpContainer = div({
+    style: "display: flex; gap: 8px; justify-content: center; margin: 20px 0;",
+  });
+
+  let resendCount = 0;
+
+  for (let i = 0; i < 6; i++) {
+    const otpInput = input({
+      type: "text",
+      maxlength: "1",
+      pattern: "[0-9]",
+      style:
+        "width: 40px; height: 40px; text-align: center; font-size: 18px; border: 1px solid #ccc; border-radius: 4px;",
+      onInput: (e) => {
+        const value = e.target.value;
+        if (!/^\d$/.test(value)) {
+          e.target.value = "";
+          checkVerifyButton();
+          return;
+        }
+        if (i < 5 && value) {
+          otpInputs[i + 1].focus();
+        }
+        checkVerifyButton();
+      },
+      onKeydown: (e) => {
+        if (e.key === "Backspace" && !e.target.value && i > 0) {
+          otpInputs[i - 1].focus();
+          checkVerifyButton();
+        }
+      },
+      onPaste: (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData("text");
+        if (/^\d{6}$/.test(paste)) {
+          paste.split("").forEach((digit, idx) => {
+            if (otpInputs[idx]) otpInputs[idx].value = digit;
+          });
+          checkVerifyButton();
+        }
+      },
+    });
+    otpInputs.push(otpInput);
+    otpContainer.appendChild(otpInput);
+  }
+
+  const errorDiv = div(
+    {
+      id: "otp-error",
+      style:
+        "color: red; font-size: 14px; visibility: hidden; margin-top: 10px; height: 16px;",
+    },
+    ""
+  );
+
+  const verifyButton = button(
+    {
+      id: "verify-btn",
+      disabled: true,
+      class: "mb-4 px-4 py-2 mb-2 rounded bg-danaherpurple-800 text-white",
+      style:
+        "margin: 20px auto; display: block; opacity: 0.5; cursor: not-allowed;",
+      onClick: async () => {
+        const code = otpInputs.map((inp) => inp.value).join("");
+        try {
+          const result = await verifyOTP(email, code);
+          if (result.success) {
+            document.body.removeChild(modal);
+            emailprocessing(DecodedEmail);
+          } else {
+            showOTPError(result.message || "Invalid OTP. Please try again.");
+          }
+        } catch (err) {
+          showOTPError("Verification failed. Please try again.");
+        }
+      },
+    },
+    "Verify Code"
+  );
+
+  const resendWrapper = div(
+    {
+      style: "text-align:center;margin-top:16px;font-size:14px;color:#555;",
+    },
+    span({}, "Didn't receive the code? "),
+    span(
+      {
+        id: "resend-link",
+        style: "color:#007bff;cursor:pointer;font-weight:500;",
+      },
+      "Resend Code"
+    )
+  );
+
+  const emailIcon = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "svg"
+  );
+  emailIcon.setAttribute("width", "16");
+  emailIcon.setAttribute("height", "16");
+  emailIcon.setAttribute("viewBox", "0 0 24 24");
+  emailIcon.setAttribute("fill", "none");
+  emailIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path1.setAttribute(
+    "d",
+    "M2 6.5C2 5.67157 2.67157 5 3.5 5H20.5C21.3284 5 22 5.67157 22 6.5V17.5C22 18.3284 21.3284 19 20.5 19H3.5C2.67157 19 2 18.3284 2 17.5V6.5Z"
+  );
+  path1.setAttribute("stroke", "currentColor");
+  path1.setAttribute("stroke-width", "1.4");
+  path1.setAttribute("stroke-linecap", "round");
+  path1.setAttribute("stroke-linejoin", "round");
+  const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path2.setAttribute("d", "M3 7L12 13L21 7");
+  path2.setAttribute("stroke", "currentColor");
+  path2.setAttribute("stroke-width", "1.4");
+  path2.setAttribute("stroke-linecap", "round");
+  path2.setAttribute("stroke-linejoin", "round");
+  emailIcon.appendChild(path1);
+  emailIcon.appendChild(path2);
+  emailIcon.style.display = "inline-block";
+  emailIcon.style.verticalAlign = "middle";
+  emailIcon.style.marginRight = "4px";
+  emailIcon.style.color = "#000";
+
+  const content = div(
+    { class: "bg-white rounded-lg p-6 w-full max-w-md text-center" },
+    h3({ style: "margin-bottom: 10px;" }, "Verify your identity"),
+    p(
+      { style: "margin-bottom: 10px;" },
+      `Enter the 6-digit code sent to`,
+      span(
+        { style: "display: block; margin-top: 4px;" },
+        emailIcon,
+        ` ${DecodedEmail}`
+      )
+    ),
+    otpContainer,
+    errorDiv,
+    verifyButton,
+    resendWrapper
+  );
+
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+
+  otpInputs[0].focus();
+
+  // Start resend cooldown immediately
+  startResendCooldown();
+
+  function checkVerifyButton() {
+    const filled = otpInputs.every((inp) => inp.value);
+    const btn = document.getElementById("verify-btn");
+    btn.disabled = !filled;
+    btn.style.opacity = filled ? "1" : "0.5";
+    btn.style.cursor = filled ? "pointer" : "not-allowed";
+  }
+
+  function showOTPError(message) {
+    const err = document.getElementById("otp-error");
+    err.innerText = message;
+    err.style.visibility = "visible";
+  }
+
+  function startResendCooldown() {
+    const link = document.getElementById("resend-link");
+    let timeLeft = 60;
+    link.style.cursor = "not-allowed";
+    link.style.color = "#ccc";
+    link.innerText = `Resend Code in ${timeLeft}s`;
+    link.onclick = null; // Clear any existing handler
+
+    const timer = setInterval(() => {
+      timeLeft--;
+      link.innerText = `Resend Code in ${timeLeft}s`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        link.innerText = "Resend Code";
+        link.style.cursor = "pointer";
+        link.style.color = "#007bff";
+
+        // Set single handler for resend action
+        link.onclick = async (e) => {
+          e.preventDefault();
+          // Clear any existing error message
+          const err = document.getElementById("otp-error");
+          err.innerText = "";
+          err.style.visibility = "hidden";
+          
+          // Clear all OTP input boxes
+          otpInputs.forEach((inp) => {
+            inp.value = "";
+          });
+          
+          // Only allow click if button is enabled (cursor is pointer)
+          if (link.style.cursor !== "pointer") {
+            return;
+          }
+          if (resendCount >= 3) {
+            showOTPError("Resend limit exceeded.");
+            link.style.cursor = "not-allowed";
+            link.style.color = "#ccc";
+            link.onclick = null;
+            return;
+          }
+          try {
+            // Send OTP without recaptchaToken (pass null)
+            await sendOTP(email, null);
+            // Only increment count on successful send
+            resendCount++;
+            startResendCooldown();
+          } catch (err) {
+            showOTPError("Failed to resend code. Please try again.");
+          }
+        };
+      }
+    }, 1000);
+  }
+}
+
+function showSessionExpiredModal() {
+  closeAllPopups();
+  const modalId = "session-expired-modal";
+  let modal = document.getElementById(modalId);
+
+  if (modal) document.body.removeChild(modal);
+
+  modal = document.createElement("div");
+  modal.id = modalId;
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  `;
+
+  const content = div(
+    { class: "bg-white rounded-lg p-6 w-full max-w-md text-center" },
+    h4({ class: "text-xl mb-4" }, "Session expired. Please login again."),
+    button(
+      {
+        class: "px-4 py-2 rounded bg-danaherpurple-800 text-white",
+        onClick: () => {
+          document.body.removeChild(modal);
+          showEmailPopup(); // 👈 Redirect to email popup
+        },
+      },
+      "OK"
+    )
   );
 
   modal.appendChild(content);
@@ -976,7 +2222,7 @@ function emailprocessing(rawEmail, rawUrl) {
         urlObj.searchParams.delete("emailid");
         window.history.replaceState({}, document.title, urlObj.toString());
       } catch (error) {
-        console.error("Email processing failed:", error);
+        // Email processing failed
       }
     })();
   } else {
@@ -984,6 +2230,31 @@ function emailprocessing(rawEmail, rawUrl) {
   }
 }
 export default async function decorate(block) {
+  // Load reCAPTCHA script
+  const recaptchaScript = document.createElement("script");
+  recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
+  recaptchaScript.async = true;
+  recaptchaScript.defer = true;
+  document.head.appendChild(recaptchaScript);
+
+  function initializeSessionTimeoutTracking() {
+    const events = [
+      "mousemove",
+      "mousedown",
+      "keypress",
+      "scroll",
+      "touchstart",
+      "click",
+    ];
+
+    events.forEach((event) =>
+      document.addEventListener(event, resetInactivityTimer, true)
+    );
+
+    // Start timer immediately
+    resetInactivityTimer();
+  }
+
   // Check if screen width is below 769px (mobile)
   if (window.innerWidth < 769) {
     block.innerHTML = `
@@ -1021,49 +2292,6 @@ export default async function decorate(block) {
          <span>Marketing Preference Center</span>
       </div>
         <div class="header-actions">
-           <div class="info-icon-wrapper">
-              <span class="info-icon" tabindex="0" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50" aria-hidden="true">
-                  <path d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 25 11 A 3 3 0 0 0 22 14 A 3 3 0 0 0 25 17 A 3 3 0 0 0 28 14 A 3 3 0 0 0 25 11 z M 21 21 L 21 23 L 22 23 L 23 23 L 23 36 L 22 36 L 21 36 L 21 38 L 22 38 L 23 38 L 27 38 L 28 38 L 29 38 L 29 36 L 28 36 L 27 36 L 27 21 L 26 21 L 22 21 L 21 21 z"></path>
-                </svg>
-              </span>
-              <label class="switch dummy-toggle header-dummy-toggle pointer-events" aria-hidden="true" title="Dummy toggle">
-                <input type="checkbox" disabled>
-                <span class="slider"></span>
-              </label>
-              <div class="info-tooltip">
-                <div class="info-bar">
-                  <div class="info-bar-content">
-                    <span style="margin-right:8px;">All Consent Given</span>
-                    <label class="switch dummy-toggle pointer-events">
-                      <input class="pointer-events" type="checkbox" checked disabled >
-                      <span class="slider granted" style="background-color:#1e51b0;"></span>
-                    </label>
-                  </div>
-                  <div class="info-bar-content">
-                    <span style="margin-right:8px;">Partial Consent Given/Withdrawn</span>
-                    <label class="switch dummy-toggle pointer-events">
-                      <input class="pointer-events" type="checkbox" checked disabled>
-                      <span class="slider denied" style="background-color:orange !important;"></span>
-                    </label>
-                  </div>
-                  <div class="info-bar-content">
-                    <span style="margin-right:8px;">All Consent Withdrawn</span>
-                    <label class="switch dummy-toggle pointer-events">
-                      <input class="pointer-events" type="uncheckbox" checked disabled>
-                      <span class="slider denied" style="background-color:red !important;"></span>
-                    </label>
-                  </div>
-                  <div class="info-bar-content">
-                    <span style="margin-right:8px;">No Consent Given</span>
-                    <label class="switch dummy-toggle pointer-events">
-                      <input class="pointer-events" type="uncheckbox" checked disabled>
-                      <span class="slider denied" style="background-color:#CCCCCC !important;"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-           </div>
            <button class="header-btn" onclick="savePreferences()">Save</button>
         </div>
    </div>
@@ -1071,10 +2299,8 @@ export default async function decorate(block) {
    <div class="preferences-sticky-bar">
       <h2>Your Preferences</h2>
       <p>
-         Here you can manage your preferences regarding the marketing you currently receive. By ticking relevant boxes below
-         you can manage whether and how Danaher group companies can contact you. You can withdraw your consent at any time.
-         For more information please review our <a href="https://danaher.com/data-privacy-notice" target="_blank">privacy
-         policy</a>.
+        By providing consent to receive marketing communications from any Danaher operating company <a href="https://www.danaher.com/business-directory" target="_blank">(“OpCos”)</a>, you understand and agree that your personal data and consent preferences may be shared within Danaher Corporation and its affiliated OpCos identified in this Preference Center, for marketing and related purposes, in accordance with the <a href="https://danaher.com/data-privacy-notice" target="_blank">Danaher Privacy Policy</a>.
+        You may manage, modify, or withdraw your consent for each OpCo at any time. Withdrawal of consent will not affect the lawfulness of processing based on consent before its withdrawal.
       </p>
    </div>
    <div id="consent-body" class="subs"></div>
@@ -1083,68 +2309,57 @@ export default async function decorate(block) {
 
   buildCards();
   setSaveButtonEnabled(false);
-  try {
-    applyChannelDataToUI();
-    storeInitialState();
-    checkForChanges();
-  } catch (err) {
-    console.warn(
-      "applyChannelDataToUI/storeInitialState initial run failed:",
-      err
-    );
-  }
 
-  setTimeout(() => {
-    const infoIcon = document.querySelector(".info-icon");
-    const wrapper = infoIcon?.closest(".info-icon-wrapper");
-    const tooltip = wrapper?.querySelector(".info-tooltip");
-    if (infoIcon && tooltip) {
-      // add a small delay when hiding so quick moves between icon and toggle don't hide tooltip
-      let tooltipHideTimeout = null;
-      wrapper.addEventListener("mouseenter", () => {
-        if (tooltipHideTimeout) {
-          clearTimeout(tooltipHideTimeout);
-          tooltipHideTimeout = null;
-        }
-        tooltip.style.display = "block";
-      });
-
-      wrapper.addEventListener("mouseleave", () => {
-        tooltipHideTimeout = setTimeout(() => {
-          tooltip.style.display = "none";
-          tooltipHideTimeout = null;
-        }, 150);
-      });
-
-      // Ensure the dummy toggle is clickable/hoverable and shows pointer cursor
-      const headerToggle = wrapper.querySelector(".header-dummy-toggle");
-      if (headerToggle) {
-        headerToggle.style.cursor = "pointer";
-        headerToggle.style.pointerEvents = "auto";
-        // remove aria-hidden so it can receive focus if needed
-        if (headerToggle.getAttribute("aria-hidden") === "true") {
-          headerToggle.removeAttribute("aria-hidden");
-        }
-      }
-
-      // show tooltip on hover/focus
-      infoIcon.addEventListener("mouseenter", () => {
-        tooltip.style.display = "block";
-      });
-      infoIcon.addEventListener("mouseleave", () => {
-        tooltip.style.display = "none";
-      });
-      infoIcon.addEventListener("focus", () => {
-        tooltip.style.display = "block";
-      });
-      infoIcon.addEventListener("blur", () => {
-        tooltip.style.display = "none";
-      });
+  // Add spinner animation style to head
+  const spinnerStyle = document.createElement("style");
+  spinnerStyle.textContent = `
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
+    
+    /* Responsive gap between preferences-sticky-bar and consent-body for screens below 1350px */
+    @media (max-width: 1350px) {
+      #consent-body {
+        margin-top: 80px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      #consent-body {
+        margin-top: 100px;
+      }
+    }
+    
+    @media (max-width: 1000px) {
+      #consent-body {
+        margin-top: 120px;
+      }
+    }
+    
+    @media (max-width: 800px) {
+      #consent-body {
+        margin-top: 150px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      #consent-body {
+        margin-top: 180px;
+      }
+    }
+  `;
+  document.head.appendChild(spinnerStyle);
+
+  // Don't call applyChannelDataToUI() here - wait for loadChannelData() after user logs in
+  
+  setTimeout(() => {
+    attachInfoIconListeners();
   }, 0);
   const url = new URL(window.location.href);
   const emailParamRaw = url.searchParams.get("emailid");
   emailprocessing(emailParamRaw, url);
+  initializeSessionTimeoutTracking();
   if (CONFIG.debug) {
     const style = document.createElement("style");
     style.textContent = `
@@ -1251,6 +2466,6 @@ export default async function decorate(block) {
         });
     }
   } catch (err) {
-    console.error("Floating email icon failed to initialize", err);
+    // Floating email icon initialization error
   }
 }
