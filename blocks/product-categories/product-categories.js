@@ -121,7 +121,8 @@ export default async function decorate(block) {
       const filtered = allProducts.filter((item) => {
         const brandArray = item.brand?.split(',') || [];
         return brandArray.some((iBrand) => {
-          const brand = iBrand;
+          // const brand = iBrand;
+          const brand = iBrand.trim();
           return (
             brand.toLowerCase() === authoredBrand
           );
@@ -139,7 +140,14 @@ export default async function decorate(block) {
       const filterSet = new Set();
       allProducts.forEach((item) => {
         const brand = item.brand?.trim();
-        if (brand && !brand.includes(',')) filterSet.add(brand);
+        // if (brand && !brand.includes(',')) filterSet.add(brand);
+        if (brand) {
+          // Split comma-separated brands and add each individually
+          brand.split(',').forEach((b) => {
+            const trimmedBrand = b.trim();
+            if (trimmedBrand) filterSet.add(trimmedBrand);
+          });
+        }
       });
       const allBrands = Array.from(filterSet).sort();
 
