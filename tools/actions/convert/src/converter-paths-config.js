@@ -9,7 +9,7 @@
 export const excludeProdPaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo'];
 
 // include pro paths
-export const includeProdPaths = ['e-buy', 'products/', 'brands', 'products.html', 'blog', 'news', 'videos', 'library', 'expert', 'new-lab', 'application', 'we-see-a-way', 'solutions', 'solutions/analytical', 'solutions/digital/products', 'about-us', 'resources', 'danaher-preference-center'];
+export const includeProdPaths = ['e-buy', 'products/', 'brands', 'products.html', 'blog', 'news', 'videos', 'library', 'expert', 'new-lab', 'application', 'we-see-a-way', 'solutions/analytical', 'solutions/digital/products', 'about-us', 'resources', 'danaher-preference-center'];
 
 // exclude stage paths
 export const excludeStagePaths = ['products/family', 'products/sku', 'products/bundle', 'products/product-coveo', 'topics-jck1'];
