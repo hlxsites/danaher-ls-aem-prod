@@ -81,7 +81,8 @@
             { "name": "ViewGrid", "value": ":dam-View_grid:" },
             { "name": "CubeTransparent", "value": ":dam-Cube_transparent:" },
             { "name": "DocumentNew", "value": ":dam-doc-new:" },
-            { "name": "DAMUsers", "value": ":dam-Users:" }
+            { "name": "DAMUsers", "value": ":dam-Users:" },
+            { "name": "ShoppingCart", "value": ":dam-Shopping_cart:" }
           ]
         },
         {
