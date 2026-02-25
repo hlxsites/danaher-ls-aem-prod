@@ -775,9 +775,9 @@ export default async function decorate(block) {
   const externalButton = div(
     {
       class: 'flex justify-center items-center text-base font-extralight leading-snug gap-3 hover:text-danaherpurple-800',
-      onclick: () => {
-        window.open(result?.raw?.externallink, '_blank');
-      },
+      // onclick: () => {
+      //   window.open(result?.raw?.externallink, '_blank');
+      // },
     },
     `To learn more visit ${result?.raw.opco} `,
     externalLink,
@@ -794,8 +794,9 @@ export default async function decorate(block) {
 
   const externalURL = String(clickableLink || '');
 
-  const info = div(
+  const info = a(
     {
+      href: customData?.externallink,
       class:
         'self-stretch inline-flex justify-start items-center gap-3 py-3 cursor-pointer',
     },
