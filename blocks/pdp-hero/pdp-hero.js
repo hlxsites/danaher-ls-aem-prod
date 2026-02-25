@@ -796,7 +796,7 @@ export default async function decorate(block) {
 
   const info = a(
     {
-      href: customData?.externallink,
+      href: external,
       class:
         'self-stretch inline-flex justify-start items-center gap-3 py-3 cursor-pointer',
     },
