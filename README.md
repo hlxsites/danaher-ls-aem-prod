@@ -36,6 +36,18 @@ The following options can be selected as the type:
 
 The short issue name must not be more than 15 characters long. 
 
+## XWalk Converter Documentation
+
+This project uses an XWalk (Crosswalk) converter to transform AEM pages into Edge Delivery Services pages. Comprehensive documentation is available:
+
+📘 **[XWalk Converter Documentation](./docs/README.md)** - Complete guide on how the converter works and how to use it in another project
+
+Key documentation includes:
+- How the converter transforms AEM pages (e.g., solutions pages) into EDS pages
+- Which files are used in the transformation process
+- How to reuse the converter in another project
+- Visual diagrams and file-by-file reference
+
 ## Local development
 
 ### Franklin
@@ -44,7 +56,16 @@ The short issue name must not be more than 15 characters long.
 1. Add the [helix-bot](https://github.com/apps/helix-bot) to the repository
 1. Start Franklin Proxy and necessary file watchers: `npm run dev` (opens your browser at `http://localhost:3000`)
 1. Open the `{repo}` directory in your favorite IDE and start coding :)
-1. To build the css bundle priot to a commit, run `npm run build:css`
+1. To build the css bundle prior to a commit, run `npm run build:css`
 1. Install the [Helix CLI](https://github.com/adobe/helix-cli): `npm install -g @adobe/helix-cli`
 1. Start local development environment: `npm run dev` (opens your browser at `http://localhost:3000`)
 1. Open the `{repo}` directory in your favorite IDE and start coding :)
+
+### XWalk Converter Development
+
+1. Build the converter: `npm run converter:build`
+1. Test locally: `npm run converter:serve` (starts local server at `http://localhost:3000`)
+1. Run tests: `npm run converter:test`
+1. Deploy: `npm run converter:deploy`
+
+For detailed converter documentation, see [docs/README.md](./docs/README.md).
