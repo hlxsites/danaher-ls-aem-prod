@@ -2,7 +2,7 @@ import { applyClasses, moveInstrumentation } from '../../scripts/scripts.js';
 import {
   table, tbody, td, th, thead, tr, input, div, label,
 } from '../../scripts/dom-builder.js';
-import { decorateIcons } from '../../scripts/aem.js';
+import { decorateIcons } from '../../scripts/lib-franklin.js';
 
 function handleSearch(event, tableEl) {
   event.preventDefault();
