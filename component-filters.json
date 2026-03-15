@@ -440,5 +440,11 @@
     "components": [
       " "
     ]
+  },
+  {
+    "id": "workflow-tabs",
+    "components": [
+      "workflow-tabs-item"
+    ]
   }
 ]

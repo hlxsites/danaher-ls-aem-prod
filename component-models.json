@@ -3356,5 +3356,25 @@
         ]
       }
     ]
+  },
+  {
+    "id": "workflow-tabs",
+    "fields": []
+  },
+  {
+    "id": "workflow-tabs-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tabName",
+        "label": "Tab Name"
+      },
+      {
+        "component": "aem-content",
+        "name": "tabFragment",
+        "label": "Tab Fragment"
+      }
+    ]
   }
 ]
