@@ -3328,6 +3328,10 @@
     ]
   },
   {
+    "id": "topic-list",
+    "fields": []
+  },
+  {
     "id": "topics",
     "fields": [
       {
