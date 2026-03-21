@@ -3356,5 +3356,65 @@
         ]
       }
     ]
+  },
+  {
+    "id": "workflow-carousel",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "View All Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "View All Link Text",
+        "value": "View All Steps"
+      }
+    ]
+  },
+  {
+    "id": "workflow-carousel-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "Picture",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Category"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Card Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "Link Text",
+        "value": "Explore"
+      }
+    ]
   }
 ]

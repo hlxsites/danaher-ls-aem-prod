@@ -92,7 +92,8 @@
       "product-card",
       "timeline",
       "side-nav",
-      "opco-consent"
+      "opco-consent",
+      "workflow-carousel"
     ]
   },
   {
@@ -439,6 +440,12 @@
     "id": "topics",
     "components": [
       " "
+    ]
+  },
+  {
+    "id": "workflow-carousel",
+    "components": [
+      "workflow-carousel-item"
     ]
   }
 ]
