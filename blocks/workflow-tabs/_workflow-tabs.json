@@ -1,0 +1,65 @@
+{
+  "definitions": [
+    {
+      "title": "Workflow Tabs",
+      "id": "workflow-tabs",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Workflow Tabs",
+              "model": "workflow-tabs",
+              "filter": "workflow-tabs"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Workflow Tabs Item",
+      "id": "workflow-tabs-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Workflow Tabs Item",
+              "model": "workflow-tabs-item"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "workflow-tabs",
+      "fields": []
+    },
+    {
+      "id": "workflow-tabs-item",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tabName",
+          "label": "Tab Name"
+        },
+        {
+          "component": "aem-content",
+          "name": "tabFragment",
+          "label": "Tab Fragment"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "workflow-tabs",
+      "components": [
+        "workflow-tabs-item"
+      ]
+    }
+  ]
+}
