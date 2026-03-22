@@ -3356,5 +3356,85 @@
         ]
       }
     ]
+  },
+  {
+    "id": "workflow-carousel",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "View All Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "View All Link Text",
+        "value": "View All Steps"
+      }
+    ]
+  },
+  {
+    "id": "workflow-carousel-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "Picture",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "category",
+        "label": "Category / Step Number"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Explore Link"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "label": "Explore Link Text",
+        "value": "Explore"
+      }
+    ]
+  },
+  {
+    "id": "workflow-tabs",
+    "fields": []
+  },
+  {
+    "id": "workflow-tabs-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tabName",
+        "label": "Tab Name"
+      },
+      {
+        "component": "aem-content",
+        "name": "tabFragment",
+        "label": "Tab Fragment"
+      }
+    ]
   }
 ]

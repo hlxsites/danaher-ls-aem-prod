@@ -141,7 +141,9 @@
       "product-card",
       "timeline",
       "side-nav",
-      "opco-consent"
+      "opco-consent",
+      "workflow-tabs",
+      "workflow-carousel"
     ]
     }
   ]
