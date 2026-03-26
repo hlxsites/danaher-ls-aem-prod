@@ -1,0 +1,403 @@
+.off-screen {
+  position: absolute;
+  visibility: hidden;
+  left: 0px;
+  right: 0px;
+  opacity: 0;
+}
+
+/* ── Tab navigation ─────────────────────────────────────────────────── */
+
+.workflow-wrapper :is(.mx-auto) {
+  margin-left: auto;
+  margin-right: auto
+}
+
+.workflow-wrapper :is(.\!ml-0) {
+  margin-left: 0px !important
+}
+
+.workflow-wrapper :is(.\!mt-0) {
+  margin-top: 0px !important
+}
+
+.workflow-wrapper :is(.block) {
+  display: block
+}
+
+.workflow-wrapper :is(.flex) {
+  display: flex
+}
+
+.workflow-wrapper :is(.inline-flex) {
+  display: inline-flex
+}
+
+.workflow-wrapper :is(.grid) {
+  display: grid
+}
+
+.workflow-wrapper :is(.h-full) {
+  height: 100%
+}
+
+.workflow-wrapper :is(.h-max) {
+  height: -moz-max-content;
+  height: max-content
+}
+
+.workflow-wrapper :is(.h-36) {
+  height: 9rem
+}
+
+.workflow-wrapper :is(.w-full) {
+  width: 100%
+}
+
+.workflow-wrapper :is(.max-w-7xl) {
+  max-width: 80rem
+}
+
+.workflow-wrapper :is(.cursor-pointer) {
+  cursor: pointer
+}
+
+.workflow-wrapper :is(.flex-col) {
+  flex-direction: column
+}
+
+.workflow-wrapper :is(.flex-row) {
+  flex-direction: row
+}
+
+.workflow-wrapper :is(.flex-wrap) {
+  flex-wrap: wrap
+}
+
+.workflow-wrapper :is(.flex-initial) {
+  flex: 0 1 auto
+}
+
+.workflow-wrapper :is(.flex-shrink-0) {
+  flex-shrink: 0
+}
+
+.workflow-wrapper :is(.items-center) {
+  align-items: center
+}
+
+.workflow-wrapper :is(.justify-start) {
+  justify-content: flex-start
+}
+
+.workflow-wrapper :is(.justify-center) {
+  justify-content: center
+}
+
+.workflow-wrapper :is(.justify-between) {
+  justify-content: space-between
+}
+
+.workflow-wrapper :is(.gap-1) {
+  gap: 0.25rem
+}
+
+.workflow-wrapper :is(.gap-3) {
+  gap: 0.75rem
+}
+
+.workflow-wrapper :is(.gap-6) {
+  gap: 1.5rem
+}
+
+.workflow-wrapper :is(.gap-x-2) {
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem
+}
+
+.workflow-wrapper :is(.gap-x-4) {
+  -moz-column-gap: 1rem;
+       column-gap: 1rem
+}
+
+.workflow-wrapper :is(.space-x-2 > :not([hidden]) ~ :not([hidden])) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))
+}
+
+.workflow-wrapper :is(.overflow-hidden) {
+  overflow: hidden
+}
+
+.workflow-wrapper :is(.overflow-x-auto) {
+  overflow-x: auto
+}
+
+.workflow-wrapper :is(.scroll-smooth) {
+  scroll-behavior: smooth
+}
+
+.workflow-wrapper :is(.snap-x) {
+  scroll-snap-type: x var(--tw-scroll-snap-strictness)
+}
+
+.workflow-wrapper :is(.snap-mandatory) {
+  --tw-scroll-snap-strictness: mandatory
+}
+
+.workflow-wrapper :is(.snap-start) {
+  scroll-snap-align: start
+}
+
+.workflow-wrapper :is(.list-none) {
+  list-style-type: none
+}
+
+.workflow-wrapper :is(.auto-cols-\[calc\(100\%\)\]) {
+  grid-auto-columns: calc(100%)
+}
+
+.workflow-wrapper :is(.grid-flow-col) {
+  grid-auto-flow: column
+}
+
+.workflow-wrapper :is(.rounded-full) {
+  border-radius: 9999px
+}
+
+.workflow-wrapper :is(.rounded-md) {
+  border-radius: 0.375rem
+}
+
+.workflow-wrapper :is(.rounded-sm) {
+  border-radius: 0.125rem
+}
+
+.workflow-wrapper :is(.border) {
+  border-width: 1px
+}
+
+.workflow-wrapper :is(.border-solid) {
+  border-style: solid
+}
+
+.workflow-wrapper :is(.border-gray-300) {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity))
+}
+
+.workflow-wrapper :is(.bg-danaherpurple-500) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(117 35 255 / var(--tw-bg-opacity))
+}
+
+.workflow-wrapper :is(.bg-danaherpurple-800) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(64 0 165 / var(--tw-bg-opacity))
+}
+
+.workflow-wrapper :is(.bg-white) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+.workflow-wrapper :is(.object-cover) {
+  -o-object-fit: cover;
+     object-fit: cover
+}
+
+.workflow-wrapper :is(.\!py-0) {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important
+}
+
+.workflow-wrapper :is(.p-4) {
+  padding: 1rem
+}
+
+.workflow-wrapper :is(.pb-2) {
+  padding-bottom: 0.5rem
+}
+
+.workflow-wrapper :is(.px-4) {
+  padding-left: 1rem;
+  padding-right: 1rem
+}
+
+.workflow-wrapper :is(.py-1) {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem
+}
+
+.workflow-wrapper :is(.relative) {
+  position: relative
+}
+
+.workflow-wrapper :is(.mx-px) {
+  margin-left: 1px;
+  margin-right: 1px
+}
+
+.workflow-wrapper :is(.mb-1) {
+  margin-bottom: 0.25rem
+}
+
+.workflow-wrapper :is(.mb-3) {
+  margin-bottom: 0.75rem
+}
+
+.workflow-wrapper :is(.mr-2) {
+  margin-right: 0.5rem
+}
+
+.workflow-wrapper :is(.mt-2) {
+  margin-top: 0.5rem
+}
+
+.workflow-wrapper :is(.mt-4) {
+  margin-top: 1rem
+}
+
+.workflow-wrapper :is(.mt-auto) {
+  margin-top: auto
+}
+
+.workflow-wrapper :is(.line-clamp-4) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4
+}
+
+.workflow-wrapper :is(.text-xs) {
+  font-size: 0.75rem;
+  line-height: 1rem
+}
+
+.workflow-wrapper :is(.text-sm) {
+  font-size: 0.875rem;
+  line-height: 1.25rem
+}
+
+.workflow-wrapper :is(.text-base) {
+  font-size: 1rem;
+  line-height: 1.5rem
+}
+
+.workflow-wrapper :is(.text-lg) {
+  font-size: 1.125rem;
+  line-height: 1.75rem
+}
+
+.workflow-wrapper :is(.text-xl) {
+  font-size: 1.25rem;
+  line-height: 1.75rem
+}
+
+.workflow-wrapper :is(.font-medium) {
+  font-weight: 500
+}
+
+.workflow-wrapper :is(.font-bold) {
+  font-weight: 700
+}
+
+.workflow-wrapper :is(.font-semibold) {
+  font-weight: 700
+}
+
+.workflow-wrapper :is(.capitalize) {
+  text-transform: capitalize
+}
+
+.workflow-wrapper :is(.leading-5) {
+  line-height: 1.25rem
+}
+
+.workflow-wrapper :is(.leading-tight) {
+  line-height: 1.25
+}
+
+.workflow-wrapper :is(.tracking-normal) {
+  letter-spacing: 0em
+}
+
+.workflow-wrapper :is(.break-words) {
+  overflow-wrap: break-word
+}
+
+.workflow-wrapper :is(.text-white) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+
+.workflow-wrapper :is(.text-danaherblue-600) {
+  --tw-text-opacity: 1;
+  color: rgb(13 49 114 / var(--tw-text-opacity))
+}
+
+.workflow-wrapper :is(.text-gray-400) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity))
+}
+
+.workflow-wrapper :is(.text-gray-900) {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity))
+}
+
+.workflow-wrapper :is(.shadow-md) {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+
+.workflow-wrapper :is(.filter) {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+}
+
+.workflow-wrapper :is(.hover\:bg-danaherpurple-500:hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(117 35 255 / var(--tw-bg-opacity))
+}
+
+.workflow-wrapper :is(.hover\:text-white:hover) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity))
+}
+
+.workflow-wrapper :is(.hover\:shadow-lg:hover) {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+
+.workflow-wrapper :is(.group:hover .group-hover\:font-bold) {
+  font-weight: 700
+}
+
+.workflow-wrapper :is(.group:hover .group-hover\:underline) {
+  text-decoration-line: underline
+}
+
+.workflow-wrapper .carousel,
+.workflow-wrapper .carousel-wrapper .carousel {
+  scrollbar-width: none
+}
+
+@media (min-width: 768px) {
+  .workflow-wrapper :is(.md\:w-2\/5) {
+    width: 40%
+  }
+
+  .workflow-wrapper :is(.md\:auto-cols-\[calc\(\(100\%\/2\)-20px\)\]) {
+    grid-auto-columns: calc((100% / 2) - 20px)
+  }
+}
+
+@media (min-width: 1024px) {
+  .workflow-wrapper :is(.lg\:auto-cols-\[calc\(\(100\%\/3\)-20px\)\]) {
+    grid-auto-columns: calc((100% / 3) - 20px)
+  }
+}

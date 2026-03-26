@@ -1,0 +1,139 @@
+{
+  "definitions": [
+    {
+      "title": "Workflow",
+      "id": "workflow",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Workflow",
+              "model": "workflow",
+              "filter": "workflow"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Workflow Tab",
+      "id": "workflow-tab",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Workflow Tab",
+              "model": "workflow-tab",
+              "filter": "workflow-tab"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Workflow Card",
+      "id": "workflow-card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Workflow Card",
+              "model": "workflow-card"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "workflow",
+      "fields": []
+    },
+    {
+      "id": "workflow-tab",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tab_name",
+          "label": "Tab Name"
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "view_all_link",
+          "label": "View All Link"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "view_all_text",
+          "label": "View All Link Text",
+          "value": "View All Steps"
+        }
+      ]
+    },
+    {
+      "id": "workflow-card",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "card_image",
+          "label": "Card Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "image_alt",
+          "label": "Image Alt Text",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "category",
+          "label": "Category Number (e.g. 01, 02)"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "card_title",
+          "label": "Card Title"
+        },
+        {
+          "component": "aem-content",
+          "valueType": "string",
+          "name": "card_link",
+          "label": "Card Link URL"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "link_text",
+          "label": "Link Text",
+          "value": "Explore"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "workflow",
+      "components": [
+        "workflow-tab"
+      ]
+    },
+    {
+      "id": "workflow-tab",
+      "components": [
+        "workflow-card"
+      ]
+    }
+  ]
+}
